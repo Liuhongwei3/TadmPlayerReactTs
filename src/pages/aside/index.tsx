@@ -9,12 +9,23 @@ import {
     ShopOutlined,
     TeamOutlined,
     UserOutlined,
-    UploadOutlined,
     VideoCameraOutlined,
+    TrophyOutlined,
 } from "@ant-design/icons";
 
 const LeftSide: React.FunctionComponent = () => {
-    const [collapsed, setCollapsed] = React.useState<boolean>(false);
+    const [collapsed, setCollapsed] = React.useState<boolean>(true);
+    const [selectedKeys, setSelectedKeys] = React.useState<Array<string>>([
+        "home",
+    ]);
+
+    const updateSelectedKeys = React.useCallback(() => {
+        const curUrl = window.location.hash.split("#")![1].replace("/", "");
+        console.log(curUrl);
+        setSelectedKeys(curUrl ? [curUrl] : ["home"]);
+    }, []);
+
+    React.useEffect(updateSelectedKeys, [updateSelectedKeys]);
 
     return (
         <Layout.Sider
@@ -34,21 +45,24 @@ const LeftSide: React.FunctionComponent = () => {
                 width={collapsed ? 80 : 160}
                 src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
             />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={["home"]}>
+            <Menu
+                theme="dark"
+                mode="vertical"
+                selectedKeys={selectedKeys}
+                defaultSelectedKeys={["home"]}
+                onClick={updateSelectedKeys}
+            >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
                     <Link to="/">首页</Link>
                 </Menu.Item>
-                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                    nav 2
+                <Menu.Item key="top" icon={<TrophyOutlined />}>
+                    <Link to="/top">巅峰榜</Link>
                 </Menu.Item>
-                <Menu.Item key="3" icon={<UploadOutlined />}>
-                    nav 3
+                <Menu.Item key="hotDetail" icon={<CloudOutlined />}>
+                    <Link to="/hotDetail">热门歌单</Link>
                 </Menu.Item>
                 <Menu.Item key="4" icon={<BarChartOutlined />}>
                     nav 4
-                </Menu.Item>
-                <Menu.Item key="5" icon={<CloudOutlined />}>
-                    nav 5
                 </Menu.Item>
                 <Menu.Item key="6" icon={<AppstoreOutlined />}>
                     nav 6

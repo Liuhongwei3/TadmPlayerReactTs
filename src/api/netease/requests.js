@@ -14,7 +14,7 @@ const getBanner = async (type = 0) => {
   return flag.data.banners;
 };
 
-const getRecomDetails = async (limit = 30) => {
+const getRecomDetails = async (limit = 16) => {
   let flag = await doReq(`/personalized?limit=${limit}`);
   if (!flag || !flag.data) {
     return [];
@@ -36,7 +36,7 @@ const getPerPush = async () => {
   return flag.data.result;
 };
 
-const getNewSongs = async (limit = 14) => {
+const getNewSongs = async (limit = 16) => {
   let flag = await doReq(`/personalized/newsong?limit=${limit}`);
   if (!flag || !flag.data) {
     return [];
@@ -64,18 +64,7 @@ const toplist = async () => {
     return [];
   }
 
-  let formatList = [];
-  for (let v of flag.data.list) {
-    let obj = {};
-    obj.id = v.id;
-    obj.name = v.name;
-    obj.imgUrl = v.coverImgUrl;
-    obj.playCount = v.playCount;
-    obj.updateTime = v.updateTime;
-    formatList.push(obj);
-  }
-
-  return formatList;
+  return flag.data.list;
 };
 
 const hotDetails = async (limit = 24) => {

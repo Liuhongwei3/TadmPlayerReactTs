@@ -1,38 +1,33 @@
 import React from "react";
 import { Spin } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
-import { IRecomDetail } from "../type";
-import { countFormat } from "../../../utils";
-import StyledCount from "../../../components/detail/StyledCount";
+import { IArtist, INewSongs } from "../type";
 import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 
-const RecommendDetail: React.FunctionComponent = () => {
+const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [recomDetails, setRecomDetails] = React.useState<Array<IRecomDetail>>(
-        []
-    );
+    const [newSongs, setNewSongs] = React.useState<Array<INewSongs>>([]);
 
-    const getRecomDetails = async () => {
+    const getNewSongs = async () => {
         setLoading(true);
-        let data = await req.netease.getRecomDetails();
-        setRecomDetails(data);
+        let data = await req.netease.getNewSongs();
+        setNewSongs(data);
         setLoading(false);
     };
 
     React.useEffect(() => {
-        getRecomDetails();
+        getNewSongs();
     }, []);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            <h2>《推荐歌单》</h2>
+            <h2>《最新音乐》</h2>
             <StyledWrapper>
-                {recomDetails.map((item: IRecomDetail) => {
+                {newSongs.map((item: INewSongs) => {
                     return (
                         <StyledItem key={item.id}>
                             <div
@@ -49,11 +44,23 @@ const RecommendDetail: React.FunctionComponent = () => {
                                     alt="detail-cover"
                                     src={item.picUrl}
                                 />
-                                <StyledCount>
-                                    <CustomerServiceOutlined style={{marginRight: 5}} />
-                                    {countFormat(item.playCount)}
-                                </StyledCount>
-                                <StyledDesc width={180}>{item.copywriter}</StyledDesc>
+                                <StyledDesc width={180}>
+                                    <span>By </span>
+                                    {item.song.artists.map(
+                                        (artist: IArtist) => {
+                                            return item.song.artists.length ===
+                                                1 ? (
+                                                <span key={artist.id}>
+                                                    {artist.name}
+                                                </span>
+                                            ) : (
+                                                <span key={artist.id}>
+                                                    {`${artist.name} / `}
+                                                </span>
+                                            );
+                                        }
+                                    )}
+                                </StyledDesc>
                             </div>
 
                             <StyledName width={180}>{item.name}</StyledName>
@@ -65,4 +72,4 @@ const RecommendDetail: React.FunctionComponent = () => {
     );
 };
 
-export default RecommendDetail;
+export default NewSongs;

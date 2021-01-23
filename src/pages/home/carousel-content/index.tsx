@@ -4,7 +4,7 @@ import { Carousel, Tag } from "antd";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
-import { IBanner } from "../types";
+import { IBanner } from "../type";
 import { CarouselRef } from "antd/lib/carousel";
 
 const StyledCarousel = styled.div`
@@ -37,6 +37,7 @@ const StyledTag = styled(Tag)`
     font-size: 14px;
     padding: 6px 10px;
     border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 `;
 
 const StyledLeftCircleOutlined = styled(LeftCircleOutlined)`

@@ -2,26 +2,27 @@ import React from "react";
 import { Spin } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 
-import req from "../../../api/req";
-import { IRecomDetail } from "../type";
-import { countFormat } from "../../../utils";
-import StyledCount from "../../../components/detail/StyledCount";
-import StyledItem from "../../../components/detail/StyledItem";
-import StyledWrapper from "../../../components/detail/StyledWrapper";
-import StyledDesc from "../../../components/detail/StyledDesc";
-import StyledName from "../../../components/detail/StyledName";
+import req from "../../api/req";
+import { ITopList } from "./type";
+import StyledWrapper from "../../components/detail/StyledWrapper";
+import StyledItem from "../../components/detail/StyledItem";
+import StyledCount from "../../components/detail/StyledCount";
+import StyledDesc from "../../components/detail/StyledDesc";
+import StyledName from "../../components/detail/StyledName";
+import { countFormat, dateFormat } from "../../utils";
 
-const RecommendDetail: React.FunctionComponent = () => {
+const Top: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [recomDetails, setRecomDetails] = React.useState<Array<IRecomDetail>>(
-        []
-    );
+    const [topLists, setTopLists] = React.useState<Array<ITopList>>([]);
 
-    const getRecomDetails = async () => {
+    const getRecomDetails = () => {
         setLoading(true);
-        let data = await req.netease.getRecomDetails();
-        setRecomDetails(data);
-        setLoading(false);
+        req.netease
+            .toplist()
+            .then((res) => {
+                setTopLists(res);
+            })
+            .finally(() => setLoading(false));
     };
 
     React.useEffect(() => {
@@ -30,9 +31,8 @@ const RecommendDetail: React.FunctionComponent = () => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            <h2>《推荐歌单》</h2>
             <StyledWrapper>
-                {recomDetails.map((item: IRecomDetail) => {
+                {topLists.map((item: ITopList) => {
                     return (
                         <StyledItem key={item.id}>
                             <div
@@ -47,13 +47,17 @@ const RecommendDetail: React.FunctionComponent = () => {
                                     width={180}
                                     height={180}
                                     alt="detail-cover"
-                                    src={item.picUrl}
+                                    src={item.coverImgUrl}
                                 />
                                 <StyledCount>
-                                    <CustomerServiceOutlined style={{marginRight: 5}} />
+                                    <CustomerServiceOutlined
+                                        style={{ marginRight: 5 }}
+                                    />
                                     {countFormat(item.playCount)}
                                 </StyledCount>
-                                <StyledDesc width={180}>{item.copywriter}</StyledDesc>
+                                <StyledDesc width={180}>
+                                    {`${dateFormat(item.updateTime)} 更新`}
+                                </StyledDesc>
                             </div>
 
                             <StyledName width={180}>{item.name}</StyledName>
@@ -65,4 +69,4 @@ const RecommendDetail: React.FunctionComponent = () => {
     );
 };
 
-export default RecommendDetail;
+export default Top;

@@ -1,62 +1,58 @@
 import React from "react";
 import { Spin } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
 import { IRecomDetail } from "../type";
 import { countFormat } from "../../../utils";
-import StyledCount from "../../../components/detail/StyledCount";
 import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
+import StyledCount from "../../../components/detail/StyledCount";
 
-const RecommendDetail: React.FunctionComponent = () => {
+const RecommendMv: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [recomDetails, setRecomDetails] = React.useState<Array<IRecomDetail>>(
-        []
-    );
+    const [recommendMv, setRecommendMv] = React.useState<Array<IRecomDetail>>([]);
 
-    const getRecomDetails = async () => {
+    const getRecommendMv = async () => {
         setLoading(true);
-        let data = await req.netease.getRecomDetails();
-        setRecomDetails(data);
+        let data = await req.netease.getNewMvs();
+        setRecommendMv(data);
         setLoading(false);
     };
 
     React.useEffect(() => {
-        getRecomDetails();
+        getRecommendMv();
     }, []);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            <h2>《推荐歌单》</h2>
+            <h2>《推荐MV》</h2>
             <StyledWrapper>
-                {recomDetails.map((item: IRecomDetail) => {
+                {recommendMv.map((item: IRecomDetail) => {
                     return (
                         <StyledItem key={item.id}>
                             <div
                                 style={{
-                                    width: 180,
-                                    height: 180,
+                                    width: 360,
+                                    height: 200,
                                     position: "relative",
                                 }}
                             >
                                 <img
                                     style={{ opacity: 0.65 }}
-                                    width={180}
-                                    height={180}
+                                    width={360}
+                                    height={200}
                                     alt="detail-cover"
                                     src={item.picUrl}
                                 />
-                                <StyledCount>
-                                    <CustomerServiceOutlined style={{marginRight: 5}} />
-                                    {countFormat(item.playCount)}
-                                </StyledCount>
-                                <StyledDesc width={180}>{item.copywriter}</StyledDesc>
+                                <StyledCount>{countFormat(item.playCount)}</StyledCount>
+                                <StyledDesc width={360}>
+                                    {item.copywriter}
+                                </StyledDesc>
                             </div>
 
-                            <StyledName width={180}>{item.name}</StyledName>
+                            <StyledName width={300}>{item.name}</StyledName>
                         </StyledItem>
                     );
                 })}
@@ -65,4 +61,4 @@ const RecommendDetail: React.FunctionComponent = () => {
     );
 };
 
-export default RecommendDetail;
+export default RecommendMv;
