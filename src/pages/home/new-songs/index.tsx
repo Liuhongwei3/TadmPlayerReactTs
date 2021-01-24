@@ -1,4 +1,5 @@
 import React from "react";
+import LazyLoad from "react-lazyload";
 import { Spin } from "antd";
 
 import req from "../../../api/req";
@@ -32,19 +33,22 @@ const NewSongs: React.FunctionComponent = () => {
                         <StyledItem key={item.id}>
                             <div
                                 style={{
-                                    width: 180,
-                                    height: 180,
+                                    width: 150,
+                                    height: 150,
                                     position: "relative",
                                 }}
                             >
-                                <img
-                                    style={{ opacity: 0.65 }}
-                                    width={180}
-                                    height={180}
-                                    alt="detail-cover"
-                                    src={item.picUrl}
-                                />
-                                <StyledDesc width={180}>
+                                <LazyLoad height={200}>
+                                    <img
+                                        style={{ opacity: 0.65 }}
+                                        width={150}
+                                        height={150}
+                                        alt="detail-cover"
+                                        loading="lazy"
+                                        src={item.picUrl}
+                                    />
+                                </LazyLoad>
+                                <StyledDesc width={150}>
                                     <span>By </span>
                                     {item.song.artists.map(
                                         (artist: IArtist) => {
@@ -63,7 +67,7 @@ const NewSongs: React.FunctionComponent = () => {
                                 </StyledDesc>
                             </div>
 
-                            <StyledName width={180}>{item.name}</StyledName>
+                            <StyledName width={150}>{item.name}</StyledName>
                         </StyledItem>
                     );
                 })}

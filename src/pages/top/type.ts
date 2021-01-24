@@ -4,6 +4,7 @@ export interface ITopList {
     userId: number;
     playCount: number;
     updateTime: number;
+    updateFrequency: string;
     coverImgUrl: string;
     description: string;
 }

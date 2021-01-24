@@ -7,6 +7,7 @@ const StyledWrapper = styled.div`
     align-items: center;
     font-size: 14px;
     color: #dfdfdf;
+    padding: 12px;
 `;
 
 export default StyledWrapper;

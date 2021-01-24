@@ -10,6 +10,7 @@ import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
 import { countFormat, dateFormat } from "../../utils";
+import LazyLoad from "react-lazyload";
 
 const Top: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -37,30 +38,32 @@ const Top: React.FunctionComponent = () => {
                         <StyledItem key={item.id}>
                             <div
                                 style={{
-                                    width: 180,
-                                    height: 180,
+                                    width: 150,
+                                    height: 150,
                                     position: "relative",
                                 }}
                             >
-                                <img
-                                    style={{ opacity: 0.65 }}
-                                    width={180}
-                                    height={180}
-                                    alt="detail-cover"
-                                    src={item.coverImgUrl}
-                                />
+                                <LazyLoad height={100}>
+                                    <img
+                                        style={{ opacity: 0.65 }}
+                                        width={150}
+                                        height={150}
+                                        alt="detail-cover"
+                                        src={item.coverImgUrl}
+                                    />
+                                </LazyLoad>
                                 <StyledCount>
                                     <CustomerServiceOutlined
                                         style={{ marginRight: 5 }}
                                     />
                                     {countFormat(item.playCount)}
                                 </StyledCount>
-                                <StyledDesc width={180}>
+                                <StyledDesc width={150}>
                                     {`${dateFormat(item.updateTime)} 更新`}
                                 </StyledDesc>
                             </div>
 
-                            <StyledName width={180}>{item.name}</StyledName>
+                            <StyledName width={150}>{item.name}</StyledName>
                         </StyledItem>
                     );
                 })}

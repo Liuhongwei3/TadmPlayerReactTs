@@ -20,7 +20,6 @@ const StyledBg = styled.div`
 `;
 
 const StyledContent = styled(Layout.Content)`
-    padding: 12px 24px;
     background: rgba(0, 0, 0, 0.5);
 `;
 

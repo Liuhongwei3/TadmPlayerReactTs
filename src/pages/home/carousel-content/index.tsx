@@ -8,14 +8,20 @@ import { IBanner } from "../type";
 import { CarouselRef } from "antd/lib/carousel";
 
 const StyledCarousel = styled.div`
-    width: 80vw;
+    width: 100%;
     margin: 0 auto;
     text-align: center;
     position: relative;
+    background-size: 60000px;
+    background-position: center center;
+
+    ${(props: { backImg: null | string }) => {
+        return props.backImg ? `background-image: url(${props.backImg})` : '';
+    }}
 `;
 
 const StyledCarouselItem = styled.div`
-    width: 70vw !important;
+    width: 66% !important;
     position: relative;
 
     &:hover {
@@ -25,7 +31,7 @@ const StyledCarouselItem = styled.div`
 
 const StyledImage = styled.img`
     width: 100%;
-    height: 320px;
+    height: 285px;
     border-radius: 10px;
     margin: 0 auto;
 `;
@@ -45,7 +51,7 @@ const StyledLeftCircleOutlined = styled(LeftCircleOutlined)`
     color: #fff;
     position: absolute;
     top: 45%;
-    left: 0;
+    left: 6%;
 `;
 
 const StyledRightCircleOutlined = styled(RightCircleOutlined)`
@@ -53,10 +59,11 @@ const StyledRightCircleOutlined = styled(RightCircleOutlined)`
     color: #fff;
     position: absolute;
     top: 45%;
-    right: 0;
+    right: 6%;
 `;
 
 const CarouselContent: React.FunctionComponent = () => {
+    const [currentSlide, setCurrentSlide] = React.useState<number>(0);
     const [banners, setBanners] = React.useState<Array<IBanner>>([]);
     const imgRef = React.useRef<CarouselRef | null>(null);
 
@@ -70,8 +77,13 @@ const CarouselContent: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <StyledCarousel>
-            <Carousel effect={"fade"} autoplay={true} ref={imgRef}>
+        <StyledCarousel backImg={banners[currentSlide] ? banners[currentSlide].imageUrl : null}>
+            <Carousel
+                effect={"fade"}
+                autoplay={true}
+                ref={imgRef}
+                beforeChange={(currentSlide, nextSlide) => setCurrentSlide(nextSlide)}
+            >
                 {banners.map((item: IBanner) => {
                     return (
                         <StyledCarouselItem key={item.scm}>
@@ -79,7 +91,9 @@ const CarouselContent: React.FunctionComponent = () => {
                                 alt="banner-cover"
                                 src={item.imageUrl}
                             />
-                            <StyledTag color={item.titleColor}>{item.typeTitle}</StyledTag>
+                            <StyledTag color={item.titleColor}>
+                                {item.typeTitle}
+                            </StyledTag>
                         </StyledCarouselItem>
                     );
                 })}

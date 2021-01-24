@@ -9,10 +9,13 @@ import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import StyledCount from "../../../components/detail/StyledCount";
+import LazyLoad from "react-lazyload";
 
 const RecommendMv: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [recommendMv, setRecommendMv] = React.useState<Array<IRecomDetail>>([]);
+    const [recommendMv, setRecommendMv] = React.useState<Array<IRecomDetail>>(
+        []
+    );
 
     const getRecommendMv = async () => {
         setLoading(true);
@@ -34,25 +37,29 @@ const RecommendMv: React.FunctionComponent = () => {
                         <StyledItem key={item.id}>
                             <div
                                 style={{
-                                    width: 360,
+                                    width: 320,
                                     height: 200,
                                     position: "relative",
                                 }}
                             >
-                                <img
-                                    style={{ opacity: 0.65 }}
-                                    width={360}
-                                    height={200}
-                                    alt="detail-cover"
-                                    src={item.picUrl}
-                                />
-                                <StyledCount>{countFormat(item.playCount)}</StyledCount>
-                                <StyledDesc width={360}>
+                                <LazyLoad height={200}>
+                                    <img
+                                        style={{ opacity: 0.65 }}
+                                        width={320}
+                                        height={200}
+                                        alt="detail-cover"
+                                        src={item.picUrl}
+                                    />
+                                </LazyLoad>
+                                <StyledCount>
+                                    {countFormat(item.playCount)}
+                                </StyledCount>
+                                <StyledDesc width={320}>
                                     {item.copywriter}
                                 </StyledDesc>
                             </div>
 
-                            <StyledName width={300}>{item.name}</StyledName>
+                            <StyledName width={320}>{item.name}</StyledName>
                         </StyledItem>
                     );
                 })}

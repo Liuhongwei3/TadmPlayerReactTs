@@ -37,15 +37,15 @@ const RecommendDetail: React.FunctionComponent = () => {
                         <StyledItem key={item.id}>
                             <div
                                 style={{
-                                    width: 180,
-                                    height: 180,
+                                    width: 150,
+                                    height: 150,
                                     position: "relative",
                                 }}
                             >
                                 <img
                                     style={{ opacity: 0.65 }}
-                                    width={180}
-                                    height={180}
+                                    width={150}
+                                    height={150}
                                     alt="detail-cover"
                                     src={item.picUrl}
                                 />
@@ -53,10 +53,10 @@ const RecommendDetail: React.FunctionComponent = () => {
                                     <CustomerServiceOutlined style={{marginRight: 5}} />
                                     {countFormat(item.playCount)}
                                 </StyledCount>
-                                <StyledDesc width={180}>{item.copywriter}</StyledDesc>
+                                <StyledDesc width={150}>{item.copywriter}</StyledDesc>
                             </div>
 
-                            <StyledName width={180}>{item.name}</StyledName>
+                            <StyledName width={150}>{item.name}</StyledName>
                         </StyledItem>
                     );
                 })}

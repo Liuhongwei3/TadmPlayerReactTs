@@ -21,7 +21,6 @@ const LeftSide: React.FunctionComponent = () => {
 
     const updateSelectedKeys = React.useCallback(() => {
         const curUrl = window.location.hash.split("#")![1].replace("/", "");
-        console.log(curUrl);
         setSelectedKeys(curUrl ? [curUrl] : ["home"]);
     }, []);
 
