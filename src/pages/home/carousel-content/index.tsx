@@ -23,6 +23,7 @@ const StyledCarousel = styled.div`
 const StyledCarouselItem = styled.div`
     width: 66% !important;
     position: relative;
+    padding: 10px 0;
 
     &:hover {
         cursor: pointer;
@@ -31,7 +32,7 @@ const StyledCarouselItem = styled.div`
 
 const StyledImage = styled.img`
     width: 100%;
-    height: 285px;
+    height: 300px;
     border-radius: 10px;
     margin: 0 auto;
 `;
@@ -39,7 +40,7 @@ const StyledImage = styled.img`
 const StyledTag = styled(Tag)`
     position: absolute;
     right: -8px;
-    top: 0;
+    top: 10px;
     font-size: 14px;
     padding: 6px 10px;
     border-top-right-radius: 10px;
@@ -81,6 +82,7 @@ const CarouselContent: React.FunctionComponent = () => {
             <Carousel
                 effect={"fade"}
                 autoplay={true}
+                autoplaySpeed={5000}
                 ref={imgRef}
                 beforeChange={(currentSlide, nextSlide) => setCurrentSlide(nextSlide)}
             >

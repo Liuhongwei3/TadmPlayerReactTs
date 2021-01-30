@@ -1,6 +1,10 @@
 export const DEFAULT_BG_IMG =
     "http://p2.music.126.net/ek5FsopWHRxf9tQSLaRnAA==/109951165643377225.jpg";
 
+export const DEFAULT_AVATAR = "https://i.loli.net/2021/01/30/t3OwgJQEAnphYrm.jpg";
+
+export const DEFAULT_LOADING_IMG = "https://i.loli.net/2021/01/25/QoPhZfYVWMUsA6J.gif";
+
 export const DEFAULT_CATS = {
     all: { name: "全部歌单" },
     categories: {

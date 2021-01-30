@@ -8,6 +8,7 @@ import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LazyLoad from "react-lazyload";
+import LoadingImg from "../../../components/LoadingImg";
 
 const PersonPush: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -38,7 +39,10 @@ const PersonPush: React.FunctionComponent = () => {
                                     position: "relative",
                                 }}
                             >
-                                <LazyLoad height={150}>
+                                <LazyLoad
+                                    height={150}
+                                    placeholder={<LoadingImg />}
+                                >
                                     <img
                                         style={{ opacity: 0.65 }}
                                         width={320}

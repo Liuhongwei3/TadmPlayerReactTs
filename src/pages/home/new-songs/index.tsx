@@ -8,6 +8,7 @@ import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
+import LoadingImg from "../../../components/LoadingImg";
 
 const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -38,7 +39,10 @@ const NewSongs: React.FunctionComponent = () => {
                                     position: "relative",
                                 }}
                             >
-                                <LazyLoad height={200}>
+                                <LazyLoad
+                                    height={160}
+                                    placeholder={<LoadingImg />}
+                                >
                                     <img
                                         style={{ opacity: 0.65 }}
                                         width={150}

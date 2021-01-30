@@ -7,7 +7,6 @@ import PersonPush from "./person-push";
 import RecommendDetail from "./recommend-detail";
 import RecommendMv from "./recommend-mv";
 
-
 const Home: React.FunctionComponent = () => {
     return (
         <>

@@ -11,6 +11,7 @@ import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
 import { countFormat, dateFormat } from "../../utils";
 import LazyLoad from "react-lazyload";
+import LoadingImg from "../../components/LoadingImg";
 
 const Top: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -43,7 +44,10 @@ const Top: React.FunctionComponent = () => {
                                     position: "relative",
                                 }}
                             >
-                                <LazyLoad height={100}>
+                                <LazyLoad
+                                    height={100}
+                                    placeholder={<LoadingImg />}
+                                >
                                     <img
                                         style={{ opacity: 0.65 }}
                                         width={150}

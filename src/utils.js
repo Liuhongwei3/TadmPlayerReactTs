@@ -143,6 +143,11 @@ export function parseLyric(lrc) {
     return lrcObj;
 }
 
+export function unique(arr) {
+    const res = new Map();
+    return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1));
+}
+
 export function getEventType(str = "") {
     // 18 分享单曲
     // 19 分享专辑

@@ -4,7 +4,7 @@ import { CustomerServiceOutlined, RightOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
 import { IHotDetail, IHotDetailCats } from "./type";
-import { countFormat, dateFormat } from "../../utils";
+import { countFormat, dateFormat, unique } from "../../utils";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
@@ -13,10 +13,13 @@ import StyledName from "../../components/detail/StyledName";
 import { DEFAULT_CATS } from "../../defaultConfig";
 import StyledTag from "../../components/StyledTag";
 import LazyLoad from "react-lazyload";
+import LoadingImg from "../../components/LoadingImg";
+
+const INIT_LIMIT = 24;
 
 const HotDetail: React.FunctionComponent = () => {
     const [curCat, setcurCat] = React.useState<string>("全部歌单");
-    const [limit, setLimit] = React.useState<number>(24);
+    const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
     const [visible, setVisible] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [hotDetailCats, setHotDetailCats] = React.useState<IHotDetailCats>(
@@ -35,24 +38,26 @@ const HotDetail: React.FunctionComponent = () => {
         req.netease
             .hotDetails(curCat, limit)
             .then((res) => {
-                setTopLists(res);
+                setTopLists(unique(res));
             })
             .finally(() => setLoading(false));
     }, [curCat, limit]);
 
     React.useEffect(() => {
         getHotDetailCats();
-        getHotDetails();
-    }, [getHotDetailCats, getHotDetails]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const updateCurInfo = React.useCallback(
-        (curCat: string) => {
-            setcurCat(curCat);
-            getHotDetails();
-            setVisible(false);
-        },
-        [getHotDetails]
-    );
+    React.useEffect(() => {
+        getHotDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [curCat, limit]);
+
+    const updateCurInfo = React.useCallback(async (curCat: string) => {
+        setcurCat(curCat);
+        setLimit(INIT_LIMIT);
+        setVisible(false);
+    }, []);
     const PopContent = React.useCallback(() => {
         return (
             <div style={{ width: 500 }}>
@@ -135,7 +140,7 @@ const HotDetail: React.FunctionComponent = () => {
                                     position: "relative",
                                 }}
                             >
-                                <LazyLoad height={150}>
+                                <LazyLoad placeholder={<LoadingImg />}>
                                     <img
                                         style={{ opacity: 0.65 }}
                                         width={150}

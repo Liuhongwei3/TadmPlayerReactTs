@@ -10,6 +10,8 @@ import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
+import LazyLoad from "react-lazyload";
+import LoadingImg from "../../../components/LoadingImg";
 
 const RecommendDetail: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -42,18 +44,28 @@ const RecommendDetail: React.FunctionComponent = () => {
                                     position: "relative",
                                 }}
                             >
-                                <img
-                                    style={{ opacity: 0.65 }}
-                                    width={150}
+                                <LazyLoad
                                     height={150}
-                                    alt="detail-cover"
-                                    src={item.picUrl}
-                                />
+                                    placeholder={<LoadingImg />}
+                                >
+                                    <img
+                                        style={{ opacity: 0.65 }}
+                                        width={150}
+                                        height={150}
+                                        alt="detail-cover"
+                                        src={item.picUrl}
+                                    />
+                                </LazyLoad>
+
                                 <StyledCount>
-                                    <CustomerServiceOutlined style={{marginRight: 5}} />
+                                    <CustomerServiceOutlined
+                                        style={{ marginRight: 5 }}
+                                    />
                                     {countFormat(item.playCount)}
                                 </StyledCount>
-                                <StyledDesc width={150}>{item.copywriter}</StyledDesc>
+                                <StyledDesc width={150}>
+                                    {item.copywriter}
+                                </StyledDesc>
                             </div>
 
                             <StyledName width={150}>{item.name}</StyledName>

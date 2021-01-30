@@ -12,6 +12,7 @@ import {
     VideoCameraOutlined,
     TrophyOutlined,
 } from "@ant-design/icons";
+import { DEFAULT_AVATAR } from "../../defaultConfig";
 
 const LeftSide: React.FunctionComponent = () => {
     const [collapsed, setCollapsed] = React.useState<boolean>(true);
@@ -42,7 +43,7 @@ const LeftSide: React.FunctionComponent = () => {
         >
             <Image
                 width={collapsed ? 80 : 160}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                src={DEFAULT_AVATAR}
             />
             <Menu
                 theme="dark"

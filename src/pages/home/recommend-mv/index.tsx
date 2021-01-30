@@ -10,6 +10,7 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import StyledCount from "../../../components/detail/StyledCount";
 import LazyLoad from "react-lazyload";
+import LoadingImg from "../../../components/LoadingImg";
 
 const RecommendMv: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -42,7 +43,10 @@ const RecommendMv: React.FunctionComponent = () => {
                                     position: "relative",
                                 }}
                             >
-                                <LazyLoad height={200}>
+                                <LazyLoad
+                                    height={200}
+                                    placeholder={<LoadingImg />}
+                                >
                                     <img
                                         style={{ opacity: 0.65 }}
                                         width={320}
