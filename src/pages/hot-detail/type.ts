@@ -1,3 +1,11 @@
+export interface IHotdetailRes {
+    total: number;
+    code: number;
+    more: boolean;
+    cat: string;
+    playlists: IHotDetail[];
+}
+
 export interface IHotDetail {
     id: number;
     name: string;
@@ -18,7 +26,8 @@ export interface ICat {
     activity: boolean;
 }
 export interface IHotDetailCats {
+    code: number;
+    sub: ICat[];
     all: { name: string };
     categories: { [key: string]: string };
-    sub: ICat[];
 }

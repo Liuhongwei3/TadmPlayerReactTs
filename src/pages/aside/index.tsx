@@ -6,8 +6,6 @@ import {
     AppstoreOutlined,
     BarChartOutlined,
     CloudOutlined,
-    ShopOutlined,
-    TeamOutlined,
     UserOutlined,
     VideoCameraOutlined,
     TrophyOutlined,
@@ -67,11 +65,11 @@ const LeftSide: React.FunctionComponent = () => {
                 <Menu.Item key="6" icon={<AppstoreOutlined />}>
                     nav 6
                 </Menu.Item>
-                <Menu.Item key="7" icon={<TeamOutlined />}>
-                    nav 7
+                <Menu.Item key="user" icon={<UserOutlined />}>
+                    <Link to="/user">用户</Link>
                 </Menu.Item>
-                <Menu.Item key="8" icon={<ShopOutlined />}>
-                    nav 8
+                <Menu.Item key="8" icon={<VideoCameraOutlined />}>
+                    <Link to="/mv">MV</Link>
                 </Menu.Item>
             </Menu>
         </Layout.Sider>

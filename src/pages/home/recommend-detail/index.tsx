@@ -1,5 +1,5 @@
 import React from "react";
-import { Spin } from "antd";
+import { Empty, Spin } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
@@ -19,60 +19,64 @@ const RecommendDetail: React.FunctionComponent = () => {
         []
     );
 
-    const getRecomDetails = async () => {
+    const getRecomDetails = React.useCallback(async () => {
         setLoading(true);
         let data = await req.netease.getRecomDetails();
-        setRecomDetails(data);
+        setRecomDetails(data.result);
         setLoading(false);
-    };
+    }, []);
 
     React.useEffect(() => {
         getRecomDetails();
-    }, []);
+    }, [getRecomDetails]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《推荐歌单》</h2>
-            <StyledWrapper>
-                {recomDetails.map((item: IRecomDetail) => {
-                    return (
-                        <StyledItem key={item.id}>
-                            <div
-                                style={{
-                                    width: 150,
-                                    height: 150,
-                                    position: "relative",
-                                }}
-                            >
-                                <LazyLoad
-                                    height={150}
-                                    placeholder={<LoadingImg />}
+            {recomDetails.length ? (
+                <StyledWrapper>
+                    {recomDetails.map((item: IRecomDetail) => {
+                        return (
+                            <StyledItem key={item.id}>
+                                <div
+                                    style={{
+                                        width: 150,
+                                        height: 150,
+                                        position: "relative",
+                                    }}
                                 >
-                                    <img
-                                        style={{ opacity: 0.65 }}
-                                        width={150}
+                                    <LazyLoad
                                         height={150}
-                                        alt="detail-cover"
-                                        src={item.picUrl}
-                                    />
-                                </LazyLoad>
+                                        placeholder={<LoadingImg />}
+                                    >
+                                        <img
+                                            style={{ opacity: 0.65 }}
+                                            width={150}
+                                            height={150}
+                                            alt="detail-cover"
+                                            src={item.picUrl}
+                                        />
+                                    </LazyLoad>
 
-                                <StyledCount>
-                                    <CustomerServiceOutlined
-                                        style={{ marginRight: 5 }}
-                                    />
-                                    {countFormat(item.playCount)}
-                                </StyledCount>
-                                <StyledDesc width={150}>
-                                    {item.copywriter}
-                                </StyledDesc>
-                            </div>
+                                    <StyledCount>
+                                        <CustomerServiceOutlined
+                                            style={{ marginRight: 5 }}
+                                        />
+                                        {countFormat(item.playCount)}
+                                    </StyledCount>
+                                    <StyledDesc width={150}>
+                                        {item.copywriter}
+                                    </StyledDesc>
+                                </div>
 
-                            <StyledName width={150}>{item.name}</StyledName>
-                        </StyledItem>
-                    );
-                })}
-            </StyledWrapper>
+                                <StyledName width={150}>{item.name}</StyledName>
+                            </StyledItem>
+                        );
+                    })}
+                </StyledWrapper>
+            ) : (
+                <Empty />
+            )}
         </Spin>
     );
 };

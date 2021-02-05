@@ -1,6 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { Spin } from "antd";
+import { Empty, Spin } from "antd";
 
 import req from "../../../api/req";
 import { IArtist, INewSongs } from "../type";
@@ -14,68 +14,72 @@ const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [newSongs, setNewSongs] = React.useState<Array<INewSongs>>([]);
 
-    const getNewSongs = async () => {
+    const getNewSongs = React.useCallback(async () => {
         setLoading(true);
         let data = await req.netease.getNewSongs();
-        setNewSongs(data);
+        setNewSongs(data.result);
         setLoading(false);
-    };
+    }, []);
 
     React.useEffect(() => {
         getNewSongs();
-    }, []);
+    }, [getNewSongs]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《最新音乐》</h2>
-            <StyledWrapper>
-                {newSongs.map((item: INewSongs) => {
-                    return (
-                        <StyledItem key={item.id}>
-                            <div
-                                style={{
-                                    width: 150,
-                                    height: 150,
-                                    position: "relative",
-                                }}
-                            >
-                                <LazyLoad
-                                    height={160}
-                                    placeholder={<LoadingImg />}
+            {newSongs.length ? (
+                <StyledWrapper>
+                    {newSongs.map((item: INewSongs) => {
+                        return (
+                            <StyledItem key={item.id}>
+                                <div
+                                    style={{
+                                        width: 150,
+                                        height: 150,
+                                        position: "relative",
+                                    }}
                                 >
-                                    <img
-                                        style={{ opacity: 0.65 }}
-                                        width={150}
-                                        height={150}
-                                        alt="detail-cover"
-                                        loading="lazy"
-                                        src={item.picUrl}
-                                    />
-                                </LazyLoad>
-                                <StyledDesc width={150}>
-                                    <span>By </span>
-                                    {item.song.artists.map(
-                                        (artist: IArtist) => {
-                                            return item.song.artists.length ===
-                                                1 ? (
-                                                <span key={artist.id}>
-                                                    {artist.name}
-                                                </span>
-                                            ) : (
-                                                <span key={artist.id}>
-                                                    {`${artist.name} / `}
-                                                </span>
-                                            );
-                                        }
-                                    )}
-                                </StyledDesc>
-                            </div>
+                                    <LazyLoad
+                                        height={160}
+                                        placeholder={<LoadingImg />}
+                                    >
+                                        <img
+                                            style={{ opacity: 0.65 }}
+                                            width={150}
+                                            height={150}
+                                            alt="detail-cover"
+                                            loading="lazy"
+                                            src={item.picUrl}
+                                        />
+                                    </LazyLoad>
+                                    <StyledDesc width={150}>
+                                        <span>By </span>
+                                        {item.song.artists.map(
+                                            (artist: IArtist) => {
+                                                return item.song.artists
+                                                    .length === 1 ? (
+                                                    <span key={artist.id}>
+                                                        {artist.name}
+                                                    </span>
+                                                ) : (
+                                                    <span key={artist.id}>
+                                                        {`${artist.name} / `}
+                                                    </span>
+                                                );
+                                            }
+                                        )}
+                                    </StyledDesc>
+                                </div>
 
-                            <StyledName width={150}>{item.name}</StyledName>
-                        </StyledItem>
-                    );
-                })}
-            </StyledWrapper>
+                                <StyledName width={150}>{item.name}</StyledName>
+                            </StyledItem>
+                        );
+                    })}
+                </StyledWrapper>
+            ) : (
+                <Empty />
+            )}
         </Spin>
     );
 };

@@ -2,8 +2,9 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 
 import Home from "./pages/home";
-import HotDetail from "./pages/hotDetail";
+import HotDetail from "./pages/hot-detail";
 import Top from "./pages/top";
+import User from "./pages/user";
 
 const Routers: React.FunctionComponent = () => {
     return (
@@ -16,6 +17,9 @@ const Routers: React.FunctionComponent = () => {
             </Route>
             <Route exact path="/hotDetail">
                 <HotDetail />
+            </Route>
+            <Route exact path="/user">
+                <User />
             </Route>
         </Switch>
     );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Divider, Popover, Spin } from "antd";
+import { Button, Divider, Empty, Popover, Spin } from "antd";
 import { CustomerServiceOutlined, RightOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
@@ -38,20 +38,18 @@ const HotDetail: React.FunctionComponent = () => {
         req.netease
             .hotDetails(curCat, limit)
             .then((res) => {
-                setTopLists(unique(res));
+                setTopLists(unique(res.playlists));
             })
             .finally(() => setLoading(false));
     }, [curCat, limit]);
 
     React.useEffect(() => {
         getHotDetailCats();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [getHotDetailCats]);
 
     React.useEffect(() => {
         getHotDetails();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [curCat, limit]);
+    }, [getHotDetails]);
 
     const updateCurInfo = React.useCallback(async (curCat: string) => {
         setcurCat(curCat);
@@ -129,50 +127,55 @@ const HotDetail: React.FunctionComponent = () => {
                 </span>
             </Popover>
             <Divider />
-            <StyledWrapper>
-                {topLists.map((item: IHotDetail) => {
-                    return (
-                        <StyledItem key={item.id}>
-                            <div
-                                style={{
-                                    width: 150,
-                                    height: 150,
-                                    position: "relative",
-                                }}
-                            >
-                                <LazyLoad placeholder={<LoadingImg />}>
-                                    <img
-                                        style={{ opacity: 0.65 }}
-                                        width={150}
-                                        height={150}
-                                        alt="detail-cover"
-                                        loading="lazy"
-                                        src={item.coverImgUrl}
-                                    />
-                                </LazyLoad>
-                                <StyledCount>
-                                    <CustomerServiceOutlined
-                                        style={{ marginRight: 5 }}
-                                    />
-                                    {countFormat(item.playCount)}
-                                </StyledCount>
-                                <StyledDesc width={150}>
-                                    <div>{`By ${item.creator.nickname}`}</div>
-                                    <div>{`${dateFormat(
-                                        item.updateTime
-                                    )} 更新`}</div>
-                                </StyledDesc>
-                            </div>
+            {topLists.length ? (
+                <StyledWrapper>
+                    {topLists.map((item: IHotDetail) => {
+                        return (
+                            <StyledItem key={item.id}>
+                                <div
+                                    style={{
+                                        width: 150,
+                                        height: 150,
+                                        position: "relative",
+                                    }}
+                                >
+                                    <LazyLoad placeholder={<LoadingImg />}>
+                                        <img
+                                            style={{ opacity: 0.65 }}
+                                            width={150}
+                                            height={150}
+                                            alt="detail-cover"
+                                            loading="lazy"
+                                            src={item.coverImgUrl}
+                                        />
+                                    </LazyLoad>
+                                    <StyledCount>
+                                        <CustomerServiceOutlined
+                                            style={{ marginRight: 5 }}
+                                        />
+                                        {countFormat(item.playCount)}
+                                    </StyledCount>
+                                    <StyledDesc width={150}>
+                                        <div>{`By ${item.creator.nickname}`}</div>
+                                        <div>{`${dateFormat(
+                                            item.updateTime
+                                        )} 更新`}</div>
+                                    </StyledDesc>
+                                </div>
 
-                            <StyledName width={150}>{item.name}</StyledName>
-                        </StyledItem>
-                    );
-                })}
-            </StyledWrapper>
+                                <StyledName width={150}>{item.name}</StyledName>
+                            </StyledItem>
+                        );
+                    })}
+                </StyledWrapper>
+            ) : (
+                <Empty />
+            )}
+
             <Button
                 style={{ margin: "0 auto", display: "flex" }}
                 type="primary"
-                disabled={limit >= 100}
+                disabled={!topLists.length || limit >= 100}
                 loading={loading}
                 onClick={() => setLimit(limit + 12)}
             >

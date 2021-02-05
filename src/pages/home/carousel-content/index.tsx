@@ -16,7 +16,7 @@ const StyledCarousel = styled.div`
     background-position: center center;
 
     ${(props: { backImg: null | string }) => {
-        return props.backImg ? `background-image: url(${props.backImg})` : '';
+        return props.backImg ? `background-image: url(${props.backImg})` : "";
     }}
 `;
 
@@ -68,23 +68,29 @@ const CarouselContent: React.FunctionComponent = () => {
     const [banners, setBanners] = React.useState<Array<IBanner>>([]);
     const imgRef = React.useRef<CarouselRef | null>(null);
 
-    const getBanners = async () => {
+    const getBanners = React.useCallback(async () => {
         let data = await req.netease.getBanner();
-        setBanners(data);
-    };
+        setBanners(data.banners);
+    }, []);
 
     React.useEffect(() => {
         getBanners();
-    }, []);
+    }, [getBanners]);
 
-    return (
-        <StyledCarousel backImg={banners[currentSlide] ? banners[currentSlide].imageUrl : null}>
+    return banners.length ? (
+        <StyledCarousel
+            backImg={
+                banners[currentSlide] ? banners[currentSlide].imageUrl : null
+            }
+        >
             <Carousel
                 effect={"fade"}
                 autoplay={true}
                 autoplaySpeed={5000}
                 ref={imgRef}
-                beforeChange={(currentSlide, nextSlide) => setCurrentSlide(nextSlide)}
+                beforeChange={(currentSlide, nextSlide) =>
+                    setCurrentSlide(nextSlide)
+                }
             >
                 {banners.map((item: IBanner) => {
                     return (
@@ -103,7 +109,7 @@ const CarouselContent: React.FunctionComponent = () => {
             <StyledLeftCircleOutlined onClick={() => imgRef.current?.prev()} />
             <StyledRightCircleOutlined onClick={() => imgRef.current?.next()} />
         </StyledCarousel>
-    );
+    ) : null;
 };
 
 export default CarouselContent;

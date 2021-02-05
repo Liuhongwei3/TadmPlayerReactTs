@@ -3,6 +3,11 @@ export interface IStyledProps {
     height?: number;
 }
 
+export interface IBannerRes {
+    code: number;
+    banners: IBanner[];
+}
+
 export interface IBanner {
     imageUrl: string;
     targetId: number;
@@ -11,6 +16,13 @@ export interface IBanner {
     typeTitle: string;
     url: string;
     scm: string;
+}
+
+export interface IRecomDetailRes {
+    hasTaste: number;
+    code: number;
+    category: number;
+    result: IRecomDetail[];
 }
 
 export interface IRecomDetail {
@@ -23,6 +35,23 @@ export interface IRecomDetail {
     trackCount: number;
 }
 
+export interface IPersonPushRes {
+    code: number;
+    name: string;
+    result: IPersonPush[];
+}
+
+export interface IPersonPush {
+    id: number;
+    url: string;
+    picUrl: string;
+    sPicUrl: string;
+    type: number;
+    copywriter: string;
+    name: string;
+    alg: string;
+}
+
 export interface IArtist {
     id: number;
     name: string;
@@ -32,6 +61,12 @@ export interface IArtist {
     musicSize: number;
 }
 
+export interface INewSongsRes {
+    code: number;
+    category: number;
+    result: INewSongs[];
+}
+
 export interface INewSongs {
     id: number;
     type: number;
@@ -39,4 +74,31 @@ export interface INewSongs {
     copywriter: string;
     picUrl: string;
     song: { artists: IArtist[] };
+}
+
+export interface IRecommendMvRes {
+    code: number;
+    category: number;
+    result: IRecommendMv[];
+}
+
+export interface IArtists {
+    id: number;
+    name: string;
+}
+
+export interface IRecommendMv {
+    id: number;
+    type: number;
+    name: string;
+    copywriter: string;
+    picUrl: string;
+    canDislike: boolean;
+    duration: number;
+    playCount: number;
+    subed: boolean;
+    artists: IArtists[];
+    artistName: string;
+    artistId: number;
+    alg: string;
 }

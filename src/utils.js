@@ -24,7 +24,16 @@ export function dateFormat(dateIn = 0, type = "less") {
         minutes = minutes.toString().padStart(2, "0");
         seconds = seconds.toString().padStart(2, "0");
 
-        let curYear = new Date().getFullYear();
+        const curYear = new Date().getFullYear();
+        const curDay = new Date().getDate();
+
+        if (+day === curDay) {
+            return "今天";
+        } else if (curDay - +day === 1) {
+            return "昨天";
+        } else if (curDay - +day === 2) {
+            return "前天";
+        }
 
         let res = "";
         res =
