@@ -8,6 +8,7 @@ const StyledName = styled.div`
     text-overflow: ellipsis;
     text-align: center;
     font-size: 15px;
+    margin-top: 5px;
 
     ${(props: IStyledProps) =>
         props.width ? `width: ${props.width}px` : `width: 100%`}

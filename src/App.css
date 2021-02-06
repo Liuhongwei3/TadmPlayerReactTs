@@ -51,3 +51,42 @@ img {
     color: white;
     background-color: #777777;
 }
+
+.ant-collapse-content-active {
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.ant-table {
+    background-color: #fff0;
+}
+
+/* 修改表头文字、背景颜色 */
+.ant-table-thead > tr > th {
+    color: #cccccc !important;
+    background-color: #fff0 !important;
+    border-bottom: 1px solid #a5a3a3;
+}
+
+/* 修改列表文字、背景颜色 */
+.ant-table-tbody > tr,
+td {
+    color: white !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    border-bottom: 1px solid #7e7e7e !important;
+}
+
+/* 去除鼠标悬浮的背景色   */
+.ant-table-tbody > tr:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+    cursor: pointer;
+}
+
+
+.ant-pagination-total-text {
+    color: white;
+}
+
+.ant-tabs {
+    color: white;
+}

@@ -12,8 +12,10 @@ import StyledName from "../../components/detail/StyledName";
 import { countFormat, dateFormat } from "../../utils";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
+import { useHistory } from "react-router-dom";
 
 const Top: React.FunctionComponent = () => {
+    const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [topLists, setTopLists] = React.useState<Array<ITopList>>([]);
 
@@ -28,13 +30,23 @@ const Top: React.FunctionComponent = () => {
         getRecomDetails();
     }, [getRecomDetails]);
 
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/detail/${id}`);
+        },
+        [history]
+    );
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             {topLists.length ? (
                 <StyledWrapper>
                     {topLists.map((item: ITopList) => {
                         return (
-                            <StyledItem key={item.id}>
+                            <StyledItem
+                                key={item.id}
+                                onClick={() => toDetail(item.id)}
+                            >
                                 <div
                                     style={{
                                         width: 150,

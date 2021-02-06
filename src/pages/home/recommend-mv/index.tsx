@@ -1,5 +1,7 @@
 import React from "react";
+import LazyLoad from "react-lazyload";
 import { Empty, Spin } from "antd";
+import { VideoCameraOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
 import { IRecommendMv } from "../type";
@@ -9,7 +11,6 @@ import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import StyledCount from "../../../components/detail/StyledCount";
-import LazyLoad from "react-lazyload";
 import LoadingImg from "../../../components/LoadingImg";
 
 const RecommendMv: React.FunctionComponent = () => {
@@ -57,6 +58,9 @@ const RecommendMv: React.FunctionComponent = () => {
                                         />
                                     </LazyLoad>
                                     <StyledCount>
+                                        <VideoCameraOutlined
+                                            style={{ marginRight: 5 }}
+                                        />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
                                     <StyledDesc width={320}>

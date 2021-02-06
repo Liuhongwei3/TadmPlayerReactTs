@@ -104,7 +104,9 @@ export function throttle(func, delay = 500, immediate = false) {
     };
 }
 
-export function shuffle(arr) {
+export function shuffle(arr = []) {
+    if (!arr.length) return [];
+
     let i = arr.length;
     if (i <= 0) {
         return [];

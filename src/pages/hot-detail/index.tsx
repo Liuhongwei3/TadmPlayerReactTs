@@ -10,14 +10,37 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
-import { DEFAULT_CATS } from "../../defaultConfig";
 import StyledTag from "../../components/StyledTag";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
+import { useHistory } from "react-router-dom";
 
 const INIT_LIMIT = 24;
+const DEFAULT_CATS = {
+    code: 200,
+    all: { name: "全部歌单" },
+    categories: {
+        0: "语种",
+        1: "风格",
+        2: "场景",
+        3: "情感",
+        4: "主题",
+    },
+    sub: [
+        {
+            name: "流行",
+            resourceCount: 943,
+            type: 0,
+            category: 1,
+            resourceType: 0,
+            hot: true,
+            activity: false,
+        },
+    ],
+};
 
 const HotDetail: React.FunctionComponent = () => {
+    const history = useHistory();
     const [curCat, setcurCat] = React.useState<string>("全部歌单");
     const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
     const [visible, setVisible] = React.useState<boolean>(false);
@@ -56,6 +79,14 @@ const HotDetail: React.FunctionComponent = () => {
         setLimit(INIT_LIMIT);
         setVisible(false);
     }, []);
+
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/detail/${id}`);
+        },
+        [history]
+    );
+
     const PopContent = React.useCallback(() => {
         return (
             <div style={{ width: 500 }}>
@@ -131,7 +162,10 @@ const HotDetail: React.FunctionComponent = () => {
                 <StyledWrapper>
                     {topLists.map((item: IHotDetail) => {
                         return (
-                            <StyledItem key={item.id}>
+                            <StyledItem
+                                key={item.id}
+                                onClick={() => toDetail(item.id)}
+                            >
                                 <div
                                     style={{
                                         width: 150,

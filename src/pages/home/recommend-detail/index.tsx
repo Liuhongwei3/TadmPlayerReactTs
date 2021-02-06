@@ -12,8 +12,10 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../../components/LoadingImg";
+import { useHistory } from "react-router-dom";
 
 const RecommendDetail: React.FunctionComponent = () => {
+    const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [recomDetails, setRecomDetails] = React.useState<Array<IRecomDetail>>(
         []
@@ -30,6 +32,13 @@ const RecommendDetail: React.FunctionComponent = () => {
         getRecomDetails();
     }, [getRecomDetails]);
 
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/detail/${id}`);
+        },
+        [history]
+    );
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《推荐歌单》</h2>
@@ -37,7 +46,10 @@ const RecommendDetail: React.FunctionComponent = () => {
                 <StyledWrapper>
                     {recomDetails.map((item: IRecomDetail) => {
                         return (
-                            <StyledItem key={item.id}>
+                            <StyledItem
+                                key={item.id}
+                                onClick={() => toDetail(item.id)}
+                            >
                                 <div
                                     style={{
                                         width: 150,

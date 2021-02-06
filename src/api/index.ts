@@ -34,11 +34,15 @@ axiosInst.interceptors.request.use(
 
 axiosInst.interceptors.response.use(
     (response) => {
-        const data = parseResponseData(response.data);
+        const res = parseResponseData(response);
 
-        return data;
+        if (res.data && typeof res.data === "string") {
+            console.log(res.data)
+        }
+        return res.data;
     },
     (error) => {
+        console.log(error)
         // 当 401 重定向到登录页
         if (error && error.response && error.response.status === 401) {
             // window.location.href = getSsoRedirectUrl();

@@ -4,7 +4,7 @@ import { Layout, Menu, Image } from "antd";
 import {
     HomeOutlined,
     AppstoreOutlined,
-    BarChartOutlined,
+    BarsOutlined,
     CloudOutlined,
     UserOutlined,
     VideoCameraOutlined,
@@ -20,7 +20,11 @@ const LeftSide: React.FunctionComponent = () => {
 
     const updateSelectedKeys = React.useCallback(() => {
         const curUrl = window.location.hash.split("#")![1].replace("/", "");
-        setSelectedKeys(curUrl ? [curUrl] : ["home"]);
+        if (curUrl.split("/").length > 1) {
+            setSelectedKeys(["detail"]);
+        } else {
+            setSelectedKeys(curUrl ? [curUrl] : ["home"]);
+        }
     }, []);
 
     React.useEffect(updateSelectedKeys, [updateSelectedKeys]);
@@ -39,10 +43,7 @@ const LeftSide: React.FunctionComponent = () => {
             collapsed={collapsed}
             onCollapse={setCollapsed}
         >
-            <Image
-                width={collapsed ? 80 : 160}
-                src={DEFAULT_AVATAR}
-            />
+            <Image width={collapsed ? 80 : 160} src={DEFAULT_AVATAR} />
             <Menu
                 theme="dark"
                 mode="vertical"
@@ -59,8 +60,8 @@ const LeftSide: React.FunctionComponent = () => {
                 <Menu.Item key="hotDetail" icon={<CloudOutlined />}>
                     <Link to="/hotDetail">热门歌单</Link>
                 </Menu.Item>
-                <Menu.Item key="4" icon={<BarChartOutlined />}>
-                    nav 4
+                <Menu.Item key="detail" icon={<BarsOutlined />}>
+                    <Link to="/detail/3778678">歌单详情</Link>
                 </Menu.Item>
                 <Menu.Item key="6" icon={<AppstoreOutlined />}>
                     nav 6
@@ -68,7 +69,7 @@ const LeftSide: React.FunctionComponent = () => {
                 <Menu.Item key="user" icon={<UserOutlined />}>
                     <Link to="/user">用户</Link>
                 </Menu.Item>
-                <Menu.Item key="8" icon={<VideoCameraOutlined />}>
+                <Menu.Item key="mv" icon={<VideoCameraOutlined />}>
                     <Link to="/mv">MV</Link>
                 </Menu.Item>
             </Menu>
