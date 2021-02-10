@@ -1,0 +1,94 @@
+import React from "react";
+import { Empty, Spin, Tabs, Pagination } from "antd";
+import req from "../../api/req";
+import { notify } from "../../utils";
+import { IDetailComment, IDetailCommentsRes, IDetailHotComment } from "./type";
+import StyledComment from "../../components/StyledComment";
+
+interface IProps {
+    detailId: string;
+    commCount: number;
+}
+
+const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { detailId, commCount } = props;
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const [page, setPage] = React.useState<number>(1);
+    const [pageSize, setPageSize] = React.useState<number>(10);
+    const [hotComms, setHotComms] = React.useState<IDetailHotComment[]>();
+    const [comms, setcomms] = React.useState<IDetailComment[]>();
+
+    const before = React.useMemo(() => {
+        return comms && comms.length ? comms[pageSize - 1].time : undefined;
+    }, [comms, pageSize]);
+
+    const getDetailComments = React.useCallback(() => {
+        setLoading(true);
+        req.netease
+            .detailComment(detailId, pageSize, (page - 1) * pageSize, before)
+            .then((res: IDetailCommentsRes) => {
+                res.hotComments && setHotComms(res.hotComments);
+                setcomms(res.comments);
+            })
+            .catch((e) => notify("error", e))
+            .finally(() => setLoading(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [detailId, page, pageSize]);
+
+    React.useEffect(() => {
+        commCount && getDetailComments();
+    }, [commCount, getDetailComments, page, pageSize]);
+
+    const pageChange = React.useCallback((page1, pageSize1) => {
+        setPage(page1);
+        setPageSize(pageSize1);
+    }, []);
+
+    return commCount ? (
+        <Spin tip="Loading..." spinning={loading}>
+            <Tabs defaultActiveKey="hot-comm">
+                <Tabs.TabPane tab={`精彩评论`} key="hot-comm">
+                    {hotComms && hotComms.length ? (
+                        hotComms.map((hotComm) => (
+                            <StyledComment
+                                key={hotComm.commentId}
+                                comm={hotComm}
+                            />
+                        ))
+                    ) : (
+                        <Empty />
+                    )}
+                </Tabs.TabPane>
+                <Tabs.TabPane tab={`最新评论`} key="lastest-comm">
+                    {comms && comms.length ? (
+                        <React.Fragment>
+                            {comms.map((comm) => (
+                                <StyledComment
+                                    key={comm.commentId}
+                                    comm={comm}
+                                />
+                            ))}
+                            <Pagination
+                                style={{ float: "right" }}
+                                total={commCount}
+                                current={page}
+                                pageSize={pageSize}
+                                showQuickJumper={true}
+                                showTotal={(total) => `共 ${total} 条`}
+                                onChange={(page, pageSize) =>
+                                    pageChange(page, pageSize)
+                                }
+                            />
+                        </React.Fragment>
+                    ) : (
+                        <Empty />
+                    )}
+                </Tabs.TabPane>
+            </Tabs>
+        </Spin>
+    ) : (
+        <Empty />
+    );
+};
+
+export default DetailComments;

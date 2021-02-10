@@ -1,4 +1,5 @@
 import React from "react";
+import { SettingOutlined } from "@ant-design/icons";
 import styled, { keyframes } from "styled-components";
 
 const hue = keyframes`
@@ -34,8 +35,21 @@ const StyledHeader = styled.header`
     animation: ${hue} 10s ease-out infinite;
 `;
 
+const StyledSettingOutlined = styled(SettingOutlined)`
+    position: absolute;
+    z-index: 999;
+    top: 15px;
+    right: 5px;
+    color: #fff;
+`;
+
 const ContentHeader: React.FunctionComponent = () => {
-    return <StyledHeader>Tadm-Player-React ^-^</StyledHeader>;
+    return (
+        <StyledHeader>
+            Tadm-Player-React ^-^
+            <StyledSettingOutlined />
+        </StyledHeader>
+    );
 };
 
 export default ContentHeader;

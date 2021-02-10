@@ -27,19 +27,20 @@ export function dateFormat(dateIn = 0, type = "less") {
         const curYear = new Date().getFullYear();
         const curDay = new Date().getDate();
 
-        if (+day === curDay) {
-            return "今天";
-        } else if (curDay - +day === 1) {
-            return "昨天";
-        } else if (curDay - +day === 2) {
-            return "前天";
-        }
-
         let res = "";
         res =
             curYear === year
                 ? `${month}月${day}日`
                 : `${year}年${month}月${day}日`;
+
+        if (+day === curDay) {
+            res = "今天";
+        } else if (curDay - +day === 1) {
+            res = "昨天";
+        } else if (curDay - +day === 2) {
+            res = "前天";
+        }
+
         res += type === "more" ? ` ${hour}:${minutes}:${seconds}` : "";
 
         return res;
@@ -63,15 +64,15 @@ export function countFormat(value) {
     if (value < 1000) {
         return value;
     } else if (value > 1000 && value < 10000) {
-        return Math.round(value / 1000) + " K+";
+        return Math.floor(value / 1000) + " K+";
     } else if (value > 10000 && value < 1000000) {
-        return Math.round(value / 10000) + " W+";
+        return Math.floor(value / 10000) + " W+";
     } else if (value > 1000000 && value < 10000000) {
-        return Math.round(value / 1000000) + " 百W+";
+        return Math.floor(value / 1000000) + " 百W+";
     } else if (value > 10000000 && value < 100000000) {
-        return Math.round(value / 10000000) + " 千W+";
+        return Math.floor(value / 10000000) + " 千W+";
     } else {
-        return Math.round(value / 100000000) + " 亿+";
+        return Math.floor(value / 100000000) + " 亿+";
     }
 }
 

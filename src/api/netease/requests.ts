@@ -1,9 +1,21 @@
-import api from '../index';
+import api from "../index";
 import { ITopListRes } from "../../pages/top/type";
-import { IHotDetailCats, IHotdetailRes } from '../../pages/hot-detail/type';
-import { IBannerRes, INewSongsRes, IPersonPushRes, IRecomDetailRes, IRecommendMvRes } from '../../pages/home/type';
-import { IUserDetail } from '../../pages/user/type';
-import { ISongsRes } from '../../pages/detail/type';
+import { IHotDetailCats, IHotdetailRes } from "../../pages/hot-detail/type";
+import {
+    IBannerRes,
+    INewSongsRes,
+    IPersonPushRes,
+    IRecomDetailRes,
+    IRecommendMvRes,
+} from "../../pages/home/type";
+import { IUserDetail } from "../../pages/user/type";
+import {
+    IDetailCommentsRes,
+    IDetailRes,
+    IDetailSubUsersRes,
+    ISimilarDetailsRes,
+    ISongsRes,
+} from "../../pages/detail/type";
 
 // -----------------------------------------------------
 // 首页
@@ -60,8 +72,31 @@ const userDetail = (uid: number) => {
 // ----------------------------------------------------------------------
 // 歌单详情
 
-const playlistdetail = (id: number) => {
-    return api.get(`/playlist/detail?id=${id}`);
+const playlistdetail = (id: number | string) => {
+    return api.get<IDetailRes>(`/playlist/detail?id=${id}`);
+};
+
+const detailComment = (
+    id: number | string,
+    limit = 10,
+    offset?: number,
+    before?: number
+) => {
+    const base = `/comment/playlist?id=${id}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+    const optional2 = before ? `&before=${before}` : "";
+    return api.get<IDetailCommentsRes>(`${base}${optional1}${optional2}`);
+};
+
+const detailSubscribe = (id: string | number, limit = 20, offset?: number) => {
+    const optional = offset ? `&offset=${offset}` : "";
+    return api.get<IDetailSubUsersRes>(
+        `/playlist/subscribers?id=${id}&limit=${limit}${optional}`
+    );
+};
+
+const getSimiDetails = (id: string | number) => {
+    return api.get<ISimilarDetailsRes>(`/related/playlist?id=${id}`);
 };
 
 // ----------------------------------------------------------------------
@@ -77,17 +112,20 @@ const getMusicDetail = (ids: string) => {
 // ----------------------------------------------------------------------
 // 视频
 const reqFuncs = {
-        getBanner,
-        getRecomDetails,
-        getPerPush,
-        getNewSongs,
-        getNewMvs,
-        toplist,
-        hotDetailCats,
-        hotDetails,
-        userDetail,
-        playlistdetail,
-        getMusicDetail,
+    getBanner,
+    getRecomDetails,
+    getPerPush,
+    getNewSongs,
+    getNewMvs,
+    toplist,
+    hotDetailCats,
+    hotDetails,
+    userDetail,
+    playlistdetail,
+    detailComment,
+    detailSubscribe,
+    getSimiDetails,
+    getMusicDetail,
 };
 
 export default reqFuncs;

@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from 'axios';
+import { ICacheLike } from 'axios-extensions';
 
 declare module 'axios' {
     export interface AxiosInstance {
@@ -11,5 +11,9 @@ declare module 'axios' {
         // eslint-disable-next-line @typescript-eslint/method-signature-style
         delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
         // ...其他方法按需增加声明
+    }
+
+    export interface AxiosRequestConfig {
+        useCache?: boolean | ICacheLike<any>;
     }
 }

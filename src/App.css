@@ -82,11 +82,26 @@ td {
     cursor: pointer;
 }
 
-
-.ant-pagination-total-text {
-    color: white;
+.ant-tabs,
+.ant-pagination-item-ellipsis,
+.ant-pagination-total-text,
+.ant-pagination-options-quick-jumper {
+    color: white !important;
 }
 
-.ant-tabs {
-    color: white;
+.ant-comment-content-author-name {
+    color: #5aacc8;
+    transform: scale(1.1);
+}
+
+.ant-comment-content-author-name:hover {
+    color: #10e468;
+    border-bottom: 1px solid #10e468;
+    cursor: pointer;
+}
+
+.ant-comment-actions > li > span,
+.ant-comment-actions > li > span:hover {
+    color: #ff9999;
+    font-size: 13px;
 }

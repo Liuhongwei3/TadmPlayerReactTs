@@ -12,6 +12,9 @@ import StyledDivider from "../../components/StyledDivider";
 import { DEFAULT_RANDOM_COLORS } from "../../defaultConfig";
 import DetailSongs from "./detail-songs";
 import { useParams } from "react-router-dom";
+import DetailComments from "./detail-comments";
+import DetailSubscribedUsers from "./detail-subscribed-users";
+import DetailSimilar from "./detail-simiar";
 
 interface IRouteParams {
     detailId: string;
@@ -20,6 +23,7 @@ interface IRouteParams {
 const Detail: React.FunctionComponent = (props) => {
     const { detailId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [activeKey, setActiveKey] = React.useState<string>("1");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
 
     const getDetails = React.useCallback(async () => {
@@ -33,8 +37,12 @@ const Detail: React.FunctionComponent = (props) => {
         getDetails();
     }, [getDetails]);
 
-    const onTabChange = React.useCallback(() => {
-        console.log("change");
+    React.useEffect(() => {
+        setActiveKey("1");
+    }, [detailId]);
+
+    const onTabChange = React.useCallback((activeKey: string) => {
+        setActiveKey(activeKey);
     }, []);
 
     return (
@@ -114,8 +122,9 @@ const Detail: React.FunctionComponent = (props) => {
 
                     <Tabs
                         style={{ width: "calc(100vw - 104px)" }}
+                        activeKey={activeKey}
                         defaultActiveKey="1"
-                        onChange={onTabChange}
+                        onChange={(activeKey) => onTabChange(activeKey)}
                     >
                         <Tabs.TabPane
                             tab={`歌曲(${countFormat(
@@ -133,7 +142,10 @@ const Detail: React.FunctionComponent = (props) => {
                             )})`}
                             key="2"
                         >
-                            Content of Tab Pane 2
+                            <DetailComments
+                                detailId={detailId}
+                                commCount={detailInfo.playlist.commentCount}
+                            />
                         </Tabs.TabPane>
                         <Tabs.TabPane
                             tab={`收藏(${countFormat(
@@ -141,10 +153,15 @@ const Detail: React.FunctionComponent = (props) => {
                             )})`}
                             key="3"
                         >
-                            Content of Tab Pane 3
+                            <DetailSubscribedUsers
+                                detailId={detailId}
+                                subUserCount={
+                                    detailInfo.playlist.subscribedCount
+                                }
+                            />
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="推荐" key="4">
-                            Content of Tab Pane 3
+                            <DetailSimilar detailId={detailId} />
                         </Tabs.TabPane>
                     </Tabs>
                 </StyledWrapper>
