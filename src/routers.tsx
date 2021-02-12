@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import Album from "./pages/album";
 import Detail from "./pages/detail";
 
 import Home from "./pages/home";
@@ -21,6 +22,9 @@ const Routers: React.FunctionComponent = () => {
             </Route>
             <Route exact path="/detail/:detailId">
                 <Detail />
+            </Route>
+            <Route exact path="/album/:albumId">
+                <Album />
             </Route>
             <Route exact path="/user">
                 <User />

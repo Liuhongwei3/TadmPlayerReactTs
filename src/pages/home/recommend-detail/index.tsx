@@ -4,7 +4,7 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
 import { IRecomDetail } from "../type";
-import { countFormat } from "../../../utils";
+import { countFormat, updateCurMenu } from "../../../utils";
 import StyledCount from "../../../components/detail/StyledCount";
 import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
@@ -35,6 +35,7 @@ const RecommendDetail: React.FunctionComponent = () => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
+            updateCurMenu();
         },
         [history]
     );

@@ -11,6 +11,7 @@ import {
     TrophyOutlined,
 } from "@ant-design/icons";
 import { DEFAULT_AVATAR } from "../../defaultConfig";
+import { updateCurMenu } from "../../utils";
 
 const LeftSide: React.FunctionComponent = () => {
     const [collapsed, setCollapsed] = React.useState<boolean>(true);
@@ -19,12 +20,7 @@ const LeftSide: React.FunctionComponent = () => {
     ]);
 
     const updateSelectedKeys = React.useCallback(() => {
-        const curUrl = window.location.hash.split("#")![1].replace("/", "");
-        if (curUrl.split("/").length > 1) {
-            setSelectedKeys(["detail"]);
-        } else {
-            setSelectedKeys(curUrl ? [curUrl] : ["home"]);
-        }
+        setSelectedKeys(updateCurMenu());
     }, []);
 
     React.useEffect(updateSelectedKeys, [updateSelectedKeys]);
@@ -63,8 +59,8 @@ const LeftSide: React.FunctionComponent = () => {
                 <Menu.Item key="detail" icon={<BarsOutlined />}>
                     <Link to="/detail/3778678">歌单详情</Link>
                 </Menu.Item>
-                <Menu.Item key="6" icon={<AppstoreOutlined />}>
-                    nav 6
+                <Menu.Item key="album" icon={<AppstoreOutlined />}>
+                    <Link to="/album/21506">专辑</Link>
                 </Menu.Item>
                 <Menu.Item key="user" icon={<UserOutlined />}>
                     <Link to="/user">用户</Link>

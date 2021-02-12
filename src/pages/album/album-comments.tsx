@@ -2,16 +2,16 @@ import React from "react";
 import { Empty, Spin, Tabs, Pagination } from "antd";
 import req from "../../api/req";
 import { notify, toTop } from "../../utils";
-import { IComment, ICommentsRes, IHotComment } from "../commType";
 import StyledComment from "../../components/StyledComment";
+import { IComment, ICommentsRes, IHotComment } from "../commType";
 
 interface IProps {
-    detailId: string;
-    commCount: number;
+    albumId: string;
+    commCount: number | undefined;
 }
 
-const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { detailId, commCount } = props;
+const AlbumComments: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { albumId, commCount } = props;
     const [loading, setLoading] = React.useState<boolean>(false);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
@@ -25,7 +25,7 @@ const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
     const getDetailComments = React.useCallback(() => {
         setLoading(true);
         req.netease
-            .detailComment(detailId, pageSize, (page - 1) * pageSize, before)
+            .AlbumComments(+albumId, pageSize, (page - 1) * pageSize, before)
             .then((res: ICommentsRes) => {
                 res.hotComments && setHotComms(res.hotComments);
                 setcomms(res.comments);
@@ -33,7 +33,7 @@ const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
             .catch((e) => notify("error", e))
             .finally(() => setLoading(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [detailId, page, pageSize]);
+    }, [albumId, page, pageSize]);
 
     React.useEffect(() => {
         commCount && getDetailComments();
@@ -71,7 +71,7 @@ const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
                             ))}
                             <Pagination
                                 style={{ float: "right" }}
-                                total={commCount}
+                                total={commCount || 0}
                                 current={page}
                                 pageSize={pageSize}
                                 showQuickJumper={true}
@@ -92,4 +92,4 @@ const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default DetailComments;
+export default AlbumComments;

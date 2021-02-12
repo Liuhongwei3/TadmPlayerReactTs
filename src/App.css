@@ -105,3 +105,12 @@ td {
     color: #ff9999;
     font-size: 13px;
 }
+
+.ant-svg-scale {
+    transform: scale(1.4);
+    margin-left: 5px;
+}
+
+.ant-svg-scale:hover {
+    cursor: pointer;
+}

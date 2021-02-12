@@ -1,58 +1,20 @@
 import React from "react";
-import { Avatar, Table, Image } from "antd";
-import { ISong, ITrackId } from "./type";
-import req from "../../api/req";
-import { dateFormat, notify, timeFormat, toTop, unique } from "../../utils";
+import { Avatar, Table, Image, Empty } from "antd";
+import { Song } from "./type";
+import { timeFormat, toTop } from "../../utils";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 
 interface IProps {
-    trackIds: ITrackId[];
-    songCount: number;
+    songs: Song[] | undefined;
 }
 
-const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { trackIds, songCount } = props;
-    const [loading, setLoading] = React.useState<boolean>(false);
+const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { songs } = props;
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
-    const [songs, setSongs] = React.useState<ISong[]>([]);
-
-    const getSongsDetail = React.useCallback(() => {
-        setLoading(true);
-        req.netease
-            .getMusicDetail(
-                unique(
-                    trackIds.slice(
-                        page === 1 ? 0 : (page - 1) * pageSize,
-                        page * pageSize
-                    )
-                )
-                    .map((trackId) => trackId.id)
-                    .join(",")
-            )
-            .then((res) => {
-                setSongs(
-                    res.songs.map((item, index) => {
-                        return {
-                            ...item,
-                            index: (page - 1) * pageSize + index + 1,
-                        };
-                    })
-                );
-            })
-            .catch((e) => {
-                notify("error", e || "获取歌曲详情数据失败");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [trackIds, page, pageSize]);
-    React.useEffect(() => {
-        getSongsDetail();
-    }, [getSongsDetail]);
 
     const pageChange = React.useCallback((page1, pageSize1) => {
         setPage(page1);
@@ -60,18 +22,18 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         toTop();
     }, []);
 
-    const columns: ColumnsType<ISong> = [
+    const columns: ColumnsType<Song> = [
         {
             title: "序号",
             dataIndex: "index",
             key: "index",
-            width: "6%",
+            width: "10%",
         },
         {
             title: "封面",
             key: "picUrl",
-            width: "8%",
-            render: (data: ISong) => (
+            width: "10%",
+            render: (data: Song) => (
                 <Avatar
                     src={
                         <LazyLoad height={50} placeholder={<LoadingImg />}>
@@ -95,12 +57,14 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             title: "歌手",
             key: "singer",
             width: "20%",
-            render: (data: ISong) => {
+            render: (data: Song) => {
                 return data.ar.length === 1 ? (
-                    <Link to={`${data.ar[0].id}`}>{data.ar[0].name}</Link>
+                    <Link to={`/singer/${data.ar[0].id}`}>
+                        {data.ar[0].name}
+                    </Link>
                 ) : (
                     data.ar.map((ar) => (
-                        <Link key={ar.id} to={`${ar.id}`}>
+                        <Link key={ar.id} to={`/singer/${ar.id}`}>
                             {ar.name}/
                         </Link>
                     ))
@@ -111,43 +75,40 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             title: "专辑",
             key: "album",
             width: "15%",
-            render: (data: ISong) => (
-                <Link to={`/album/${data.al.id}`}>{data.al.name}</Link>
-            ),
+            render: (data: Song) => <div>{data.al.name}</div>,
         },
         {
             title: "时长",
             key: "dt",
             width: "10%",
-            render: (data: ISong) => (
+            render: (data: Song) => (
                 <div>{timeFormat(Math.floor(data.dt / 1000))}</div>
             ),
         },
         {
             title: "MV",
             key: "mv",
-            width: "14%",
-            render: (data: ISong) =>
-            data.mv ? <Link to={`/mv/${data.mv}`}>去欣赏</Link> : null,
-        },
-        {
-            title: "发行日期",
-            key: "publishTime",
-            width: "15%",
-            render: (data: ISong) => <div>{dateFormat(data.publishTime)}</div>,
+            width: "10%",
+            render: (data: Song) =>
+                data.mv ? <Link to={`/mv/${data.mv}`}>去欣赏</Link> : null,
         },
     ];
 
-    return (
-        <Table<ISong>
+    return songs && songs.length ? (
+        <Table<Song>
             rowKey="id"
             bordered={false}
             columns={columns}
-            loading={loading}
-            dataSource={songs}
+            dataSource={songs.map((item, index) => {
+                return {
+                    ...item,
+                    index: (page - 1) * pageSize + index + 1,
+                };
+            })}
             pagination={{
                 showQuickJumper: true,
-                total: songCount,
+                showSizeChanger: true,
+                total: songs.length,
                 current: page,
                 pageSize,
                 onChange: (page, pageSize) => pageChange(page, pageSize),
@@ -164,7 +125,9 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 };
             }}
         />
+    ) : (
+        <Empty />
     );
 };
 
-export default DetailSongs;
+export default AlbumSongs;

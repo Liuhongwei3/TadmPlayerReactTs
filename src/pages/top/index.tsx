@@ -9,7 +9,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
-import { countFormat, dateFormat } from "../../utils";
+import { countFormat, dateFormat, toTop, updateCurMenu } from "../../utils";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
@@ -27,12 +27,17 @@ const Top: React.FunctionComponent = () => {
     }, []);
 
     React.useEffect(() => {
+        toTop();
+    }, []);
+
+    React.useEffect(() => {
         getRecomDetails();
     }, [getRecomDetails]);
 
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
+            updateCurMenu();
         },
         [history]
     );

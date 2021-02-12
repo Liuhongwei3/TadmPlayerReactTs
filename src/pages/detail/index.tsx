@@ -1,17 +1,23 @@
 import React from "react";
-import { Avatar, Empty, Spin, Image, Collapse, Tabs } from "antd";
+import LazyLoad from "react-lazyload";
+import { useParams } from "react-router-dom";
+import { Avatar, Empty, Spin, Image, Collapse, Tabs, Tooltip } from "antd";
+import {
+    ShareAltOutlined,
+    CustomerServiceOutlined,
+    StarOutlined,
+    FieldTimeOutlined,
+} from "@ant-design/icons";
 
 import req from "../../api/req";
 import { IDetailRes } from "./type";
 import StyledWrapper from "../../components/detail/StyledWrapper";
-import { countFormat, dateFormat } from "../../utils";
-import LazyLoad from "react-lazyload";
+import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
 import { DEFAULT_RANDOM_COLORS } from "../../defaultConfig";
 import DetailSongs from "./detail-songs";
-import { useParams } from "react-router-dom";
 import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
 import DetailSimilar from "./detail-simiar";
@@ -26,12 +32,22 @@ const Detail: React.FunctionComponent = (props) => {
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
 
-    const getDetails = React.useCallback(async () => {
+    const getDetails = React.useCallback(() => {
         setLoading(true);
-        const data = await req.netease.playlistdetail(+detailId || 3778678);
-        setDetailInfo(data);
-        setLoading(false);
+        req.netease
+            .playlistdetail(+detailId || 3778678)
+            .then((res) => {
+                setDetailInfo(res);
+            })
+            .catch((err) => {
+                notify("error", err.message || err || "加载专辑数据失败");
+            })
+            .finally(() => setLoading(false));
     }, [detailId]);
+
+    React.useEffect(() => {
+        toTop();
+    }, []);
 
     React.useEffect(() => {
         getDetails();
@@ -43,6 +59,7 @@ const Detail: React.FunctionComponent = (props) => {
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
+        toTop();
     }, []);
 
     return (
@@ -62,35 +79,54 @@ const Detail: React.FunctionComponent = (props) => {
                                 </LazyLoad>
                             }
                         />
-                        <StyledTag color="magenta">
-                            {detailInfo?.playlist.name}
-                        </StyledTag>
-                        <StyledTag color="red">
-                            {detailInfo?.playlist.creator.nickname}
-                        </StyledTag>
-                        <StyledTag color="volcano">
-                            歌曲：{countFormat(detailInfo?.playlist.trackCount)}
-                        </StyledTag>
-                        <StyledTag color="orange">
-                            播放：{countFormat(detailInfo?.playlist.playCount)}
-                        </StyledTag>
-                        <StyledTag color="gold">
-                            分享：{countFormat(detailInfo?.playlist.shareCount)}
-                        </StyledTag>
-                        <StyledTag color="purple">
-                            收藏：
-                            {countFormat(detailInfo?.playlist.subscribedCount)}
-                        </StyledTag>
-                        <StyledTag color="green">
-                            创建：{dateFormat(detailInfo?.playlist.createTime)}
-                        </StyledTag>
+                        <Tooltip title="歌单名">
+                            <StyledTag color="magenta">
+                                {detailInfo?.playlist.name}
+                            </StyledTag>
+                        </Tooltip>
+                        <Tooltip title="创建者">
+                            <StyledTag color="red">
+                                {detailInfo?.playlist.creator.nickname}
+                            </StyledTag>
+                        </Tooltip>
+                        <Tooltip title="播放量">
+                            <StyledTag color="orange">
+                                <CustomerServiceOutlined
+                                    style={{ marginRight: 5 }}
+                                />
+                                {countFormat(detailInfo?.playlist.playCount)}
+                            </StyledTag>
+                        </Tooltip>
+                        <Tooltip title="分享">
+                            <StyledTag color="gold">
+                                <ShareAltOutlined style={{ marginRight: 5 }} />
+                                {countFormat(detailInfo?.playlist.shareCount)}
+                            </StyledTag>
+                        </Tooltip>
+                        <Tooltip title="收藏">
+                            <StyledTag color="purple">
+                                <StarOutlined style={{ marginRight: 5 }} />
+                                {countFormat(
+                                    detailInfo?.playlist.subscribedCount
+                                )}
+                            </StyledTag>
+                        </Tooltip>
+                        <Tooltip title="创建时间">
+                            <StyledTag color="green">
+                                <FieldTimeOutlined style={{ marginRight: 5 }} />
+                                {dateFormat(detailInfo?.playlist.createTime)}
+                            </StyledTag>
+                        </Tooltip>
+
                         <StyledTag color="cyan">
                             更新：{dateFormat(detailInfo?.playlist.updateTime)}
                         </StyledTag>
                         {detailInfo?.playlist.updateFrequency ? (
-                            <StyledTag color="blue">
-                                {detailInfo.playlist.updateFrequency}
-                            </StyledTag>
+                            <Tooltip title="更新频率">
+                                <StyledTag color="blue">
+                                    {detailInfo.playlist.updateFrequency}
+                                </StyledTag>
+                            </Tooltip>
                         ) : null}
                     </div>
 
@@ -134,6 +170,7 @@ const Detail: React.FunctionComponent = (props) => {
                         >
                             <DetailSongs
                                 trackIds={detailInfo.playlist.trackIds}
+                                songCount={detailInfo.playlist.trackCount}
                             />
                         </Tabs.TabPane>
                         <Tabs.TabPane

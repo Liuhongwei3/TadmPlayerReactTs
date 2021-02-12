@@ -6,7 +6,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { dateFormat, notify } from "../../utils";
+import { dateFormat, notify, updateCurMenu } from "../../utils";
 import { useHistory } from "react-router-dom";
 import { ISubscriber } from "./type";
 import reqs from "../../api/req";
@@ -47,7 +47,8 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
     }, []);
 
     const toDetail = React.useCallback((id: number) => {
-        // history.push(`/detail/${id}`);
+        // history.push(`/user/${id}`);
+        updateCurMenu();
         console.log(id);
     }, []);
 

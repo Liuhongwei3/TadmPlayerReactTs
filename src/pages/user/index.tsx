@@ -3,6 +3,7 @@ import { Button, Spin } from "antd";
 
 import req from "../../api/req";
 import StyledWrapper from "../../components/detail/StyledWrapper";
+import { toTop } from "../../utils";
 
 interface IUserInfo {
     userId: number;
@@ -22,9 +23,15 @@ const User: React.FunctionComponent = () => {
         console.log(data);
         setLoading(false);
     }, [userInfo.userId]);
+
+    React.useEffect(() => {
+        toTop();
+    }, []);
+
     React.useEffect(() => {
         getUserInfo();
     }, [getUserInfo]);
+    
     return (
         <Spin tip="Loading..." spinning={loading}>
             <StyledWrapper>hello user {userInfo.userName}</StyledWrapper>

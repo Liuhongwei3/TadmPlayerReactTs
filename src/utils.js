@@ -1,5 +1,16 @@
 import { message } from "antd";
 
+export function toTop() {
+    document.documentElement.scrollTop = document.body.scrollTop = 0;
+}
+
+export const updateCurMenu = () => {
+    const curUrl = window.location.hash.split("#")[1].split("/");
+    // const reg = new RegExp(`${curUrl[1]}/g`);
+
+    return curUrl && curUrl[1] ? [curUrl[1]] : ["home"];
+};
+
 export function dateFormat(dateIn = 0, type = "less") {
     // const time = new Date(dateIn);
     // let y = time.getFullYear();
@@ -155,7 +166,11 @@ export function parseLyric(lrc) {
     return lrcObj;
 }
 
-export function unique(arr) {
+export const unique = (arr) => {
+    return arr.length ? [...new Set(arr)] : [];
+};
+
+export function uniqueId(arr) {
     const res = new Map();
     return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1));
 }

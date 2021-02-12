@@ -9,7 +9,7 @@ import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { Playlist } from "./type";
-import { notify } from "../../utils";
+import { notify, updateCurMenu } from "../../utils";
 
 interface IProps {
     detailId: string;
@@ -24,7 +24,7 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     const getSimilarDetails = React.useCallback(() => {
         setLoading(true);
         reqs.netease
-            .getSimiDetails(detailId)
+            .getSimiDetails(+detailId)
             .then((res) => {
                 setSimilarDetails(res.playlists);
             })
@@ -36,9 +36,13 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
         getSimilarDetails();
     }, [getSimilarDetails]);
 
-    const toDetail = React.useCallback((id: number) => {
-        history.push(`/detail/${id}`);
-    }, []);
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/detail/${id}`);
+            updateCurMenu();
+        },
+        [history]
+    );
 
     return (
         <Spin tip="Loading..." spinning={loading}>

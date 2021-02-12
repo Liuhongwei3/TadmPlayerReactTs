@@ -10,12 +10,13 @@ import {
 } from "../../pages/home/type";
 import { IUserDetail } from "../../pages/user/type";
 import {
-    IDetailCommentsRes,
     IDetailRes,
     IDetailSubUsersRes,
     ISimilarDetailsRes,
     ISongsRes,
 } from "../../pages/detail/type";
+import { IAlbumDetailCount, IAlbumRes } from "../../pages/album/type";
+import { ICommentsRes } from "../../pages/commType";
 
 // -----------------------------------------------------
 // 首页
@@ -85,7 +86,7 @@ const detailComment = (
     const base = `/comment/playlist?id=${id}&limit=${limit}`;
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = before ? `&before=${before}` : "";
-    return api.get<IDetailCommentsRes>(`${base}${optional1}${optional2}`);
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
 };
 
 const detailSubscribe = (id: string | number, limit = 20, offset?: number) => {
@@ -95,8 +96,30 @@ const detailSubscribe = (id: string | number, limit = 20, offset?: number) => {
     );
 };
 
-const getSimiDetails = (id: string | number) => {
+const getSimiDetails = (id: number) => {
     return api.get<ISimilarDetailsRes>(`/related/playlist?id=${id}`);
+};
+
+// ---------------------------------------------------------------------
+// 专辑详情
+const albumDetail = (id: number) => {
+    return api.get<IAlbumRes>(`/album?id=${id}`);
+};
+
+const albumDetailCount = (id: number) => {
+    return api.get<IAlbumDetailCount>(`/album/detail/dynamic?id=${id}`);
+};
+
+const AlbumComments = (
+    id: number,
+    limit = 10,
+    offset?: number,
+    before?: number
+) => {
+    const base = `/comment/album?id=${id}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+    const optional2 = before ? `&before=${before}` : "";
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
 };
 
 // ----------------------------------------------------------------------
@@ -126,6 +149,9 @@ const reqFuncs = {
     detailSubscribe,
     getSimiDetails,
     getMusicDetail,
+    albumDetail,
+    albumDetailCount,
+    AlbumComments,
 };
 
 export default reqFuncs;

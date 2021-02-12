@@ -4,7 +4,7 @@ import { CustomerServiceOutlined, RightOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
 import { IHotDetail, IHotDetailCats } from "./type";
-import { countFormat, dateFormat, unique } from "../../utils";
+import { countFormat, dateFormat, toTop, uniqueId, updateCurMenu } from "../../utils";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
@@ -61,10 +61,14 @@ const HotDetail: React.FunctionComponent = () => {
         req.netease
             .hotDetails(curCat, limit)
             .then((res) => {
-                setTopLists(unique(res.playlists));
+                setTopLists(uniqueId(res.playlists));
             })
             .finally(() => setLoading(false));
     }, [curCat, limit]);
+
+    React.useEffect(() => {
+        toTop();
+    }, []);
 
     React.useEffect(() => {
         getHotDetailCats();
@@ -83,6 +87,7 @@ const HotDetail: React.FunctionComponent = () => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
+            updateCurMenu();
         },
         [history]
     );
