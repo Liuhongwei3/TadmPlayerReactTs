@@ -6,7 +6,7 @@ import { IComment, ICommentsRes, IHotComment } from "../commType";
 import StyledComment from "../../components/StyledComment";
 
 interface IProps {
-    detailId: string;
+    detailId: number;
     commCount: number;
 }
 

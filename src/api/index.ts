@@ -54,7 +54,7 @@ axiosInst.interceptors.response.use(
         return res.data;
     },
     (error) => {
-        console.log(error, error.response);
+        console.error(error, error.response);
         // 当 401 重定向到登录页
         if (error && error.response && error.response.status === 401) {
             // window.location.href = getSsoRedirectUrl();

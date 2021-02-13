@@ -97,11 +97,13 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             width: "20%",
             render: (data: ISong) => {
                 return data.ar.length === 1 ? (
-                    <Link to={`${data.ar[0].id}`}>{data.ar[0].name}</Link>
+                    <Link to={`/singer/${data.ar[0].id}`}>
+                        {data.ar[0].name}
+                    </Link>
                 ) : (
                     data.ar.map((ar) => (
-                        <Link key={ar.id} to={`${ar.id}`}>
-                            {ar.name}/
+                        <Link key={ar.id} to={`/singer/${ar.id}`}>
+                            {ar.name} / 
                         </Link>
                     ))
                 );
@@ -128,7 +130,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             key: "mv",
             width: "14%",
             render: (data: ISong) =>
-            data.mv ? <Link to={`/mv/${data.mv}`}>去欣赏</Link> : null,
+                data.mv ? <Link to={`/mv/${data.mv}`}>去欣赏</Link> : null,
         },
         {
             title: "发行日期",

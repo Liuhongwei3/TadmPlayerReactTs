@@ -4,6 +4,7 @@ import { Button, Spin } from "antd";
 import req from "../../api/req";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import { toTop } from "../../utils";
+import { DEFAULT_USER_ID } from "../../defaultConfig";
 
 interface IUserInfo {
     userId: number;
@@ -13,7 +14,7 @@ interface IUserInfo {
 const User: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [userInfo, setUserInfo] = React.useState<IUserInfo>({
-        userId: 537069044,
+        userId: DEFAULT_USER_ID,
         userName: "tadm",
     });
 

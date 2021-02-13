@@ -9,8 +9,14 @@ import {
     UserOutlined,
     VideoCameraOutlined,
     TrophyOutlined,
+    UserSwitchOutlined,
 } from "@ant-design/icons";
-import { DEFAULT_AVATAR } from "../../defaultConfig";
+import {
+    DEFAULT_ALBUM_ID,
+    DEFAULT_AVATAR,
+    DEFAULT_DETAIL_ID,
+    DEFAULT_SINGER_ID,
+} from "../../defaultConfig";
 import { updateCurMenu } from "../../utils";
 
 const LeftSide: React.FunctionComponent = () => {
@@ -57,12 +63,15 @@ const LeftSide: React.FunctionComponent = () => {
                     <Link to="/hotDetail">热门歌单</Link>
                 </Menu.Item>
                 <Menu.Item key="detail" icon={<BarsOutlined />}>
-                    <Link to="/detail/3778678">歌单详情</Link>
+                    <Link to={`/detail/${DEFAULT_DETAIL_ID}`}>歌单详情</Link>
                 </Menu.Item>
                 <Menu.Item key="album" icon={<AppstoreOutlined />}>
-                    <Link to="/album/21506">专辑</Link>
+                    <Link to={`/album/${DEFAULT_ALBUM_ID}`}>专辑</Link>
                 </Menu.Item>
-                <Menu.Item key="user" icon={<UserOutlined />}>
+                <Menu.Item key="singer" icon={<UserOutlined />}>
+                    <Link to={`/singer/${DEFAULT_SINGER_ID}`}>歌手</Link>
+                </Menu.Item>
+                <Menu.Item key="user" icon={<UserSwitchOutlined />}>
                     <Link to="/user">用户</Link>
                 </Menu.Item>
                 <Menu.Item key="mv" icon={<VideoCameraOutlined />}>

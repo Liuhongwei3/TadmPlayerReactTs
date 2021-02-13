@@ -1,41 +1,41 @@
 import React from "react";
-import { Empty, Pagination, Spin } from "antd";
 import LazyLoad from "react-lazyload";
+import { useHistory } from "react-router-dom";
+import { Empty, Pagination, Spin } from "antd";
+import { VideoCameraOutlined, FieldTimeOutlined } from "@ant-design/icons";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
+import StyledCount from "../../components/detail/StyledCount";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { dateFormat, notify, updateCurMenu } from "../../utils";
-import { useHistory } from "react-router-dom";
-import { ISubscriber } from "./type";
+import { countFormat, notify, timeFormat, updateCurMenu } from "../../utils";
 import reqs from "../../api/req";
+import { Mv } from "./type";
 
 interface IProps {
-    detailId: number;
-    subUserCount: number;
+    singerId: number;
+    mvCount: number;
 }
 
-const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
-    props: IProps
-) => {
-    const { detailId, subUserCount } = props;
+const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { singerId, mvCount } = props;
     const history = useHistory();
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(24);
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [subsUsers, setSubsUsers] = React.useState<ISubscriber[]>([]);
+    const [mvs, setMvs] = React.useState<Mv[]>([]);
 
     const getSubUsers = React.useCallback(() => {
         setLoading(true);
         reqs.netease
-            .detailSubscribe(detailId, pageSize, (page - 1) * pageSize)
+            .singerMvs(singerId, pageSize, (page - 1) * pageSize)
             .then((res) => {
-                setSubsUsers(res.subscribers);
+                setMvs(res.mvs);
             })
             .catch((e) => notify("error", e))
             .finally(() => setLoading(false));
-    }, [detailId, page, pageSize]);
+    }, [page, pageSize, singerId]);
 
     React.useEffect(() => {
         getSubUsers();
@@ -46,54 +46,62 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
         setPageSize(pageSize1);
     }, []);
 
-    const toDetail = React.useCallback((id: number) => {
-        history.push(`/user/${id}`);
-        updateCurMenu();
-    }, []);
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/mv/${id}`);
+            updateCurMenu();
+        },
+        [history]
+    );
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {subsUsers.length ? (
+            {mvs.length ? (
                 <React.Fragment>
                     <StyledWrapper>
-                        {subsUsers.map((item: ISubscriber) => {
+                        {mvs.map((item: Mv) => {
                             return (
                                 <StyledItem
-                                    key={item.userId}
-                                    onClick={() => toDetail(item.userId)}
+                                    key={item.id}
+                                    onClick={() => toDetail(item.id)}
                                 >
                                     <div
                                         style={{
-                                            width: 150,
+                                            width: 200,
                                             height: 150,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={100}
+                                            height={150}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.65 }}
-                                                width={150}
+                                                style={{ opacity: 0.85 }}
+                                                width={200}
                                                 height={150}
                                                 alt="detail-cover"
-                                                src={item.avatarUrl}
+                                                src={item.imgurl}
                                             />
                                         </LazyLoad>
-                                        {/* <StyledCount>
-                                        {countFormat(item.)}
-                                    </StyledCount> */}
-                                        <StyledDesc width={150}>
-                                            {`${dateFormat(
-                                                item.subscribeTime,
-                                                "more"
-                                            )} 收藏`}
+                                        <StyledCount>
+                                            <VideoCameraOutlined
+                                                style={{ marginRight: 5 }}
+                                            />
+                                            {countFormat(item.playCount)}
+                                        </StyledCount>
+                                        <StyledDesc width={200}>
+                                            <FieldTimeOutlined
+                                                style={{ marginRight: 5 }}
+                                            />
+                                            {timeFormat(
+                                                Math.floor(item.duration / 1000)
+                                            )}
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
-                                        {item.nickname}
+                                    <StyledName width={200}>
+                                        {item.name}
                                     </StyledName>
                                 </StyledItem>
                             );
@@ -103,7 +111,8 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                         style={{ float: "right" }}
                         current={page}
                         pageSize={pageSize}
-                        total={subUserCount}
+                        total={mvCount}
+                        showSizeChanger={true}
                         showQuickJumper={true}
                         showTotal={(total) => `共 ${total} 条`}
                         onChange={(page, pageSize) =>
@@ -118,4 +127,4 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
     );
 };
 
-export default DetailSubscribedUsers;
+export default SingerMvs;

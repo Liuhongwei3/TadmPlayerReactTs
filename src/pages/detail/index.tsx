@@ -5,6 +5,7 @@ import { Avatar, Empty, Spin, Image, Collapse, Tabs, Tooltip } from "antd";
 import {
     ShareAltOutlined,
     CustomerServiceOutlined,
+    StarFilled,
     StarOutlined,
     FieldTimeOutlined,
 } from "@ant-design/icons";
@@ -16,7 +17,7 @@ import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_RANDOM_COLORS } from "../../defaultConfig";
+import { DEFAULT_DETAIL_ID, DEFAULT_RANDOM_COLORS } from "../../defaultConfig";
 import DetailSongs from "./detail-songs";
 import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
@@ -27,20 +28,21 @@ interface IRouteParams {
 }
 
 const Detail: React.FunctionComponent = (props) => {
-    const { detailId } = useParams<IRouteParams>();
+    let { detailId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
+    detailId = detailId || String(DEFAULT_DETAIL_ID);
 
     const getDetails = React.useCallback(() => {
         setLoading(true);
         req.netease
-            .playlistdetail(+detailId || 3778678)
+            .playlistdetail(+detailId)
             .then((res) => {
                 setDetailInfo(res);
             })
             .catch((err) => {
-                notify("error", err.message || err || "加载专辑数据失败");
+                notify("error", err.message || err || "加载歌单数据失败");
             })
             .finally(() => setLoading(false));
     }, [detailId]);
@@ -64,7 +66,7 @@ const Detail: React.FunctionComponent = (props) => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {detailInfo?.playlist.trackIds.length ? (
+            {detailInfo?.playlist ? (
                 <StyledWrapper>
                     <div>
                         <Avatar
@@ -128,6 +130,19 @@ const Detail: React.FunctionComponent = (props) => {
                                 </StyledTag>
                             </Tooltip>
                         ) : null}
+
+                        {detailInfo.playlist.subscribed ? (
+                            <Tooltip title="取消收藏">
+                                <StarFilled
+                                    className="ant-svg-scale"
+                                    style={{ color: "#ff5a5a" }}
+                                />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip title="收藏该歌单">
+                                <StarOutlined className="ant-svg-scale" />
+                            </Tooltip>
+                        )}
                     </div>
 
                     {detailInfo.playlist.tags.length ? (
@@ -180,7 +195,7 @@ const Detail: React.FunctionComponent = (props) => {
                             key="2"
                         >
                             <DetailComments
-                                detailId={detailId}
+                                detailId={+detailId}
                                 commCount={detailInfo.playlist.commentCount}
                             />
                         </Tabs.TabPane>
@@ -191,14 +206,14 @@ const Detail: React.FunctionComponent = (props) => {
                             key="3"
                         >
                             <DetailSubscribedUsers
-                                detailId={detailId}
+                                detailId={+detailId}
                                 subUserCount={
                                     detailInfo.playlist.subscribedCount
                                 }
                             />
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="推荐" key="4">
-                            <DetailSimilar detailId={detailId} />
+                            <DetailSimilar detailId={+detailId} />
                         </Tabs.TabPane>
                     </Tabs>
                 </StyledWrapper>

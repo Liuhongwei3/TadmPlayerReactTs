@@ -5,6 +5,7 @@ import Detail from "./pages/detail";
 
 import Home from "./pages/home";
 import HotDetail from "./pages/hot-detail";
+import Singer from "./pages/singer";
 import Top from "./pages/top";
 import User from "./pages/user";
 
@@ -25,6 +26,9 @@ const Routers: React.FunctionComponent = () => {
             </Route>
             <Route exact path="/album/:albumId">
                 <Album />
+            </Route>
+            <Route exact path="/singer/:singerId">
+                <Singer />
             </Route>
             <Route exact path="/user">
                 <User />

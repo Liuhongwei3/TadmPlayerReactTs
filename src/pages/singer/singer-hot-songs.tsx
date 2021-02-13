@@ -1,18 +1,18 @@
 import React from "react";
-import { Avatar, Table, Image, Empty } from "antd";
-import { Song } from "./type";
+import { Avatar, Table, Image } from "antd";
 import { timeFormat, toTop } from "../../utils";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
+import { HotSong, ISong } from "./type";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 
 interface IProps {
-    songs: Song[] | undefined;
+    hotSongs: HotSong[];
 }
 
-const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { songs } = props;
+const SingerHotSongs: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { hotSongs } = props;
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
 
@@ -22,18 +22,18 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         toTop();
     }, []);
 
-    const columns: ColumnsType<Song> = [
+    const columns: ColumnsType<HotSong> = [
         {
             title: "序号",
             dataIndex: "index",
             key: "index",
-            width: "10%",
+            width: "6%",
         },
         {
             title: "封面",
             key: "picUrl",
-            width: "10%",
-            render: (data: Song) => (
+            width: "8%",
+            render: (data: ISong) => (
                 <Avatar
                     src={
                         <LazyLoad height={50} placeholder={<LoadingImg />}>
@@ -57,7 +57,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             title: "歌手",
             key: "singer",
             width: "20%",
-            render: (data: Song) => {
+            render: (data: ISong) => {
                 return data.ar.length === 1 ? (
                     <Link to={`/singer/${data.ar[0].id}`}>
                         {data.ar[0].name}
@@ -65,7 +65,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 ) : (
                     data.ar.map((ar) => (
                         <Link key={ar.id} to={`/singer/${ar.id}`}>
-                            {ar.name} / 
+                            {ar.name} /
                         </Link>
                     ))
                 );
@@ -75,31 +75,33 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             title: "专辑",
             key: "album",
             width: "15%",
-            render: (data: Song) => <div>{data.al.name}</div>,
+            render: (data: ISong) => (
+                <Link to={`/album/${data.al.id}`}>{data.al.name}</Link>
+            ),
         },
         {
             title: "时长",
             key: "dt",
             width: "10%",
-            render: (data: Song) => (
+            render: (data: ISong) => (
                 <div>{timeFormat(Math.floor(data.dt / 1000))}</div>
             ),
         },
         {
             title: "MV",
             key: "mv",
-            width: "10%",
-            render: (data: Song) =>
+            width: "14%",
+            render: (data: ISong) =>
                 data.mv ? <Link to={`/mv/${data.mv}`}>去欣赏</Link> : null,
         },
     ];
 
-    return songs && songs.length ? (
-        <Table<Song>
+    return (
+        <Table<HotSong>
             rowKey="id"
             bordered={false}
             columns={columns}
-            dataSource={songs.map((item, index) => {
+            dataSource={hotSongs.map((item, index) => {
                 return {
                     ...item,
                     index: (page - 1) * pageSize + index + 1,
@@ -107,8 +109,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             })}
             pagination={{
                 showQuickJumper: true,
-                showSizeChanger: true,
-                total: songs.length,
+                total: hotSongs.length,
                 current: page,
                 pageSize,
                 onChange: (page, pageSize) => pageChange(page, pageSize),
@@ -125,9 +126,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 };
             }}
         />
-    ) : (
-        <Empty />
     );
 };
 
-export default AlbumSongs;
+export default SingerHotSongs;

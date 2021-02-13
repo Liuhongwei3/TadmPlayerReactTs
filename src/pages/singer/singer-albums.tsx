@@ -6,36 +6,34 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { dateFormat, notify, updateCurMenu } from "../../utils";
+import { notify, updateCurMenu } from "../../utils";
 import { useHistory } from "react-router-dom";
-import { ISubscriber } from "./type";
 import reqs from "../../api/req";
+import { HotAlbum } from "./type";
 
 interface IProps {
-    detailId: number;
-    subUserCount: number;
+    singerId: number;
+    albumCount: number;
 }
 
-const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
-    props: IProps
-) => {
-    const { detailId, subUserCount } = props;
+const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { singerId, albumCount } = props;
     const history = useHistory();
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(24);
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [subsUsers, setSubsUsers] = React.useState<ISubscriber[]>([]);
+    const [albums, setAlbums] = React.useState<HotAlbum[]>([]);
 
     const getSubUsers = React.useCallback(() => {
         setLoading(true);
         reqs.netease
-            .detailSubscribe(detailId, pageSize, (page - 1) * pageSize)
+            .singerAlbums(singerId, pageSize, (page - 1) * pageSize)
             .then((res) => {
-                setSubsUsers(res.subscribers);
+                setAlbums(res.hotAlbums);
             })
             .catch((e) => notify("error", e))
             .finally(() => setLoading(false));
-    }, [detailId, page, pageSize]);
+    }, [page, pageSize, singerId]);
 
     React.useEffect(() => {
         getSubUsers();
@@ -46,21 +44,24 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
         setPageSize(pageSize1);
     }, []);
 
-    const toDetail = React.useCallback((id: number) => {
-        history.push(`/user/${id}`);
-        updateCurMenu();
-    }, []);
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/album/${id}`);
+            updateCurMenu();
+        },
+        [history]
+    );
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {subsUsers.length ? (
+            {albums.length ? (
                 <React.Fragment>
                     <StyledWrapper>
-                        {subsUsers.map((item: ISubscriber) => {
+                        {albums.map((item: HotAlbum) => {
                             return (
                                 <StyledItem
-                                    key={item.userId}
-                                    onClick={() => toDetail(item.userId)}
+                                    key={item.id}
+                                    onClick={() => toDetail(item.id)}
                                 >
                                     <div
                                         style={{
@@ -74,26 +75,17 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.65 }}
+                                                style={{ opacity: 0.85 }}
                                                 width={150}
                                                 height={150}
                                                 alt="detail-cover"
-                                                src={item.avatarUrl}
+                                                src={item.picUrl}
                                             />
                                         </LazyLoad>
-                                        {/* <StyledCount>
-                                        {countFormat(item.)}
-                                    </StyledCount> */}
-                                        <StyledDesc width={150}>
-                                            {`${dateFormat(
-                                                item.subscribeTime,
-                                                "more"
-                                            )} 收藏`}
-                                        </StyledDesc>
                                     </div>
 
                                     <StyledName width={150}>
-                                        {item.nickname}
+                                        {item.name}
                                     </StyledName>
                                 </StyledItem>
                             );
@@ -103,7 +95,8 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                         style={{ float: "right" }}
                         current={page}
                         pageSize={pageSize}
-                        total={subUserCount}
+                        total={albumCount}
+                        showSizeChanger={true}
                         showQuickJumper={true}
                         showTotal={(total) => `共 ${total} 条`}
                         onChange={(page, pageSize) =>
@@ -118,4 +111,4 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
     );
 };
 
-export default DetailSubscribedUsers;
+export default SingerAlbums;

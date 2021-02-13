@@ -8,29 +8,32 @@ import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
-import { Playlist } from "./type";
 import { notify, updateCurMenu } from "../../utils";
+import { Artist } from "./type";
 
 interface IProps {
-    detailId: number;
+    singerId: number;
 }
 
-const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { detailId } = props;
+const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { singerId } = props;
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [similarDetails, setSimilarDetails] = React.useState<Playlist[]>([]);
+    const [similarSingers, setSimilarSingers] = React.useState<Artist[]>(
+        []
+    );
 
     const getSimilarDetails = React.useCallback(() => {
         setLoading(true);
         reqs.netease
-            .getSimiDetails(+detailId)
+            .simiSingers(+singerId)
             .then((res) => {
-                setSimilarDetails(res.playlists);
+                console.log(res);
+                setSimilarSingers(res.artists);
             })
             .catch((e) => notify("error", e))
             .finally(() => setLoading(false));
-    }, [detailId]);
+    }, [singerId]);
 
     React.useEffect(() => {
         getSimilarDetails();
@@ -38,7 +41,7 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
 
     const toDetail = React.useCallback(
         (id: number) => {
-            history.push(`/detail/${id}`);
+            history.push(`/singer/${id}`);
             updateCurMenu();
         },
         [history]
@@ -46,9 +49,9 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {similarDetails.length ? (
+            {similarSingers.length ? (
                 <StyledWrapper>
-                    {similarDetails.map((item: Playlist) => {
+                    {similarSingers.map((item: Artist) => {
                         return (
                             <StyledItem
                                 key={item.id}
@@ -66,21 +69,16 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
-                                            style={{ opacity: 0.65 }}
+                                            style={{ opacity: 0.85 }}
                                             width={150}
                                             height={150}
                                             alt="detail-cover"
-                                            src={item.coverImgUrl}
+                                            src={item.picUrl}
                                         />
                                     </LazyLoad>
-                                    <StyledDesc width={150}>
-                                        {`By ${item.creator.nickname}`}
-                                    </StyledDesc>
                                 </div>
 
-                                <StyledName width={150}>
-                                    {item.creator.nickname}
-                                </StyledName>
+                                <StyledName width={150}>{item.name}</StyledName>
                             </StyledItem>
                         );
                     })}
@@ -92,4 +90,4 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default DetailSimilar;
+export default SingerSimilar;

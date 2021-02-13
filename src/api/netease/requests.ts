@@ -1,5 +1,5 @@
 import api from "../index";
-import { ITopListRes } from "../../pages/top/type";
+import { ESingerType, ITopListRes, ITopSingerRes } from "../../pages/top/type";
 import { IHotDetailCats, IHotdetailRes } from "../../pages/hot-detail/type";
 import {
     IBannerRes,
@@ -17,6 +17,15 @@ import {
 } from "../../pages/detail/type";
 import { IAlbumDetailCount, IAlbumRes } from "../../pages/album/type";
 import { ICommentsRes } from "../../pages/commType";
+import {
+    EOrderType,
+    ISimiSingersRes,
+    ISingerAlbumsRes,
+    ISingerDesc,
+    ISingerMvsRes,
+    ISingerRes,
+    ISongRes,
+} from "../../pages/singer/type";
 
 // -----------------------------------------------------
 // 首页
@@ -52,6 +61,10 @@ const toplist = () => {
     return api.get<ITopListRes>(`/toplist`);
 };
 
+const topSinger = (type = ESingerType.CHINESE) => {
+    return api.get<ITopSingerRes>(`/toplist/artist?type=${type}`);
+};
+
 // -----------------------------------------------------------
 // 热门歌单
 
@@ -73,12 +86,12 @@ const userDetail = (uid: number) => {
 // ----------------------------------------------------------------------
 // 歌单详情
 
-const playlistdetail = (id: number | string) => {
+const playlistdetail = (id: number) => {
     return api.get<IDetailRes>(`/playlist/detail?id=${id}`);
 };
 
 const detailComment = (
-    id: number | string,
+    id: number,
     limit = 10,
     offset?: number,
     before?: number
@@ -86,10 +99,11 @@ const detailComment = (
     const base = `/comment/playlist?id=${id}&limit=${limit}`;
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = before ? `&before=${before}` : "";
+
     return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
 };
 
-const detailSubscribe = (id: string | number, limit = 20, offset?: number) => {
+const detailSubscribe = (id: number, limit = 20, offset?: number) => {
     const optional = offset ? `&offset=${offset}` : "";
     return api.get<IDetailSubUsersRes>(
         `/playlist/subscribers?id=${id}&limit=${limit}${optional}`
@@ -119,7 +133,49 @@ const AlbumComments = (
     const base = `/comment/album?id=${id}&limit=${limit}`;
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = before ? `&before=${before}` : "";
+
     return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+};
+
+// ----------------------------------------------------------------------
+// 歌手
+const singerDetail = (sid: number) => {
+    return api.get<ISingerRes>(`/artists?id=${sid}`);
+};
+
+const singerSongs = (
+    sid: number,
+    limit = 10,
+    offset?: number,
+    order?: EOrderType
+) => {
+    const base = `/artist/songs?id=${sid}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+    const optional2 = order ? `&order=${order}` : "";
+
+    return api.get<ISongRes>(`${base}${optional1}${optional2}`);
+};
+
+const singerAlbums = (sid: number, limit = 10, offset?: number) => {
+    const base = `/artist/album?id=${sid}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+
+    return api.get<ISingerAlbumsRes>(`${base}${optional1}`);
+};
+
+const singerMvs = (sid: number, limit = 10, offset?: number) => {
+    const base = `/artist/mv?id=${sid}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+
+    return api.get<ISingerMvsRes>(`${base}${optional1}`);
+};
+
+const singerDesc = (sid: number) => {
+    return api.get<ISingerDesc>(`/artist/desc?id=${sid}`);
+};
+
+const simiSingers = (sid: number) => {
+    return api.get<ISimiSingersRes>(`/simi/artist?id=${sid}`);
 };
 
 // ----------------------------------------------------------------------
@@ -141,6 +197,7 @@ const reqFuncs = {
     getNewSongs,
     getNewMvs,
     toplist,
+    topSinger,
     hotDetailCats,
     hotDetails,
     userDetail,
@@ -152,6 +209,12 @@ const reqFuncs = {
     albumDetail,
     albumDetailCount,
     AlbumComments,
+    singerDetail,
+    singerSongs,
+    singerAlbums,
+    singerMvs,
+    simiSingers,
+    singerDesc,
 };
 
 export default reqFuncs;

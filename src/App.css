@@ -114,3 +114,8 @@ td {
 .ant-svg-scale:hover {
     cursor: pointer;
 }
+
+.ant-radio-button-wrapper {
+    color: wheat;
+    background-color: #878787;
+}

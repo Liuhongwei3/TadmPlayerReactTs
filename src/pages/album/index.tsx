@@ -20,22 +20,25 @@ import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledDivider from "../../components/StyledDivider";
 import AlbumSongs from "./album-songs";
 import AlbumComments from "./album-comments";
+import { DEFAULT_ALBUM_ID } from "../../defaultConfig";
 
 interface IRouteParams {
     albumId: string;
 }
 
 const Album: React.FunctionComponent = () => {
-    const { albumId } = useParams<IRouteParams>();
+    let { albumId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [albumInfo, setAlbumInfo] = React.useState<IAlbumRes>();
     const [albumCount, setAlbumCount] = React.useState<IAlbumDetailCount>();
+    albumId = albumId || String(DEFAULT_ALBUM_ID);
 
     const getAlbumDetail = React.useCallback(() => {
         setLoading(true);
+
         reqs.netease
-            .albumDetail(+albumId || 21506)
+            .albumDetail(+albumId)
             .then((res) => {
                 setAlbumInfo(res);
             })
@@ -45,7 +48,7 @@ const Album: React.FunctionComponent = () => {
             .finally(() => setLoading(false));
 
         reqs.netease
-            .albumDetailCount(+albumId || 21506)
+            .albumDetailCount(+albumId)
             .then((res) => {
                 setAlbumCount(res);
             })
@@ -125,7 +128,7 @@ const Album: React.FunctionComponent = () => {
                     </Tooltip>
 
                     {albumCount?.isSub ? (
-                        <Tooltip title="已收藏">
+                        <Tooltip title="取消收藏">
                             <StarFilled
                                 className="ant-svg-scale"
                                 style={{ color: "#ff5a5a" }}
@@ -156,7 +159,7 @@ const Album: React.FunctionComponent = () => {
                         key="2"
                     >
                         <AlbumComments
-                            albumId={albumId}
+                            albumId={+albumId}
                             commCount={albumCount?.commentCount}
                         />
                     </Tabs.TabPane>

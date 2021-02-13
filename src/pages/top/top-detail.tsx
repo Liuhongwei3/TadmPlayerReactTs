@@ -1,40 +1,38 @@
 import React from "react";
-import { Empty, Spin } from "antd";
 import LazyLoad from "react-lazyload";
-import StyledDesc from "../../components/detail/StyledDesc";
-import StyledItem from "../../components/detail/StyledItem";
-import StyledName from "../../components/detail/StyledName";
-import StyledWrapper from "../../components/detail/StyledWrapper";
-import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
-import reqs from "../../api/req";
-import { Playlist } from "./type";
-import { notify, updateCurMenu } from "../../utils";
+import { Empty, Spin } from "antd";
+import { CustomerServiceOutlined } from "@ant-design/icons";
 
-interface IProps {
-    detailId: number;
-}
+import req from "../../api/req";
+import { ITopList } from "./type";
+import StyledWrapper from "../../components/detail/StyledWrapper";
+import StyledItem from "../../components/detail/StyledItem";
+import StyledCount from "../../components/detail/StyledCount";
+import StyledDesc from "../../components/detail/StyledDesc";
+import StyledName from "../../components/detail/StyledName";
+import { countFormat, dateFormat, toTop, updateCurMenu } from "../../utils";
+import LoadingImg from "../../components/LoadingImg";
 
-const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { detailId } = props;
+const TopDetail: React.FunctionComponent = () => {
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [similarDetails, setSimilarDetails] = React.useState<Playlist[]>([]);
+    const [topLists, setTopLists] = React.useState<Array<ITopList>>([]);
 
-    const getSimilarDetails = React.useCallback(() => {
+    const getRecomDetails = React.useCallback(async () => {
         setLoading(true);
-        reqs.netease
-            .getSimiDetails(+detailId)
-            .then((res) => {
-                setSimilarDetails(res.playlists);
-            })
-            .catch((e) => notify("error", e))
-            .finally(() => setLoading(false));
-    }, [detailId]);
+        const data = await req.netease.toplist();
+        setTopLists(data.list);
+        setLoading(false);
+    }, []);
 
     React.useEffect(() => {
-        getSimilarDetails();
-    }, [getSimilarDetails]);
+        toTop();
+    }, []);
+
+    React.useEffect(() => {
+        getRecomDetails();
+    }, [getRecomDetails]);
 
     const toDetail = React.useCallback(
         (id: number) => {
@@ -46,13 +44,13 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {similarDetails.length ? (
+            {topLists.length ? (
                 <StyledWrapper>
-                    {similarDetails.map((item: Playlist) => {
+                    {topLists.map((item: ITopList) => {
                         return (
                             <StyledItem
                                 key={item.id}
-                                onClick={() => toDetail(+item.id)}
+                                onClick={() => toDetail(item.id)}
                             >
                                 <div
                                     style={{
@@ -73,14 +71,18 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                             src={item.coverImgUrl}
                                         />
                                     </LazyLoad>
+                                    <StyledCount>
+                                        <CustomerServiceOutlined
+                                            style={{ marginRight: 5 }}
+                                        />
+                                        {countFormat(item.playCount)}
+                                    </StyledCount>
                                     <StyledDesc width={150}>
-                                        {`By ${item.creator.nickname}`}
+                                        {`${dateFormat(item.updateTime)} 更新`}
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={150}>
-                                    {item.creator.nickname}
-                                </StyledName>
+                                <StyledName width={150}>{item.name}</StyledName>
                             </StyledItem>
                         );
                     })}
@@ -92,4 +94,4 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default DetailSimilar;
+export default TopDetail;

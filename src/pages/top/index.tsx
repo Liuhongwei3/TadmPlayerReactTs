@@ -1,96 +1,31 @@
+import { Tabs } from "antd";
 import React from "react";
-import { Empty, Spin } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
-
-import req from "../../api/req";
-import { ITopList } from "./type";
-import StyledWrapper from "../../components/detail/StyledWrapper";
-import StyledItem from "../../components/detail/StyledItem";
-import StyledCount from "../../components/detail/StyledCount";
-import StyledDesc from "../../components/detail/StyledDesc";
-import StyledName from "../../components/detail/StyledName";
-import { countFormat, dateFormat, toTop, updateCurMenu } from "../../utils";
-import LazyLoad from "react-lazyload";
-import LoadingImg from "../../components/LoadingImg";
-import { useHistory } from "react-router-dom";
+import { toTop } from "../../utils";
+import TopDetail from "./top-detail";
+import TopSinger from "./top-singer";
 
 const Top: React.FunctionComponent = () => {
-    const history = useHistory();
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [topLists, setTopLists] = React.useState<Array<ITopList>>([]);
+    const [activeKey, setActiveKey] = React.useState<string>("1");
 
-    const getRecomDetails = React.useCallback(async () => {
-        setLoading(true);
-        const data = await req.netease.toplist();
-        setTopLists(data.list);
-        setLoading(false);
-    }, []);
-
-    React.useEffect(() => {
+    const onTabChange = React.useCallback((activeKey: string) => {
+        setActiveKey(activeKey);
         toTop();
     }, []);
 
-    React.useEffect(() => {
-        getRecomDetails();
-    }, [getRecomDetails]);
-
-    const toDetail = React.useCallback(
-        (id: number) => {
-            history.push(`/detail/${id}`);
-            updateCurMenu();
-        },
-        [history]
-    );
-
     return (
-        <Spin tip="Loading..." spinning={loading}>
-            {topLists.length ? (
-                <StyledWrapper>
-                    {topLists.map((item: ITopList) => {
-                        return (
-                            <StyledItem
-                                key={item.id}
-                                onClick={() => toDetail(item.id)}
-                            >
-                                <div
-                                    style={{
-                                        width: 150,
-                                        height: 150,
-                                        position: "relative",
-                                    }}
-                                >
-                                    <LazyLoad
-                                        height={100}
-                                        placeholder={<LoadingImg />}
-                                    >
-                                        <img
-                                            style={{ opacity: 0.65 }}
-                                            width={150}
-                                            height={150}
-                                            alt="detail-cover"
-                                            src={item.coverImgUrl}
-                                        />
-                                    </LazyLoad>
-                                    <StyledCount>
-                                        <CustomerServiceOutlined
-                                            style={{ marginRight: 5 }}
-                                        />
-                                        {countFormat(item.playCount)}
-                                    </StyledCount>
-                                    <StyledDesc width={150}>
-                                        {`${dateFormat(item.updateTime)} 更新`}
-                                    </StyledDesc>
-                                </div>
-
-                                <StyledName width={150}>{item.name}</StyledName>
-                            </StyledItem>
-                        );
-                    })}
-                </StyledWrapper>
-            ) : (
-                <Empty />
-            )}
-        </Spin>
+        <Tabs
+            style={{ padding: 10 }}
+            activeKey={activeKey}
+            defaultActiveKey="1"
+            onChange={(activeKey) => onTabChange(activeKey)}
+        >
+            <Tabs.TabPane tab={`歌单排行榜`} key="1">
+                <TopDetail />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`歌手排行榜`} key="2">
+                <TopSinger />
+            </Tabs.TabPane>
+        </Tabs>
     );
 };
 
