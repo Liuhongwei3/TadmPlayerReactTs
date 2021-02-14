@@ -6,6 +6,7 @@ import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import req from "../../../api/req";
 import { IBanner } from "../type";
 import { CarouselRef } from "antd/lib/carousel";
+import { notify } from "../../../utils";
 
 const StyledCarousel = styled.div`
     width: 100%;
@@ -68,9 +69,20 @@ const CarouselContent: React.FunctionComponent = () => {
     const [banners, setBanners] = React.useState<Array<IBanner>>([]);
     const imgRef = React.useRef<CarouselRef | null>(null);
 
-    const getBanners = React.useCallback(async () => {
-        let data = await req.netease.getBanner();
-        setBanners(data.banners);
+    const getBanners = React.useCallback(() => {
+        req.netease
+            .getBanner()
+            .then((res) => {
+                setBanners(res.banners);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载轮播图数据失败"
+                )
+            );
     }, []);
 
     React.useEffect(() => {

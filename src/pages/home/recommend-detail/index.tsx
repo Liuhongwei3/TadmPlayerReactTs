@@ -4,7 +4,7 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
 import { IRecomDetail } from "../type";
-import { countFormat, updateCurMenu } from "../../../utils";
+import { countFormat, notify, updateCurMenu } from "../../../utils";
 import StyledCount from "../../../components/detail/StyledCount";
 import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
@@ -21,11 +21,22 @@ const RecommendDetail: React.FunctionComponent = () => {
         []
     );
 
-    const getRecomDetails = React.useCallback(async () => {
+    const getRecomDetails = React.useCallback(() => {
         setLoading(true);
-        let data = await req.netease.getRecomDetails();
-        setRecomDetails(data.result);
-        setLoading(false);
+        req.netease
+            .getRecomDetails()
+            .then((res) => {
+                setRecomDetails(res.result);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载推荐歌单数据失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, []);
 
     React.useEffect(() => {

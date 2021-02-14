@@ -33,7 +33,14 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
             .then((res) => {
                 setMvs(res.mvs);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌手 MV 数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [page, pageSize, singerId]);
 

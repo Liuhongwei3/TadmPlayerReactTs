@@ -37,23 +37,21 @@ const Album: React.FunctionComponent = () => {
     const getAlbumDetail = React.useCallback(() => {
         setLoading(true);
 
-        reqs.netease
-            .albumDetail(+albumId)
+        Promise.all([
+            reqs.netease.albumDetail(+albumId),
+            reqs.netease.albumDetailCount(+albumId),
+        ])
             .then((res) => {
-                setAlbumInfo(res);
+                setAlbumInfo(res[0]);
+                setAlbumCount(res[1]);
             })
             .catch((err) => {
-                notify("error", err.message || err || "加载专辑数据失败");
-            })
-            .finally(() => setLoading(false));
-
-        reqs.netease
-            .albumDetailCount(+albumId)
-            .then((res) => {
-                setAlbumCount(res);
-            })
-            .catch((err) => {
-                notify("error", err.message || err || "加载专辑数据失败");
+                notify(
+                    "error",
+                    (err.response && err.response.statusText) ||
+                        err.message ||
+                        "加载专辑数据失败"
+                );
             })
             .finally(() => setLoading(false));
     }, [albumId]);

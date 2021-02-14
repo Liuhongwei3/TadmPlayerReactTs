@@ -13,7 +13,7 @@ const axiosInst = axios.create({
     baseURL,
     timeout: 10000,
     withCredentials: true, // 允许携带cookie
-    // do cache 
+    // do cache
     adapter: cacheAdapterEnhancer(axios.defaults.adapter!, {
         enabledByDefault: false,
         cacheFlag: "useCache",
@@ -45,9 +45,10 @@ axiosInst.interceptors.response.use(
         const res = parseResponseData(response);
 
         if (res.data && typeof res.data === "string") {
-            console.log(res.data);
+            notify("error", res.data);
+            return Promise.reject(res.data);
         }
-        
+
         if (res.data.reason) {
             notify("warning", res.data.reason || "需要登录~");
         }
@@ -58,12 +59,16 @@ axiosInst.interceptors.response.use(
         // 当 401 重定向到登录页
         if (error && error.response && error.response.status === 401) {
             // window.location.href = getSsoRedirectUrl();
-            console.log("redirect");
-            return;
+            notify("warning", error.response.statusText || "需要登录~");
         } else if (error && error.response && error.response.status >= 500) {
             notify("error", error.response.statusText || "服务器异常！");
         } else {
-            notify("error", error.response.statusText || "加载错误！");
+            notify(
+                "error",
+                (error.response && error.response.statusText) ||
+                    error.message ||
+                    "加载数据失败"
+            );
         }
 
         return Promise.reject(error);

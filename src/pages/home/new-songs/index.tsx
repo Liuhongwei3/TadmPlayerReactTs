@@ -9,16 +9,28 @@ import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
+import { notify } from "../../../utils";
 
 const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [newSongs, setNewSongs] = React.useState<Array<INewSongs>>([]);
 
-    const getNewSongs = React.useCallback(async () => {
+    const getNewSongs = React.useCallback(() => {
         setLoading(true);
-        let data = await req.netease.getNewSongs();
-        setNewSongs(data.result);
-        setLoading(false);
+        req.netease
+            .getNewSongs()
+            .then((res) => {
+                setNewSongs(res.result);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载最新音乐数据失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, []);
 
     React.useEffect(() => {

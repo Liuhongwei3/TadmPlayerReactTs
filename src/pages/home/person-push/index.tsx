@@ -10,17 +10,29 @@ import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
+import { notify } from "../../../utils";
 
 const PersonPush: React.FunctionComponent = () => {
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [personPush, setPersonPush] = React.useState<Array<IPersonPush>>([]);
 
-    const getPerPush = React.useCallback(async () => {
+    const getPerPush = React.useCallback(() => {
         setLoading(true);
-        let data = await req.netease.getPerPush();
-        setPersonPush(data.result);
-        setLoading(false);
+        req.netease
+            .getPerPush()
+            .then((res) => {
+                setPersonPush(res.result);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载独家放送失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, []);
 
     React.useEffect(() => {

@@ -44,7 +44,12 @@ const Mv: React.FunctionComponent = () => {
                 res[1].code === 200 && setMvUrl(res[1].data);
             })
             .catch((err) => {
-                notify("error", err.message || err || "加载 MV 数据失败");
+                notify(
+                    "error",
+                    (err.response && err.response.statusText) ||
+                        err.message ||
+                        "加载 MV 数据失败"
+                );
             })
             .finally(() => setLoading(false));
     }, [mvId]);

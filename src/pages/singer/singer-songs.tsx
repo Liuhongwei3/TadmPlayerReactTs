@@ -39,7 +39,12 @@ const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 setTotal(res.total);
             })
             .catch((e) => {
-                notify("error", e || "获取歌曲详情数据失败");
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌手全部歌曲数据失败"
+                );
             })
             .finally(() => {
                 setLoading(false);

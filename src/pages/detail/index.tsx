@@ -42,7 +42,12 @@ const Detail: React.FunctionComponent = (props) => {
                 setDetailInfo(res);
             })
             .catch((err) => {
-                notify("error", err.message || err || "加载歌单数据失败");
+                notify(
+                    "error",
+                    (err.response && err.response.statusText) ||
+                        err.message ||
+                        "加载歌单数据失败"
+                );
             })
             .finally(() => setLoading(false));
     }, [detailId]);

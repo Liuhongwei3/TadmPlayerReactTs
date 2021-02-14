@@ -6,7 +6,7 @@ import { VideoCameraOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
 import { IRecommendMv } from "../type";
-import { countFormat } from "../../../utils";
+import { countFormat, notify } from "../../../utils";
 import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
@@ -21,11 +21,22 @@ const RecommendMv: React.FunctionComponent = () => {
         []
     );
 
-    const getRecommendMv = React.useCallback(async () => {
+    const getRecommendMv = React.useCallback(() => {
         setLoading(true);
-        let data = await req.netease.getNewMvs();
-        setRecommendMv(data.result);
-        setLoading(false);
+        req.netease
+            .getNewMvs()
+            .then((res) => {
+                setRecommendMv(res.result);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载推荐 MV 数据失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, []);
 
     React.useEffect(() => {

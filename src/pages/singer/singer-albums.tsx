@@ -1,7 +1,6 @@
 import React from "react";
 import { Empty, Pagination, Spin } from "antd";
 import LazyLoad from "react-lazyload";
-import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
@@ -31,7 +30,14 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
             .then((res) => {
                 setAlbums(res.hotAlbums);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌手专辑数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [page, pageSize, singerId]);
 

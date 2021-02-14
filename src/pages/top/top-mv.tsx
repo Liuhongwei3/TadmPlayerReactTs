@@ -6,7 +6,7 @@ import { VideoCameraOutlined } from "@ant-design/icons";
 
 import StyledItem from "../../components/detail/StyledItem";
 import StyledWrapper from "../../components/detail/StyledWrapper";
-import { countFormat, dateFormat, toTop } from "../../utils";
+import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import { Data, ITopMvRes } from "./type";
 import req from "../../api/req";
 import LoadingImg from "../../components/LoadingImg";
@@ -31,11 +31,22 @@ const TopMv: React.FunctionComponent = () => {
     const [type, setType] = React.useState<string>(Types[0].title);
     const [mvRes, setMvRes] = React.useState<ITopMvRes>();
 
-    const getTopMvs = React.useCallback(async () => {
+    const getTopMvs = React.useCallback(() => {
         setLoading(true);
-        const data = await req.netease.topMv(limit, type);
-        setMvRes(data);
-        setLoading(false);
+        req.netease
+            .topMv(limit, type)
+            .then((res) => {
+                setMvRes(res);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载 MV 排行榜数据失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, [limit, type]);
 
     React.useEffect(() => {

@@ -31,7 +31,14 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
             .then((res) => {
                 setSimilarMvs(res.mvs);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载相似 MV 数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [mvId]);
 

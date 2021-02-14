@@ -28,7 +28,14 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
             .then((res) => {
                 setSimilarDetails(res.playlists);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载相似歌单数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [detailId]);
 

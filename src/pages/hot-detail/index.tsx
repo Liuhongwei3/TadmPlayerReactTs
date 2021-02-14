@@ -15,6 +15,7 @@ import { IHotDetail, IHotDetailCats } from "./type";
 import {
     countFormat,
     dateFormat,
+    notify,
     toTop,
     uniqueId,
     updateCurMenu,
@@ -78,6 +79,14 @@ const HotDetail: React.FunctionComponent = () => {
             .then((res) => {
                 setTopLists(uniqueId(res.playlists));
             })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载热门歌单数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [curCat, limit]);
 
@@ -174,21 +183,25 @@ const HotDetail: React.FunctionComponent = () => {
                     visible={visible}
                     trigger="click"
                     title={
-                        <StyledTag
-                            fontSize={13}
-                            color={
-                                curCat === hotDetailCats.all.name
-                                    ? "red"
-                                    : "rgb(159 157 157)"
-                            }
-                            onClick={() =>
-                                updateCurInfo(hotDetailCats.all.name)
-                            }
-                        >
-                            {hotDetailCats.all.name}
-                        </StyledTag>
+                        hotDetailCats ? (
+                            <StyledTag
+                                fontSize={13}
+                                color={
+                                    curCat === hotDetailCats.all.name
+                                        ? "red"
+                                        : "rgb(159 157 157)"
+                                }
+                                onClick={() =>
+                                    updateCurInfo(hotDetailCats.all.name)
+                                }
+                            >
+                                {hotDetailCats.all.name}
+                            </StyledTag>
+                        ) : (
+                            <Empty />
+                        )
                     }
-                    content={<PopContent />}
+                    content={hotDetailCats ? <PopContent /> : <Empty />}
                     onVisibleChange={(visible) => setVisible(visible)}
                 >
                     <Button

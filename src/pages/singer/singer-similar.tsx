@@ -1,7 +1,6 @@
 import React from "react";
 import { Empty, Spin } from "antd";
 import LazyLoad from "react-lazyload";
-import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
@@ -19,9 +18,7 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     const { singerId } = props;
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [similarSingers, setSimilarSingers] = React.useState<Artist[]>(
-        []
-    );
+    const [similarSingers, setSimilarSingers] = React.useState<Artist[]>([]);
 
     const getSimilarDetails = React.useCallback(() => {
         setLoading(true);
@@ -31,7 +28,14 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                 console.log(res);
                 setSimilarSingers(res.artists);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载相似歌手数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [singerId]);
 

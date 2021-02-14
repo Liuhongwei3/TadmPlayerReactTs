@@ -11,7 +11,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
-import { countFormat, dateFormat, toTop, updateCurMenu } from "../../utils";
+import { countFormat, dateFormat, notify, toTop, updateCurMenu } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 
 const TopDetail: React.FunctionComponent = () => {
@@ -19,11 +19,22 @@ const TopDetail: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [topLists, setTopLists] = React.useState<Array<ITopList>>([]);
 
-    const getRecomDetails = React.useCallback(async () => {
+    const getRecomDetails = React.useCallback(() => {
         setLoading(true);
-        const data = await req.netease.toplist();
-        setTopLists(data.list);
-        setLoading(false);
+        req.netease
+            .toplist()
+            .then((res) => {
+                setTopLists(res.list);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌单排行榜数据失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, []);
 
     React.useEffect(() => {

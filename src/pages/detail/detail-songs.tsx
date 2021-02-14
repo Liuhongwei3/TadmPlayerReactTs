@@ -44,7 +44,12 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 );
             })
             .catch((e) => {
-                notify("error", e || "获取歌曲详情数据失败");
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "获取歌曲详情数据失败"
+                );
             })
             .finally(() => {
                 setLoading(false);
@@ -103,7 +108,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 ) : (
                     data.ar.map((ar) => (
                         <Link key={ar.id} to={`/singer/${ar.id}`}>
-                            {ar.name} / 
+                            {ar.name} /
                         </Link>
                     ))
                 );

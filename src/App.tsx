@@ -1,7 +1,7 @@
 import React from "react";
 import { HashRouter as Router } from "react-router-dom";
 import { ConfigProvider, BackTop, Divider, Layout } from "antd";
-import { SettingOutlined, UpSquareTwoTone } from "@ant-design/icons";
+import { UpSquareTwoTone } from "@ant-design/icons";
 import styled from "styled-components";
 import enUS from "antd/lib/locale/en_US";
 import zhCN from "antd/lib/locale/zh_CN";
@@ -25,18 +25,11 @@ const StyledContent = styled(Layout.Content)`
     background: rgba(0, 0, 0, 0.5);
 `;
 
-const StyledSettingOutlined = styled(SettingOutlined)`
-    position: absolute;
-    z-index: 999;
-    top: 15px;
-    right: 5px;
-`;
-
 const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState(zhCN);
 
     const changeLocale = React.useCallback(() => {
-        setLocale(locale.locale === 'zh-cn' ? enUS : zhCN);
+        setLocale(locale.locale === "zh-cn" ? enUS : zhCN);
     }, [locale]);
 
     return (
@@ -46,7 +39,7 @@ const App: React.FunctionComponent = () => {
                     <LeftSide />
 
                     <Layout style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
-                        <ContentHeader />
+                        <ContentHeader changeLocale={changeLocale} />
 
                         <StyledBg>
                             <StyledContent>

@@ -43,11 +43,17 @@ const StyledSettingOutlined = styled(SettingOutlined)`
     color: #fff;
 `;
 
-const ContentHeader: React.FunctionComponent = () => {
+interface IProps {
+    changeLocale: () => void;
+}
+
+const ContentHeader: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { changeLocale } = props;
+
     return (
         <StyledHeader>
             Tadm-Player-React ^-^
-            <StyledSettingOutlined />
+            <StyledSettingOutlined onClick={changeLocale} />
         </StyledHeader>
     );
 };

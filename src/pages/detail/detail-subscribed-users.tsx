@@ -33,7 +33,14 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
             .then((res) => {
                 setSubsUsers(res.subscribers);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌单收藏者数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [detailId, page, pageSize]);
 
@@ -49,7 +56,7 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
     const toDetail = React.useCallback((id: number) => {
         history.push(`/user/${id}`);
         updateCurMenu();
-    }, []);
+    }, [history]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>

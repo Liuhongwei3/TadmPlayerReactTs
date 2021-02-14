@@ -20,7 +20,14 @@ const SingerDesc: React.FunctionComponent<IProps> = (props: IProps) => {
             .then((res) => {
                 setDescs(res);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌手描述数据失败"
+                )
+            )
             .finally(() => setLoading(false));
     }, [singerId]);
 

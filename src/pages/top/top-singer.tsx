@@ -6,7 +6,7 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import StyledItem from "../../components/detail/StyledItem";
 import StyledWrapper from "../../components/detail/StyledWrapper";
-import { countFormat, dateFormat, toTop } from "../../utils";
+import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import { Artist, ESingerType, List } from "./type";
 import req from "../../api/req";
 import LoadingImg from "../../components/LoadingImg";
@@ -30,11 +30,22 @@ const TopSinger: React.FunctionComponent = () => {
     const [type, setType] = React.useState<number>(ESingerType.CHINESE);
     const [singers, setSingers] = React.useState<List>();
 
-    const getTopSingers = React.useCallback(async () => {
+    const getTopSingers = React.useCallback(() => {
         setLoading(true);
-        const data = await req.netease.topSinger(type);
-        setSingers(data.list);
-        setLoading(false);
+        req.netease
+            .topSinger(type)
+            .then((res) => {
+                setSingers(res.list);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载歌手排行榜数据失败"
+                )
+            )
+            .finally(() => setLoading(false));
     }, [type]);
 
     React.useEffect(() => {

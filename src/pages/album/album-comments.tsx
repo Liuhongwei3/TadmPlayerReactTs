@@ -32,7 +32,14 @@ const AlbumComments: React.FunctionComponent<IProps> = (props: IProps) => {
                 res.hotComments && setHotComms(res.hotComments);
                 setcomms(res.comments);
             })
-            .catch((e) => notify("error", e))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载专辑评论数据失败"
+                )
+            )
             .finally(() => setLoading(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [albumId, page, pageSize]);
