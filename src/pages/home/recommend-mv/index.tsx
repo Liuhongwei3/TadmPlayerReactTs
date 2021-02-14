@@ -1,5 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
+import { useHistory } from "react-router-dom";
 import { Empty, Spin } from "antd";
 import { VideoCameraOutlined } from "@ant-design/icons";
 
@@ -14,6 +15,7 @@ import StyledCount from "../../../components/detail/StyledCount";
 import LoadingImg from "../../../components/LoadingImg";
 
 const RecommendMv: React.FunctionComponent = () => {
+    const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [recommendMv, setRecommendMv] = React.useState<Array<IRecommendMv>>(
         []
@@ -30,6 +32,14 @@ const RecommendMv: React.FunctionComponent = () => {
         getRecommendMv();
     }, [getRecommendMv]);
 
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/mv/${id}`);
+            // updateCurMenu();
+        },
+        [history]
+    );
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《推荐MV》</h2>
@@ -37,7 +47,10 @@ const RecommendMv: React.FunctionComponent = () => {
                 <StyledWrapper>
                     {recommendMv.map((item: IRecommendMv) => {
                         return (
-                            <StyledItem key={item.id}>
+                            <StyledItem
+                                key={item.id}
+                                onClick={() => toDetail(item.id)}
+                            >
                                 <div
                                     style={{
                                         width: 320,

@@ -15,6 +15,7 @@ import {
     DEFAULT_ALBUM_ID,
     DEFAULT_AVATAR,
     DEFAULT_DETAIL_ID,
+    DEFAULT_MV_ID,
     DEFAULT_SINGER_ID,
 } from "../../defaultConfig";
 import { updateCurMenu } from "../../utils";
@@ -75,7 +76,7 @@ const LeftSide: React.FunctionComponent = () => {
                     <Link to="/user">用户</Link>
                 </Menu.Item>
                 <Menu.Item key="mv" icon={<VideoCameraOutlined />}>
-                    <Link to="/mv">MV</Link>
+                    <Link to={`/mv/${DEFAULT_MV_ID}`}>MV</Link>
                 </Menu.Item>
             </Menu>
         </Layout.Sider>

@@ -21,7 +21,7 @@ import { DEFAULT_DETAIL_ID, DEFAULT_RANDOM_COLORS } from "../../defaultConfig";
 import DetailSongs from "./detail-songs";
 import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
-import DetailSimilar from "./detail-simiar";
+import DetailSimilar from "./detail-similar";
 
 interface IRouteParams {
     detailId: string;
@@ -57,11 +57,11 @@ const Detail: React.FunctionComponent = (props) => {
 
     React.useEffect(() => {
         setActiveKey("1");
+        toTop();
     }, [detailId]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
-        toTop();
     }, []);
 
     return (

@@ -1,4 +1,6 @@
 import React from "react";
+import LazyLoad from "react-lazyload";
+import { useHistory } from "react-router-dom";
 import { Empty, Spin } from "antd";
 
 import req from "../../../api/req";
@@ -7,10 +9,10 @@ import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
-import LazyLoad from "react-lazyload";
 import LoadingImg from "../../../components/LoadingImg";
 
 const PersonPush: React.FunctionComponent = () => {
+    const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [personPush, setPersonPush] = React.useState<Array<IPersonPush>>([]);
 
@@ -25,6 +27,14 @@ const PersonPush: React.FunctionComponent = () => {
         getPerPush();
     }, [getPerPush]);
 
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/mv/${id}`);
+            // updateCurMenu();
+        },
+        [history]
+    );
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《独家放送》</h2>
@@ -32,7 +42,10 @@ const PersonPush: React.FunctionComponent = () => {
                 <StyledWrapper>
                     {personPush.map((item: IPersonPush) => {
                         return (
-                            <StyledItem key={item.id}>
+                            <StyledItem
+                                key={item.id}
+                                onClick={() => toDetail(item.id)}
+                            >
                                 <div
                                     style={{
                                         width: 320,

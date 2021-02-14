@@ -62,9 +62,13 @@ const Album: React.FunctionComponent = () => {
         getAlbumDetail();
     }, [getAlbumDetail]);
 
+    React.useEffect(() => {
+        setActiveKey("1");
+        toTop();
+    }, [albumId]);
+
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
-        toTop();
     }, []);
 
     return (

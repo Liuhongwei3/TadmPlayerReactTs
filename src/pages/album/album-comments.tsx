@@ -19,7 +19,9 @@ const AlbumComments: React.FunctionComponent<IProps> = (props: IProps) => {
     const [comms, setcomms] = React.useState<IComment[]>();
 
     const before = React.useMemo(() => {
-        return comms && comms.length ? comms[pageSize - 1].time : undefined;
+        return comms && comms.length && comms[pageSize - 1]
+            ? comms[pageSize - 1].time
+            : undefined;
     }, [comms, pageSize]);
 
     const getDetailComments = React.useCallback(() => {

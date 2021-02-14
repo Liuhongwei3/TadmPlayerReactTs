@@ -2,12 +2,12 @@ import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
 import { Button, Empty, Radio, Spin } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
+import { VideoCameraOutlined } from "@ant-design/icons";
 
 import StyledItem from "../../components/detail/StyledItem";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import { countFormat, dateFormat, toTop } from "../../utils";
-import { Artist, ESingerType, List } from "./type";
+import { Data, ITopMvRes } from "./type";
 import req from "../../api/req";
 import LoadingImg from "../../components/LoadingImg";
 import StyledName from "../../components/detail/StyledName";
@@ -15,44 +15,45 @@ import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledDivider from "../../components/StyledDivider";
 
-const INIT_LIMIT = 24;
+const INIT_LIMIT = 18;
 const Types = [
-    { title: "华语", value: ESingerType.CHINESE },
-    { title: "欧美", value: ESingerType.ENGLISH },
-    { title: "韩国", value: ESingerType.KOREAN },
-    { title: "日本", value: ESingerType.JAPANESE },
+    { title: "内地" },
+    { title: "港台" },
+    { title: "欧美" },
+    { title: "韩国" },
+    { title: "日本" },
 ];
 
-const TopSinger: React.FunctionComponent = () => {
+const TopMv: React.FunctionComponent = () => {
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
-    const [type, setType] = React.useState<number>(ESingerType.CHINESE);
-    const [singers, setSingers] = React.useState<List>();
+    const [type, setType] = React.useState<string>(Types[0].title);
+    const [mvRes, setMvRes] = React.useState<ITopMvRes>();
 
-    const getTopSingers = React.useCallback(async () => {
+    const getTopMvs = React.useCallback(async () => {
         setLoading(true);
-        const data = await req.netease.topSinger(type);
-        setSingers(data.list);
+        const data = await req.netease.topMv(limit, type);
+        setMvRes(data);
         setLoading(false);
-    }, [type]);
+    }, [limit, type]);
 
     React.useEffect(() => {
         toTop();
     }, []);
 
     React.useEffect(() => {
-        getTopSingers();
-    }, [getTopSingers]);
+        getTopMvs();
+    }, [getTopMvs]);
 
-    const updateCurInfo = React.useCallback((type: number) => {
+    const updateCurInfo = React.useCallback((type: string) => {
         setLimit(INIT_LIMIT);
         setType(type);
     }, []);
 
     const toDetail = React.useCallback(
         (id: number) => {
-            history.push(`/singer/${id}`);
+            history.push(`/mv/${id}`);
             // updateCurMenu();
         },
         [history]
@@ -64,27 +65,27 @@ const TopSinger: React.FunctionComponent = () => {
                 <span>地区：</span>
                 <Radio.Group
                     buttonStyle="solid"
-                    defaultValue={ESingerType.CHINESE}
+                    defaultValue={"内地"}
                     onChange={(e) => updateCurInfo(e.target.value)}
                 >
                     {Types.map((type) => (
-                        <Radio.Button key={type.title} value={type.value}>
+                        <Radio.Button key={type.title} value={type.title}>
                             {type.title}
                         </Radio.Button>
                     ))}
                 </Radio.Group>
 
                 <span style={{ float: "right", marginRight: 10 }}>
-                    更新时间：{dateFormat(singers?.updateTime)}
+                    更新时间：{dateFormat(mvRes?.updateTime)}
                 </span>
             </div>
 
             <StyledDivider />
 
-            {singers?.artists && singers?.artists.length ? (
+            {mvRes?.data && mvRes?.data.length ? (
                 <React.Fragment>
                     <StyledWrapper>
-                        {singers.artists.slice(0, limit).map((item: Artist) => {
+                        {mvRes?.data.map((item: Data) => {
                             return (
                                 <StyledItem
                                     key={item.id}
@@ -92,35 +93,35 @@ const TopSinger: React.FunctionComponent = () => {
                                 >
                                     <div
                                         style={{
-                                            width: 150,
+                                            width: 200,
                                             height: 150,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={100}
+                                            height={150}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.7 }}
-                                                width={150}
+                                                style={{ opacity: 0.85 }}
+                                                width={200}
                                                 height={150}
-                                                alt="detail-cover"
-                                                src={item.picUrl}
+                                                alt="mv-cover"
+                                                src={item.cover}
                                             />
                                         </LazyLoad>
                                         <StyledCount>
-                                            <CustomerServiceOutlined
+                                            <VideoCameraOutlined
                                                 style={{ marginRight: 5 }}
                                             />
-                                            {countFormat(item.musicSize)}
+                                            {countFormat(item.playCount)}
                                         </StyledCount>
-                                        <StyledDesc width={150}>
+                                        <StyledDesc width={200}>
                                             热度：{item.score}
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
+                                    <StyledName width={200}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>
@@ -130,9 +131,9 @@ const TopSinger: React.FunctionComponent = () => {
                     <Button
                         style={{ margin: "0 auto", display: "flex" }}
                         type="primary"
-                        disabled={limit >= singers.artists.length}
+                        disabled={!mvRes.hasMore}
                         loading={loading}
-                        onClick={() => setLimit(limit + 16)}
+                        onClick={() => setLimit(limit + 12)}
                     >
                         Loading More
                     </Button>
@@ -144,4 +145,4 @@ const TopSinger: React.FunctionComponent = () => {
     );
 };
 
-export default TopSinger;
+export default TopMv;

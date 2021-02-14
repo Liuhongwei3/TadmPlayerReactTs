@@ -59,11 +59,11 @@ const Singer: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         setActiveKey("1");
+        toTop();
     }, [singerId]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
-        toTop();
     }, []);
 
     return (

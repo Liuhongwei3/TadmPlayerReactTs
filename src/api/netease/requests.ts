@@ -1,5 +1,10 @@
 import api from "../index";
-import { ESingerType, ITopListRes, ITopSingerRes } from "../../pages/top/type";
+import {
+    ESingerType,
+    ITopListRes,
+    ITopMvRes,
+    ITopSingerRes,
+} from "../../pages/top/type";
 import { IHotDetailCats, IHotdetailRes } from "../../pages/hot-detail/type";
 import {
     IBannerRes,
@@ -26,6 +31,7 @@ import {
     ISingerRes,
     ISongRes,
 } from "../../pages/singer/type";
+import { IMvDetailRes, IMvUrlRes, ISimiMvRes } from "../../pages/mv/type";
 
 // -----------------------------------------------------
 // 首页
@@ -65,6 +71,13 @@ const topSinger = (type = ESingerType.CHINESE) => {
     return api.get<ITopSingerRes>(`/toplist/artist?type=${type}`);
 };
 
+const topMv = (limit = 10, area?: string) => {
+    const base = `/top/mv?limit=${limit}`;
+    const optional1 = area ? `&area=${area}` : "";
+
+    return api.get<ITopMvRes>(`${base}${optional1}`);
+};
+
 // -----------------------------------------------------------
 // 热门歌单
 
@@ -98,7 +111,7 @@ const detailComment = (
 ) => {
     const base = `/comment/playlist?id=${id}&limit=${limit}`;
     const optional1 = offset ? `&offset=${offset}` : "";
-    const optional2 = before ? `&before=${before}` : "";
+    const optional2 = offset && before ? `&before=${before}` : "";
 
     return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
 };
@@ -132,7 +145,7 @@ const AlbumComments = (
 ) => {
     const base = `/comment/album?id=${id}&limit=${limit}`;
     const optional1 = offset ? `&offset=${offset}` : "";
-    const optional2 = before ? `&before=${before}` : "";
+    const optional2 = offset && before ? `&before=${before}` : "";
 
     return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
 };
@@ -186,7 +199,61 @@ const getMusicDetail = (ids: string) => {
 };
 
 // ----------------------------------------------------------------------
+/**
+ * 新版评论接口
+ * @param type 资源类型
+ * @param id
+ * @param pageNo 分页参数,第N页,默认为1
+ * @param pageSize 分页参数,每页多少条数据,默认20
+ * @param sortType 排序方式,99:按推荐排序,2:按热度排序,3:按时间排序
+ * @param cursor 当sortType为3时且页数不是第一页时需传入,值为上一条数据的time
+ */
+const newComment = (
+    type: number,
+    id: number,
+    pageNo?: number,
+    pageSize?: number,
+    sortType?: number,
+    cursor?: number
+) => {
+    const base = `/comment/new?&type=${type}&id=${id}`;
+    const optional1 =
+        pageNo && pageSize ? `&pageNo=${pageNo}&pageSize=${pageSize}` : "";
+    const optional2 = sortType ? `&sortType=${sortType}` : "";
+    const optional3 = cursor ? `&cursor=${cursor}` : "";
+
+    return api.get(`${base}${optional1}${optional2}${optional3}`);
+};
+
+// ----------------------------------------------------------------------
 // MV
+
+const mvDetail = (id: number) => {
+    return api.get<IMvDetailRes>(`/mv/detail?mvid=${id}`);
+};
+
+const mvUrl = (id: number, r?: number) => {
+    const optional1 = r ? `&r=${r}` : "";
+
+    return api.get<IMvUrlRes>(`/mv/url?id=${id}${optional1}`);
+};
+
+const mvComment = (
+    id: number,
+    limit = 10,
+    offset?: number,
+    before?: number
+) => {
+    const base = `/comment/mv?id=${id}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+    const optional2 = offset && before ? `&before=${before}` : "";
+
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+};
+
+const simiMv = (id: number) => {
+    return api.get<ISimiMvRes>(`/simi/mv?mvid=${id}`);
+};
 
 // ----------------------------------------------------------------------
 // 视频
@@ -198,6 +265,7 @@ const reqFuncs = {
     getNewMvs,
     toplist,
     topSinger,
+    topMv,
     hotDetailCats,
     hotDetails,
     userDetail,
@@ -215,6 +283,11 @@ const reqFuncs = {
     singerMvs,
     simiSingers,
     singerDesc,
+    newComment,
+    mvDetail,
+    mvUrl,
+    mvComment,
+    simiMv,
 };
 
 export default reqFuncs;

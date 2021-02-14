@@ -29,6 +29,7 @@ img {
 
 ::-webkit-scrollbar {
     width: 6px;
+    height: 10px;
 }
 
 /*  滑块部分  */

@@ -2,6 +2,7 @@ import { Tabs } from "antd";
 import React from "react";
 import { toTop } from "../../utils";
 import TopDetail from "./top-detail";
+import TopMv from "./top-mv";
 import TopSinger from "./top-singer";
 
 const Top: React.FunctionComponent = () => {
@@ -24,6 +25,9 @@ const Top: React.FunctionComponent = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab={`歌手排行榜`} key="2">
                 <TopSinger />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`MV 排行榜`} key="3">
+                <TopMv />
             </Tabs.TabPane>
         </Tabs>
     );
