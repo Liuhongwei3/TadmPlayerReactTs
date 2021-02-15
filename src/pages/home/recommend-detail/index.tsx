@@ -83,9 +83,7 @@ const RecommendDetail: React.FunctionComponent = () => {
                                     </LazyLoad>
 
                                     <StyledCount>
-                                        <CustomerServiceOutlined
-                                            style={{ marginRight: 5 }}
-                                        />
+                                        <CustomerServiceOutlined />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
                                     <StyledDesc width={150}>

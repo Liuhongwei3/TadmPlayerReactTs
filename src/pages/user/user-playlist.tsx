@@ -1,72 +1,80 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty, Pagination, Spin } from "antd";
-import { VideoCameraOutlined, FieldTimeOutlined } from "@ant-design/icons";
+import { Button, Empty, Spin } from "antd";
+import { CustomerServiceOutlined } from "@ant-design/icons";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { countFormat, notify, timeFormat, updateCurMenu } from "../../utils";
-import reqs from "../../api/req";
-import { Mv } from "./type";
+import {
+    countFormat,
+    dateFormat,
+    notify,
+    toTop,
+} from "../../utils";
+import req from "../../api/req";
+import { IUserPlaylistRes } from "./type";
 
 interface IProps {
-    singerId: number;
-    mvCount: number;
+    userId: number;
 }
 
-const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { singerId, mvCount } = props;
-    const history = useHistory();
-    const [page, setPage] = React.useState<number>(1);
-    const [pageSize, setPageSize] = React.useState<number>(24);
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [mvs, setMvs] = React.useState<Mv[]>([]);
+const INIT_LIMIT = 16;
 
-    const getSubUsers = React.useCallback(() => {
+const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
+    const history = useHistory();
+    const { userId } = props;
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
+    const [playlistsRes, setPlaylistsRes] = React.useState<IUserPlaylistRes>();
+
+    const getPlaylists = React.useCallback(() => {
         setLoading(true);
-        reqs.netease
-            .singerMvs(singerId, pageSize, (page - 1) * pageSize)
+        req.netease
+            .userPlaylist(userId, limit)
             .then((res) => {
-                setMvs(res.mvs);
+                setPlaylistsRes(res);
             })
             .catch((e) =>
                 notify(
                     "error",
                     (e.response && e.response.statusText) ||
                         e.message ||
-                        "加载歌手 MV 数据失败"
+                        "加载用户歌单数据失败"
                 )
             )
             .finally(() => setLoading(false));
-    }, [page, pageSize, singerId]);
+    }, [limit, userId]);
 
     React.useEffect(() => {
-        getSubUsers();
-    }, [getSubUsers, page, pageSize]);
-
-    const pageChange = React.useCallback((page1, pageSize1) => {
-        setPage(page1);
-        setPageSize(pageSize1);
+        toTop();
     }, []);
+
+    React.useEffect(() => {
+        getPlaylists();
+    }, [getPlaylists]);
+
+    React.useEffect(() => {
+        setLimit(INIT_LIMIT);
+    }, [userId]);
 
     const toDetail = React.useCallback(
         (id: number) => {
-            history.push(`/mv/${id}`);
-            updateCurMenu();
+            history.push(`/detail/${id}`);
+            // updateCurMenu();
         },
         [history]
     );
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {mvs.length ? (
-                <React.Fragment>
+            {playlistsRes && playlistsRes.playlist.length ? (
+                <>
                     <StyledWrapper>
-                        {mvs.map((item: Mv) => {
+                        {playlistsRes.playlist.map((item) => {
                             return (
                                 <StyledItem
                                     key={item.id}
@@ -74,7 +82,7 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
                                 >
                                     <div
                                         style={{
-                                            width: 200,
+                                            width: 150,
                                             height: 150,
                                             position: "relative",
                                         }}
@@ -85,44 +93,40 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
                                         >
                                             <img
                                                 style={{ opacity: 0.85 }}
-                                                width={200}
+                                                width={150}
                                                 height={150}
-                                                alt="detail-cover"
-                                                src={item.imgurl}
+                                                alt="mv-cover"
+                                                src={item.coverImgUrl}
                                             />
                                         </LazyLoad>
                                         <StyledCount>
-                                            <VideoCameraOutlined />
+                                            <CustomerServiceOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
-                                        <StyledDesc width={200}>
-                                            <FieldTimeOutlined />
-                                            {timeFormat(
-                                                Math.floor(item.duration / 1000)
-                                            )}
+                                        <StyledDesc width={150}>
+                                            {`${dateFormat(
+                                                item.updateTime
+                                            )} 更新`}
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={200}>
+                                    <StyledName width={150}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>
                             );
                         })}
                     </StyledWrapper>
-                    <Pagination
-                        style={{ float: "right" }}
-                        current={page}
-                        pageSize={pageSize}
-                        total={mvCount}
-                        showSizeChanger={true}
-                        showQuickJumper={true}
-                        showTotal={(total) => `共 ${total} 条`}
-                        onChange={(page, pageSize) =>
-                            pageChange(page, pageSize)
-                        }
-                    />
-                </React.Fragment>
+                    <Button
+                        style={{ margin: "0 auto", display: "flex" }}
+                        type="primary"
+                        disabled={!playlistsRes.more}
+                        loading={loading}
+                        onClick={() => setLimit(limit + 12)}
+                    >
+                        Loading More
+                    </Button>
+                </>
             ) : (
                 <Empty />
             )}
@@ -130,4 +134,4 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default SingerMvs;
+export default UserPlaylist;

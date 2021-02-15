@@ -13,7 +13,13 @@ import {
     IRecomDetailRes,
     IRecommendMvRes,
 } from "../../pages/home/type";
-import { IUserDetail } from "../../pages/user/type";
+import {
+    IEventsRes,
+    IFollowedRes,
+    IFollowRes,
+    IUserDetail,
+    IUserPlaylistRes,
+} from "../../pages/user/type";
 import {
     IDetailRes,
     IDetailSubUsersRes,
@@ -94,6 +100,42 @@ const hotDetails = (cat = "全部", limit = 24) => {
 
 const userDetail = (uid: number) => {
     return api.get<IUserDetail>(`/user/detail?uid=${uid}`);
+};
+
+const userPlaylist = (uid: number, limit?: number, offset?: number) => {
+    const optional1 = limit ? `&limit=${limit - 1}` : "";
+    const optional2 = offset ? `&offset=${offset}` : "";
+
+    return api.get<IUserPlaylistRes>(
+        `/user/playlist?uid=${uid}${optional1}${optional2}`
+    );
+};
+
+const userFollow = (uid: number, limit?: number, offset?: number) => {
+    const optional1 = limit ? `&limit=${limit - 1}` : "";
+    const optional2 = offset ? `&offset=${offset}` : "";
+
+    return api.get<IFollowRes>(
+        `/user/follows?uid=${uid}${optional1}${optional2}`
+    );
+};
+
+const userFollowed = (uid: number, limit?: number, lasttime?: number) => {
+    const optional1 = limit ? `&limit=${limit}` : "";
+    const optional2 = lasttime ? `&lasttime=${lasttime}` : "";
+
+    return api.get<IFollowedRes>(
+        `/user/followeds?uid=${uid}${optional1}${optional2}`
+    );
+};
+
+const userEvent = (uid: number, limit?: number, lasttime?: number) => {
+    const optional1 = limit ? `&limit=${limit}` : "";
+    const optional2 = lasttime ? `&lasttime=${lasttime}` : "";
+
+    return api.get<IEventsRes>(
+        `/user/event?uid=${uid}${optional1}${optional2}`
+    );
 };
 
 // ----------------------------------------------------------------------
@@ -257,6 +299,7 @@ const simiMv = (id: number) => {
 
 // ----------------------------------------------------------------------
 // 视频
+
 const reqFuncs = {
     getBanner,
     getRecomDetails,
@@ -269,6 +312,10 @@ const reqFuncs = {
     hotDetailCats,
     hotDetails,
     userDetail,
+    userPlaylist,
+    userFollow,
+    userFollowed,
+    userEvent,
     playlistdetail,
     detailComment,
     detailSubscribe,

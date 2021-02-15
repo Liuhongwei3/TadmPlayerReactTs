@@ -95,39 +95,31 @@ const Mv: React.FunctionComponent = () => {
                             </Tooltip>
                             <Tooltip title="播放量">
                                 <StyledTag color="orange">
-                                    <CustomerServiceOutlined
-                                        style={{ marginRight: 5 }}
-                                    />
+                                    <CustomerServiceOutlined />
                                     {countFormat(mvInfo?.data.playCount)}
                                 </StyledTag>
                             </Tooltip>
                             <Tooltip title="收藏量">
                                 <StyledTag color="purple">
-                                    <StarOutlined style={{ marginRight: 5 }} />
+                                    <StarOutlined />
                                     {countFormat(mvInfo?.data.subCount)}
                                 </StyledTag>
                             </Tooltip>
                             <Tooltip title="分享量">
                                 <StyledTag color="green">
-                                    <ShareAltOutlined
-                                        style={{ marginRight: 5 }}
-                                    />
+                                    <ShareAltOutlined />
                                     {countFormat(mvInfo?.data.shareCount)}
                                 </StyledTag>
                             </Tooltip>
                             <Tooltip title="评论数">
                                 <StyledTag color="blue">
-                                    <CommentOutlined
-                                        style={{ marginRight: 5 }}
-                                    />
+                                    <CommentOutlined />
                                     {countFormat(mvInfo?.data.commentCount)}
                                 </StyledTag>
                             </Tooltip>
                             <Tooltip title="发行时间">
                                 <StyledTag color="volcano">
-                                    <FieldTimeOutlined
-                                        style={{ marginRight: 5 }}
-                                    />
+                                    <FieldTimeOutlined />
                                     {mvInfo?.data.publishTime}
                                 </StyledTag>
                             </Tooltip>

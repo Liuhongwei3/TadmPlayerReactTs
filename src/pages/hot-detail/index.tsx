@@ -122,23 +122,11 @@ const HotDetail: React.FunctionComponent = () => {
                 {Object.entries(hotDetailCats.categories).map((item, index) => (
                     <div key={item[0]} style={{ margin: "20px 0" }}>
                         <h3>
-                            {index === 0 && (
-                                <GlobalOutlined style={{ marginRight: 5 }} />
-                            )}
-                            {index === 1 && (
-                                <RadarChartOutlined
-                                    style={{ marginRight: 5 }}
-                                />
-                            )}
-                            {index === 2 && (
-                                <SkinOutlined style={{ marginRight: 5 }} />
-                            )}
-                            {index === 3 && (
-                                <SmileOutlined style={{ marginRight: 5 }} />
-                            )}
-                            {index === 4 && (
-                                <AppstoreOutlined style={{ marginRight: 5 }} />
-                            )}
+                            {index === 0 && <GlobalOutlined />}
+                            {index === 1 && <RadarChartOutlined />}
+                            {index === 2 && <SkinOutlined />}
+                            {index === 3 && <SmileOutlined />}
+                            {index === 4 && <AppstoreOutlined />}
                             {item[1]}
                         </h3>
                         <div>
@@ -242,9 +230,7 @@ const HotDetail: React.FunctionComponent = () => {
                                             />
                                         </LazyLoad>
                                         <StyledCount>
-                                            <CustomerServiceOutlined
-                                                style={{ marginRight: 5 }}
-                                            />
+                                            <CustomerServiceOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
                                         <StyledDesc width={150}>

@@ -85,15 +85,11 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                             />
                                         </LazyLoad>
                                         <StyledCount>
-                                            <VideoCameraOutlined
-                                                style={{ marginRight: 5 }}
-                                            />
+                                            <VideoCameraOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
                                         <StyledDesc width={200}>
-                                            <FieldTimeOutlined
-                                                style={{ marginRight: 5 }}
-                                            />
+                                            <FieldTimeOutlined />
                                             {timeFormat(
                                                 Math.floor(item.duration / 1000)
                                             )}

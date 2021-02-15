@@ -82,9 +82,7 @@ const RecommendMv: React.FunctionComponent = () => {
                                         />
                                     </LazyLoad>
                                     <StyledCount>
-                                        <VideoCameraOutlined
-                                            style={{ marginRight: 5 }}
-                                        />
+                                        <VideoCameraOutlined />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
                                     <StyledDesc width={320}>

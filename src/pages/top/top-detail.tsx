@@ -11,7 +11,13 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
-import { countFormat, dateFormat, notify, toTop, updateCurMenu } from "../../utils";
+import {
+    countFormat,
+    dateFormat,
+    notify,
+    toTop,
+    updateCurMenu,
+} from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 
 const TopDetail: React.FunctionComponent = () => {
@@ -83,9 +89,7 @@ const TopDetail: React.FunctionComponent = () => {
                                         />
                                     </LazyLoad>
                                     <StyledCount>
-                                        <CustomerServiceOutlined
-                                            style={{ marginRight: 5 }}
-                                        />
+                                        <CustomerServiceOutlined />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
                                     <StyledDesc width={150}>

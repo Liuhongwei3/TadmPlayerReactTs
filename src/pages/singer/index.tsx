@@ -94,31 +94,25 @@ const Singer: React.FunctionComponent = () => {
                         </Tooltip>
                         <Tooltip title="歌曲数">
                             <StyledTag color="blue">
-                                <CustomerServiceOutlined
-                                    style={{ marginRight: 5 }}
-                                />
+                                <CustomerServiceOutlined />
                                 {countFormat(singerInfo?.artist.musicSize)}
                             </StyledTag>
                         </Tooltip>
                         <Tooltip title="专辑数">
                             <StyledTag color="purple">
-                                <CustomerServiceOutlined
-                                    style={{ marginRight: 5 }}
-                                />
+                                <CustomerServiceOutlined />
                                 {countFormat(singerInfo.artist.albumSize)}
                             </StyledTag>
                         </Tooltip>
                         <Tooltip title="MV数">
                             <StyledTag color="orange">
-                                <VideoCameraOutlined
-                                    style={{ marginRight: 5 }}
-                                />
+                                <VideoCameraOutlined />
                                 {countFormat(singerInfo?.artist.mvSize)}
                             </StyledTag>
                         </Tooltip>
                         <Tooltip title="入驻时间">
                             <StyledTag color="green">
-                                <FieldTimeOutlined style={{ marginRight: 5 }} />
+                                <FieldTimeOutlined />
                                 {dateFormat(singerInfo?.artist.publishTime)}
                             </StyledTag>
                         </Tooltip>

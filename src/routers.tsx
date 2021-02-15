@@ -31,7 +31,7 @@ const Routers: React.FunctionComponent = () => {
             <Route exact path="/singer/:singerId">
                 <Singer />
             </Route>
-            <Route exact path="/user">
+            <Route exact path="/user/:userId">
                 <User />
             </Route>
             <Route exact path="/mv/:mvId">

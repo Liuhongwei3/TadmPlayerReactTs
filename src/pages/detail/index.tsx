@@ -1,6 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Avatar, Empty, Spin, Image, Collapse, Tabs, Tooltip } from "antd";
 import {
     ShareAltOutlined,
@@ -92,27 +92,29 @@ const Detail: React.FunctionComponent = (props) => {
                             </StyledTag>
                         </Tooltip>
                         <Tooltip title="创建者">
-                            <StyledTag color="red">
-                                {detailInfo?.playlist.creator.nickname}
-                            </StyledTag>
+                            <Link
+                                to={`/user/${detailInfo?.playlist.creator.userId}`}
+                            >
+                                <StyledTag color="red">
+                                    {detailInfo?.playlist.creator.nickname}
+                                </StyledTag>
+                            </Link>
                         </Tooltip>
                         <Tooltip title="播放量">
                             <StyledTag color="orange">
-                                <CustomerServiceOutlined
-                                    style={{ marginRight: 5 }}
-                                />
+                                <CustomerServiceOutlined />
                                 {countFormat(detailInfo?.playlist.playCount)}
                             </StyledTag>
                         </Tooltip>
                         <Tooltip title="分享">
                             <StyledTag color="gold">
-                                <ShareAltOutlined style={{ marginRight: 5 }} />
+                                <ShareAltOutlined />
                                 {countFormat(detailInfo?.playlist.shareCount)}
                             </StyledTag>
                         </Tooltip>
                         <Tooltip title="收藏">
                             <StyledTag color="purple">
-                                <StarOutlined style={{ marginRight: 5 }} />
+                                <StarOutlined />
                                 {countFormat(
                                     detailInfo?.playlist.subscribedCount
                                 )}
@@ -120,7 +122,7 @@ const Detail: React.FunctionComponent = (props) => {
                         </Tooltip>
                         <Tooltip title="创建时间">
                             <StyledTag color="green">
-                                <FieldTimeOutlined style={{ marginRight: 5 }} />
+                                <FieldTimeOutlined />
                                 {dateFormat(detailInfo?.playlist.createTime)}
                             </StyledTag>
                         </Tooltip>
@@ -166,15 +168,24 @@ const Detail: React.FunctionComponent = (props) => {
 
                     <StyledDivider />
 
-                    <Collapse
-                        style={{ backgroundColor: "#a2a0a0d1", width: "50vw" }}
-                    >
-                        <Collapse.Panel header="歌单简介" key="description">
-                            <p>{detailInfo?.playlist.description}</p>
-                        </Collapse.Panel>
-                    </Collapse>
-
-                    <StyledDivider />
+                    {detailInfo?.playlist.description && (
+                        <>
+                            <Collapse
+                                style={{
+                                    backgroundColor: "#a2a0a0d1",
+                                    width: "50vw",
+                                }}
+                            >
+                                <Collapse.Panel
+                                    header="歌单简介"
+                                    key="description"
+                                >
+                                    <p>{detailInfo?.playlist.description}</p>
+                                </Collapse.Panel>
+                            </Collapse>
+                            <StyledDivider />
+                        </>
+                    )}
 
                     <Tabs
                         style={{ width: "calc(100vw - 104px)" }}

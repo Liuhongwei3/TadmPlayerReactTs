@@ -121,9 +121,7 @@ const TopSinger: React.FunctionComponent = () => {
                                             />
                                         </LazyLoad>
                                         <StyledCount>
-                                            <CustomerServiceOutlined
-                                                style={{ marginRight: 5 }}
-                                            />
+                                            <CustomerServiceOutlined />
                                             {countFormat(item.musicSize)}
                                         </StyledCount>
                                         <StyledDesc width={150}>

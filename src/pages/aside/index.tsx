@@ -17,6 +17,7 @@ import {
     DEFAULT_DETAIL_ID,
     DEFAULT_MV_ID,
     DEFAULT_SINGER_ID,
+    DEFAULT_USER_ID,
 } from "../../defaultConfig";
 import { updateCurMenu } from "../../utils";
 
@@ -73,7 +74,7 @@ const LeftSide: React.FunctionComponent = () => {
                     <Link to={`/singer/${DEFAULT_SINGER_ID}`}>歌手</Link>
                 </Menu.Item>
                 <Menu.Item key="user" icon={<UserSwitchOutlined />}>
-                    <Link to="/user">用户</Link>
+                    <Link to={`/user/${DEFAULT_USER_ID}`}>用户</Link>
                 </Menu.Item>
                 <Menu.Item key="mv" icon={<VideoCameraOutlined />}>
                     <Link to={`/mv/${DEFAULT_MV_ID}`}>MV</Link>

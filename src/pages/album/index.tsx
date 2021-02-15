@@ -94,7 +94,7 @@ const Album: React.FunctionComponent = () => {
                     {albumInfo?.album.subType && (
                         <Tooltip title="录制版本">
                             <StyledTag color="orange">
-                                <AudioOutlined style={{ marginRight: 5 }} />
+                                <AudioOutlined />
                                 {albumInfo?.album.subType}
                             </StyledTag>
                         </Tooltip>
@@ -103,28 +103,26 @@ const Album: React.FunctionComponent = () => {
                     {albumInfo?.album.company && (
                         <Tooltip title="所属唱片公司">
                             <StyledTag color="lime">
-                                <TrademarkCircleOutlined
-                                    style={{ marginRight: 5 }}
-                                />
+                                <TrademarkCircleOutlined />
                                 {albumInfo?.album.company}
                             </StyledTag>
                         </Tooltip>
                     )}
                     <Tooltip title="发行时间">
                         <StyledTag color="volcano">
-                            <FieldTimeOutlined style={{ marginRight: 5 }} />
+                            <FieldTimeOutlined />
                             {dateFormat(albumInfo?.album.publishTime)}
                         </StyledTag>
                     </Tooltip>
                     <Tooltip title="收藏">
                         <StyledTag color="purple">
-                            <StarOutlined style={{ marginRight: 5 }} />
+                            <StarOutlined />
                             {countFormat(albumCount?.subCount)}
                         </StyledTag>
                     </Tooltip>
                     <Tooltip title="分享">
                         <StyledTag color="purple">
-                            <ShareAltOutlined style={{ marginRight: 5 }} />
+                            <ShareAltOutlined />
                             {countFormat(albumCount?.shareCount)}
                         </StyledTag>
                     </Tooltip>

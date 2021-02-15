@@ -10,6 +10,8 @@ import { dateFormat, notify, updateCurMenu } from "../../utils";
 import { useHistory } from "react-router-dom";
 import { ISubscriber } from "./type";
 import reqs from "../../api/req";
+import StyledCount from "../../components/detail/StyledCount";
+import UserSex from "../user/user-sex";
 
 interface IProps {
     detailId: number;
@@ -53,10 +55,13 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
         setPageSize(pageSize1);
     }, []);
 
-    const toDetail = React.useCallback((id: number) => {
-        history.push(`/user/${id}`);
-        updateCurMenu();
-    }, [history]);
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/user/${id}`);
+            updateCurMenu();
+        },
+        [history]
+    );
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -88,9 +93,9 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                                                 src={item.avatarUrl}
                                             />
                                         </LazyLoad>
-                                        {/* <StyledCount>
-                                        {countFormat(item.)}
-                                    </StyledCount> */}
+                                        <StyledCount>
+                                            <UserSex gender={item.gender} />
+                                        </StyledCount>
                                         <StyledDesc width={150}>
                                             {`${dateFormat(
                                                 item.subscribeTime,

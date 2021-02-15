@@ -2,60 +2,69 @@ import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
 import { Empty, Pagination, Spin } from "antd";
-import { VideoCameraOutlined, FieldTimeOutlined } from "@ant-design/icons";
-import StyledDesc from "../../components/detail/StyledDesc";
+
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
-import StyledCount from "../../components/detail/StyledCount";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { countFormat, notify, timeFormat, updateCurMenu } from "../../utils";
+import { notify, toTop, updateCurMenu } from "../../utils";
+import { IFollowedRes } from "./type";
 import reqs from "../../api/req";
-import { Mv } from "./type";
+import StyledCount from "../../components/detail/StyledCount";
+import UserSex from "./user-sex";
 
 interface IProps {
-    singerId: number;
-    mvCount: number;
+    userId: number;
+    followedCount: number;
 }
 
-const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { singerId, mvCount } = props;
+const UserFollowed: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { userId, followedCount } = props;
     const history = useHistory();
-    const [page, setPage] = React.useState<number>(1);
-    const [pageSize, setPageSize] = React.useState<number>(24);
+    // const [page, setPage] = React.useState<number>(1);
+    // const [pageSize, setPageSize] = React.useState<number>(24);
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [mvs, setMvs] = React.useState<Mv[]>([]);
+    const [userFolloweds, setUserFolloweds] = React.useState<IFollowedRes>();
 
-    const getSubUsers = React.useCallback(() => {
+    // const lasttime = React.useMemo(() => {
+    //     return userFolloweds &&
+    //         userFolloweds.followeds.length &&
+    //         userFolloweds.followeds[pageSize - 1]
+    //         ? userFolloweds.followeds[pageSize - 1].time
+    //         : undefined;
+    // }, [pageSize, userFolloweds]);
+
+    const getUserFolloweds = React.useCallback(() => {
         setLoading(true);
         reqs.netease
-            .singerMvs(singerId, pageSize, (page - 1) * pageSize)
+            .userFollowed(userId)
             .then((res) => {
-                setMvs(res.mvs);
+                setUserFolloweds(res);
             })
             .catch((e) =>
                 notify(
                     "error",
                     (e.response && e.response.statusText) ||
                         e.message ||
-                        "加载歌手 MV 数据失败"
+                        "加载用户粉丝列表数据失败"
                 )
             )
             .finally(() => setLoading(false));
-    }, [page, pageSize, singerId]);
+    }, [userId]);
 
     React.useEffect(() => {
-        getSubUsers();
-    }, [getSubUsers, page, pageSize]);
+        followedCount && getUserFolloweds();
+    }, [followedCount, getUserFolloweds]);
 
-    const pageChange = React.useCallback((page1, pageSize1) => {
-        setPage(page1);
-        setPageSize(pageSize1);
-    }, []);
+    // const pageChange = React.useCallback((page1, pageSize1) => {
+    //     setPage(page1);
+    //     setPageSize(pageSize1);
+    //     toTop();
+    // }, []);
 
     const toDetail = React.useCallback(
         (id: number) => {
-            history.push(`/mv/${id}`);
+            history.push(`/user/${id}`);
             updateCurMenu();
         },
         [history]
@@ -63,65 +72,57 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {mvs.length ? (
+            {userFolloweds && userFolloweds?.followeds.length ? (
                 <React.Fragment>
                     <StyledWrapper>
-                        {mvs.map((item: Mv) => {
+                        {userFolloweds?.followeds.map((item) => {
                             return (
                                 <StyledItem
-                                    key={item.id}
-                                    onClick={() => toDetail(item.id)}
+                                    key={item.userId}
+                                    onClick={() => toDetail(item.userId)}
                                 >
                                     <div
                                         style={{
-                                            width: 200,
+                                            width: 150,
                                             height: 150,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={150}
+                                            height={100}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.85 }}
-                                                width={200}
+                                                style={{ opacity: 0.65 }}
+                                                width={150}
                                                 height={150}
                                                 alt="detail-cover"
-                                                src={item.imgurl}
+                                                src={item.avatarUrl}
                                             />
                                         </LazyLoad>
                                         <StyledCount>
-                                            <VideoCameraOutlined />
-                                            {countFormat(item.playCount)}
+                                            <UserSex gender={item.gender} />
                                         </StyledCount>
-                                        <StyledDesc width={200}>
-                                            <FieldTimeOutlined />
-                                            {timeFormat(
-                                                Math.floor(item.duration / 1000)
-                                            )}
-                                        </StyledDesc>
                                     </div>
 
-                                    <StyledName width={200}>
-                                        {item.name}
+                                    <StyledName width={150}>
+                                        {item.nickname}
                                     </StyledName>
                                 </StyledItem>
                             );
                         })}
                     </StyledWrapper>
-                    <Pagination
+                    {/* <Pagination
                         style={{ float: "right" }}
                         current={page}
                         pageSize={pageSize}
-                        total={mvCount}
-                        showSizeChanger={true}
+                        total={followedCount}
                         showQuickJumper={true}
                         showTotal={(total) => `共 ${total} 条`}
                         onChange={(page, pageSize) =>
                             pageChange(page, pageSize)
                         }
-                    />
+                    /> */}
                 </React.Fragment>
             ) : (
                 <Empty />
@@ -130,4 +131,4 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default SingerMvs;
+export default UserFollowed;
