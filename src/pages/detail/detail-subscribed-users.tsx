@@ -12,6 +12,7 @@ import { ISubscriber } from "./type";
 import reqs from "../../api/req";
 import StyledCount from "../../components/detail/StyledCount";
 import UserSex from "../user/user-sex";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 interface IProps {
     detailId: number;
@@ -76,19 +77,19 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                                 >
                                     <div
                                         style={{
-                                            width: 150,
-                                            height: 150,
+                                            width: DEFAULT_IMG_WIDTH,
+                                            height: DEFAULT_IMG_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={100}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
                                                 style={{ opacity: 0.65 }}
-                                                width={150}
-                                                height={150}
+                                                width={DEFAULT_IMG_WIDTH}
+                                                height={DEFAULT_IMG_HEIGHT}
                                                 alt="detail-cover"
                                                 src={item.avatarUrl}
                                             />
@@ -96,7 +97,7 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                                         <StyledCount>
                                             <UserSex gender={item.gender} />
                                         </StyledCount>
-                                        <StyledDesc width={150}>
+                                        <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                             {`${dateFormat(
                                                 item.subscribeTime,
                                                 "more"
@@ -104,7 +105,7 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
+                                    <StyledName width={DEFAULT_IMG_WIDTH}>
                                         {item.nickname}
                                     </StyledName>
                                 </StyledItem>

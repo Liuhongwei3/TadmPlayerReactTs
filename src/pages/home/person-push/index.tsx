@@ -11,6 +11,7 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
 import { notify } from "../../../utils";
+import { DEFAULT_MV_HEIGHT, DEFAULT_MV_WIDTH } from "../../../defaultConfig";
 
 const PersonPush: React.FunctionComponent = () => {
     const history = useHistory();
@@ -60,29 +61,31 @@ const PersonPush: React.FunctionComponent = () => {
                             >
                                 <div
                                     style={{
-                                        width: 320,
-                                        height: 200,
+                                        width: DEFAULT_MV_WIDTH,
+                                        height: DEFAULT_MV_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
                                     <LazyLoad
-                                        height={150}
+                                        height={DEFAULT_MV_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
                                             style={{ opacity: 0.65 }}
-                                            width={320}
-                                            height={200}
+                                            width={DEFAULT_MV_WIDTH}
+                                            height={DEFAULT_MV_HEIGHT}
                                             alt="detail-cover"
                                             src={item.picUrl}
                                         />
                                     </LazyLoad>
-                                    <StyledDesc width={320}>
+                                    <StyledDesc width={DEFAULT_MV_WIDTH}>
                                         {item.copywriter}
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={320}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_MV_WIDTH}>
+                                    {item.name}
+                                </StyledName>
                             </StyledItem>
                         );
                     })}

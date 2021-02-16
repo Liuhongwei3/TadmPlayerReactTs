@@ -30,6 +30,7 @@ import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
 import StyledDivider from "../../components/StyledDivider";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 const INIT_LIMIT = 24;
 const DEFAULT_CATS = {
@@ -118,9 +119,9 @@ const HotDetail: React.FunctionComponent = () => {
 
     const PopContent = React.useCallback(() => {
         return (
-            <div style={{ width: 500 }}>
+            <>
                 {Object.entries(hotDetailCats.categories).map((item, index) => (
-                    <div key={item[0]} style={{ margin: "20px 0" }}>
+                    <div key={item[0]} style={{ margin: "10px 0" }}>
                         <h3>
                             {index === 0 && <GlobalOutlined />}
                             {index === 1 && <RadarChartOutlined />}
@@ -152,7 +153,7 @@ const HotDetail: React.FunctionComponent = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </>
         );
     }, [hotDetailCats, curCat, updateCurInfo]);
 
@@ -166,7 +167,6 @@ const HotDetail: React.FunctionComponent = () => {
             >
                 <span>选择分类：</span>
                 <Popover
-                    style={{ height: 500 }}
                     placement="bottomLeft"
                     visible={visible}
                     trigger="click"
@@ -214,16 +214,16 @@ const HotDetail: React.FunctionComponent = () => {
                                 >
                                     <div
                                         style={{
-                                            width: 150,
-                                            height: 150,
+                                            width: DEFAULT_IMG_WIDTH,
+                                            height: DEFAULT_IMG_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad placeholder={<LoadingImg />}>
                                             <img
                                                 style={{ opacity: 0.65 }}
-                                                width={150}
-                                                height={150}
+                                                width={DEFAULT_IMG_WIDTH}
+                                                height={DEFAULT_IMG_HEIGHT}
                                                 alt="detail-cover"
                                                 loading="lazy"
                                                 src={item.coverImgUrl}
@@ -233,7 +233,7 @@ const HotDetail: React.FunctionComponent = () => {
                                             <CustomerServiceOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
-                                        <StyledDesc width={150}>
+                                        <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                             <div>{`By ${item.creator.nickname}`}</div>
                                             <div>{`${dateFormat(
                                                 item.updateTime
@@ -241,7 +241,7 @@ const HotDetail: React.FunctionComponent = () => {
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
+                                    <StyledName width={DEFAULT_IMG_WIDTH}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>

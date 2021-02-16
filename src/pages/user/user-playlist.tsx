@@ -9,14 +9,10 @@ import StyledName from "../../components/detail/StyledName";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import {
-    countFormat,
-    dateFormat,
-    notify,
-    toTop,
-} from "../../utils";
+import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import req from "../../api/req";
 import { IUserPlaylistRes } from "./type";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 interface IProps {
     userId: number;
@@ -82,19 +78,19 @@ const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
                                 >
                                     <div
                                         style={{
-                                            width: 150,
-                                            height: 150,
+                                            width: DEFAULT_IMG_WIDTH,
+                                            height: DEFAULT_IMG_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={150}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
                                                 style={{ opacity: 0.85 }}
-                                                width={150}
-                                                height={150}
+                                                width={DEFAULT_IMG_WIDTH}
+                                                height={DEFAULT_IMG_HEIGHT}
                                                 alt="mv-cover"
                                                 src={item.coverImgUrl}
                                             />
@@ -103,14 +99,14 @@ const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
                                             <CustomerServiceOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
-                                        <StyledDesc width={150}>
+                                        <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                             {`${dateFormat(
                                                 item.updateTime
                                             )} 更新`}
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
+                                    <StyledName width={DEFAULT_IMG_WIDTH}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>

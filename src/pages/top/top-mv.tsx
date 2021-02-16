@@ -14,6 +14,10 @@ import StyledName from "../../components/detail/StyledName";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledDivider from "../../components/StyledDivider";
+import {
+    DEFAULT_MV_SMALL_HEIGHT,
+    DEFAULT_MV_SMALL_WIDTH,
+} from "../../defaultConfig";
 
 const INIT_LIMIT = 18;
 const Types = [
@@ -104,19 +108,19 @@ const TopMv: React.FunctionComponent = () => {
                                 >
                                     <div
                                         style={{
-                                            width: 200,
-                                            height: 150,
+                                            width: DEFAULT_MV_SMALL_WIDTH,
+                                            height: DEFAULT_MV_SMALL_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={150}
+                                            height={DEFAULT_MV_SMALL_WIDTH}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
                                                 style={{ opacity: 0.85 }}
-                                                width={200}
-                                                height={150}
+                                                width={DEFAULT_MV_SMALL_WIDTH}
+                                                height={DEFAULT_MV_SMALL_HEIGHT}
                                                 alt="mv-cover"
                                                 src={item.cover}
                                             />
@@ -125,12 +129,14 @@ const TopMv: React.FunctionComponent = () => {
                                             <VideoCameraOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
-                                        <StyledDesc width={200}>
+                                        <StyledDesc
+                                            width={DEFAULT_MV_SMALL_WIDTH}
+                                        >
                                             热度：{item.score}
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={200}>
+                                    <StyledName width={DEFAULT_MV_SMALL_WIDTH}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>

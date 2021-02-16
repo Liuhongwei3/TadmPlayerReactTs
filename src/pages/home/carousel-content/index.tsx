@@ -29,6 +29,10 @@ const StyledCarouselItem = styled.div`
     &:hover {
         cursor: pointer;
     }
+
+    @media screen and (max-width: 768px) {
+        width: 96% !important;
+    }
 `;
 
 const StyledImage = styled.img`
@@ -36,6 +40,10 @@ const StyledImage = styled.img`
     height: 300px;
     border-radius: 10px;
     margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+        height: 36vh;
+    }
 `;
 
 const StyledTag = styled(Tag)`
@@ -46,6 +54,10 @@ const StyledTag = styled(Tag)`
     padding: 6px 10px;
     border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
+
+    @media screen and (max-width: 768px) {
+        font-size: 12px;
+    }
 `;
 
 const StyledLeftCircleOutlined = styled(LeftCircleOutlined)`

@@ -8,6 +8,11 @@ const StyledWrapper = styled.div`
     font-size: 14px;
     color: #dfdfdf;
     padding: 12px;
+
+    @media screen and (max-width: 768px) {
+        font-size: 12px;
+        padding: 4px;
+    }
 `;
 
 export default StyledWrapper;

@@ -15,7 +15,7 @@ const Top: React.FunctionComponent = () => {
 
     return (
         <Tabs
-            style={{ padding: 10 }}
+            style={{ padding: 6 }}
             activeKey={activeKey}
             defaultActiveKey="1"
             onChange={(activeKey) => onTabChange(activeKey)}

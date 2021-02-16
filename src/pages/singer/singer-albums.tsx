@@ -5,10 +5,13 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { notify, updateCurMenu } from "../../utils";
+import { dateFormat, notify, updateCurMenu } from "../../utils";
 import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { HotAlbum } from "./type";
+import StyledDesc from "../../components/detail/StyledDesc";
+import StyledCount from "../../components/detail/StyledCount";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 interface IProps {
     singerId: number;
@@ -19,7 +22,7 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
     const { singerId, albumCount } = props;
     const history = useHistory();
     const [page, setPage] = React.useState<number>(1);
-    const [pageSize, setPageSize] = React.useState<number>(24);
+    const [pageSize, setPageSize] = React.useState<number>(16);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [albums, setAlbums] = React.useState<HotAlbum[]>([]);
 
@@ -71,8 +74,8 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
                                 >
                                     <div
                                         style={{
-                                            width: 150,
-                                            height: 150,
+                                            width: DEFAULT_IMG_WIDTH,
+                                            height: DEFAULT_IMG_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
@@ -82,15 +85,23 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
                                         >
                                             <img
                                                 style={{ opacity: 0.85 }}
-                                                width={150}
-                                                height={150}
+                                                width={DEFAULT_IMG_WIDTH}
+                                                height={DEFAULT_IMG_HEIGHT}
                                                 alt="detail-cover"
                                                 src={item.picUrl}
                                             />
                                         </LazyLoad>
+                                        <StyledCount>
+                                            {item.subType}
+                                        </StyledCount>
+                                        <StyledDesc width={DEFAULT_IMG_WIDTH}>
+                                            {`${dateFormat(
+                                                item.publishTime
+                                            )} 发行`}
+                                        </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
+                                    <StyledName width={DEFAULT_IMG_WIDTH}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>

@@ -13,6 +13,10 @@ import reqs from "../../api/req";
 import { countFormat, notify, timeFormat, updateCurMenu } from "../../utils";
 import { Mv } from "./type";
 import StyledCount from "../../components/detail/StyledCount";
+import {
+    DEFAULT_MV_SMALL_HEIGHT,
+    DEFAULT_MV_SMALL_WIDTH,
+} from "../../defaultConfig";
 
 interface IProps {
     mvId: number;
@@ -67,19 +71,19 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                 >
                                     <div
                                         style={{
-                                            width: 200,
-                                            height: 150,
+                                            width: DEFAULT_MV_SMALL_WIDTH,
+                                            height: DEFAULT_MV_SMALL_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
                                         <LazyLoad
-                                            height={150}
+                                            height={DEFAULT_MV_SMALL_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
                                                 style={{ opacity: 0.85 }}
-                                                width={200}
-                                                height={150}
+                                                width={DEFAULT_MV_SMALL_WIDTH}
+                                                height={DEFAULT_MV_SMALL_HEIGHT}
                                                 alt="detail-cover"
                                                 src={item.cover}
                                             />
@@ -88,7 +92,9 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                             <VideoCameraOutlined />
                                             {countFormat(item.playCount)}
                                         </StyledCount>
-                                        <StyledDesc width={200}>
+                                        <StyledDesc
+                                            width={DEFAULT_MV_SMALL_WIDTH}
+                                        >
                                             <FieldTimeOutlined />
                                             {timeFormat(
                                                 Math.floor(item.duration / 1000)
@@ -96,7 +102,7 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={200}>
+                                    <StyledName width={DEFAULT_MV_SMALL_WIDTH}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>

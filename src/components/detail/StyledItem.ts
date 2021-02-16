@@ -7,6 +7,10 @@ const StyledItem = styled.div`
         color: #fff;
         cursor: pointer;
     }
+
+    @media screen and (max-width: 768px) {
+        margin: 5px;
+    }
 `;
 
 export default StyledItem;

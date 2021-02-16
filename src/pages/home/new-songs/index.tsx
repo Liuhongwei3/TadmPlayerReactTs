@@ -10,6 +10,7 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
 import { notify } from "../../../utils";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../defaultConfig";
 
 const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -47,8 +48,8 @@ const NewSongs: React.FunctionComponent = () => {
                             <StyledItem key={item.id}>
                                 <div
                                     style={{
-                                        width: 150,
-                                        height: 150,
+                                        width: DEFAULT_IMG_WIDTH,
+                                        height: DEFAULT_IMG_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
@@ -58,14 +59,14 @@ const NewSongs: React.FunctionComponent = () => {
                                     >
                                         <img
                                             style={{ opacity: 0.65 }}
-                                            width={150}
-                                            height={150}
+                                            width={DEFAULT_IMG_WIDTH}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"
                                             loading="lazy"
                                             src={item.picUrl}
                                         />
                                     </LazyLoad>
-                                    <StyledDesc width={150}>
+                                    <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                         <span>By </span>
                                         {item.song.artists.map(
                                             (artist: IArtist) => {
@@ -84,7 +85,9 @@ const NewSongs: React.FunctionComponent = () => {
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={150}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_IMG_WIDTH}>
+                                    {item.name}
+                                </StyledName>
                             </StyledItem>
                         );
                     })}

@@ -137,6 +137,18 @@ const userEvent = (uid: number, limit?: number, lasttime?: number) => {
         `/user/event?uid=${uid}${optional1}${optional2}`
     );
 };
+const userEventComm = (
+    threadId: string,
+    limit: number,
+    offset?: number,
+    before?: number
+) => {
+    const base = `/comment/event?threadId=${threadId}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+    const optional2 = offset && before ? `&before=${before}` : "";
+
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+};
 
 // ----------------------------------------------------------------------
 // 歌单详情
@@ -316,6 +328,7 @@ const reqFuncs = {
     userFollow,
     userFollowed,
     userEvent,
+    userEventComm,
     playlistdetail,
     detailComment,
     detailSubscribe,

@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { Playlist } from "./type";
 import { notify, updateCurMenu } from "../../utils";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 interface IProps {
     detailId: number;
@@ -63,8 +64,8 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                             >
                                 <div
                                     style={{
-                                        width: 150,
-                                        height: 150,
+                                        width: DEFAULT_IMG_WIDTH,
+                                        height: DEFAULT_IMG_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
@@ -74,18 +75,18 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                     >
                                         <img
                                             style={{ opacity: 0.65 }}
-                                            width={150}
-                                            height={150}
+                                            width={DEFAULT_IMG_WIDTH}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"
                                             src={item.coverImgUrl}
                                         />
                                     </LazyLoad>
-                                    <StyledDesc width={150}>
+                                    <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                         {`By ${item.creator.nickname}`}
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={150}>
+                                <StyledName width={DEFAULT_IMG_WIDTH}>
                                     {item.creator.nickname}
                                 </StyledName>
                             </StyledItem>

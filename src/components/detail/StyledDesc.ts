@@ -12,7 +12,11 @@ const StyledDesc = styled.div`
     border-bottom-right-radius: 14%;
 
     ${(props: IStyledProps) =>
-        props.width ? `width: ${props.width}px` : `width: 100%`}
+        props.width ? `width: ${props.width}px` : `width: 100%`};
+
+    @media screen and (max-width: 768px) {
+        line-height: 20px;
+    }
 `;
 
 export default StyledDesc;

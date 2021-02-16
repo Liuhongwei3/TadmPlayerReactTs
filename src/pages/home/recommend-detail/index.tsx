@@ -13,6 +13,7 @@ import StyledName from "../../../components/detail/StyledName";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../defaultConfig";
 
 const RecommendDetail: React.FunctionComponent = () => {
     const history = useHistory();
@@ -64,19 +65,19 @@ const RecommendDetail: React.FunctionComponent = () => {
                             >
                                 <div
                                     style={{
-                                        width: 150,
-                                        height: 150,
+                                        width: DEFAULT_IMG_WIDTH,
+                                        height: DEFAULT_IMG_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
                                     <LazyLoad
-                                        height={150}
+                                        height={DEFAULT_IMG_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
                                             style={{ opacity: 0.65 }}
-                                            width={150}
-                                            height={150}
+                                            width={DEFAULT_IMG_WIDTH}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"
                                             src={item.picUrl}
                                         />
@@ -86,12 +87,14 @@ const RecommendDetail: React.FunctionComponent = () => {
                                         <CustomerServiceOutlined />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
-                                    <StyledDesc width={150}>
+                                    <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                         {item.copywriter}
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={150}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_IMG_WIDTH}>
+                                    {item.name}
+                                </StyledName>
                             </StyledItem>
                         );
                     })}

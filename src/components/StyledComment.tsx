@@ -1,8 +1,10 @@
 import React from "react";
+import LazyLoad from "react-lazyload";
+import { Link } from "react-router-dom";
 import { Comment, Tooltip, Avatar, Image } from "antd";
 import { LikeFilled, LikeOutlined } from "@ant-design/icons";
+
 import { dateFormat } from "../utils";
-import LazyLoad from "react-lazyload";
 import LoadingImg from "./LoadingImg";
 import { IComment, IHotComment } from "../pages/commType";
 
@@ -28,6 +30,7 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
     const avatar = React.useCallback((comm: IHotComment | IComment) => {
         return (
             <Avatar
+                alt={comm.user.nickname}
                 src={
                     <LazyLoad height={50} placeholder={<LoadingImg />}>
                         <Image
@@ -37,7 +40,6 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
                         />
                     </LazyLoad>
                 }
-                alt={comm.user.nickname}
             />
         );
     }, []);
@@ -45,7 +47,11 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
     return (
         <Comment
             actions={actions(comm)}
-            author={comm.user.nickname}
+            author={
+                <Link to={`/user/${comm.user.userId}`}>
+                    {comm.user.nickname}
+                </Link>
+            }
             avatar={avatar(comm)}
             content={comm.content}
             datetime={dateFormat(comm.time, "more")}

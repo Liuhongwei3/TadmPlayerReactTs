@@ -175,7 +175,7 @@ export function uniqueId(arr) {
     return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1));
 }
 
-export function getEventType(str = "") {
+export function getEventType(str = 0) {
     // 18 分享单曲
     // 19 分享专辑
     // 17、28 分享电台节目
@@ -185,8 +185,8 @@ export function getEventType(str = "") {
     // 24 分享专栏文章
     // 41、21 分享视频
     // 35 发布动态
-    if (str.length === 0) return;
-    switch (+str) {
+    if (str === 0) return "";
+    switch (str) {
         case 18: {
             str = "分享单曲";
             break;
@@ -221,7 +221,7 @@ export function getEventType(str = "") {
             break;
         }
         case 21: {
-            str = "分享MV";
+            str = "分享 MV";
             break;
         }
         case 41: {

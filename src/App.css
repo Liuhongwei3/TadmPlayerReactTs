@@ -53,8 +53,11 @@ svg {
 }
 
 .ant-popover-inner {
+    width: 80vw;
+    height: 80vh;
     color: white;
     background-color: #777777;
+    overflow-y: scroll;
 }
 
 .ant-collapse-content-active {
@@ -94,12 +97,13 @@ td {
     color: white !important;
 }
 
-.ant-comment-content-author-name {
+.ant-comment-content-author-name,
+.ant-comment-content-author-name > * {
     color: #5aacc8;
     transform: scale(1.1);
 }
 
-.ant-comment-content-author-name:hover {
+.ant-comment-content-author-name > *:hover {
     color: #10e468;
     border-bottom: 1px solid #10e468;
     cursor: pointer;
@@ -123,4 +127,9 @@ td {
 .ant-radio-button-wrapper {
     color: wheat;
     background-color: #878787;
+}
+
+@media screen and (max-width: 768px) {
+    img {
+    }
 }

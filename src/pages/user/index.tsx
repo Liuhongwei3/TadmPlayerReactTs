@@ -35,6 +35,7 @@ import UserFollow from "./user-follow";
 import UserSex from "./user-sex";
 import UserFollowed from "./user-followed";
 import UserEvent from "./user-event";
+import { createTime, userType } from "./content-util";
 
 interface IRouteParams {
     userId: string;
@@ -76,24 +77,6 @@ const User: React.FunctionComponent = () => {
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
-    }, []);
-
-    const userType = React.useCallback(
-        (type: number) => {
-            if (type === 2 || type === 4) {
-                return userInfo?.profile.mainAuthType!.desc || "未知";
-            } else {
-                return "普通用户";
-            }
-        },
-        [userInfo?.profile.mainAuthType]
-    );
-
-    const createTime = React.useCallback((days: number) => {
-        const year = Math.floor(days / 365);
-        const day = days - year * 365;
-
-        return day === 0 ? `${year} 年` : `${year} 年 ${day} 天`;
     }, []);
 
     const Binds = React.useCallback(() => {
@@ -146,7 +129,8 @@ const User: React.FunctionComponent = () => {
                     <div style={{ width: "100%" }}>
                         音乐人：
                         <StyledTag color="blue">{name}</StyledTag>
-                        {mainAuthType?.tags.length &&
+                        {mainAuthType?.tags &&
+                            mainAuthType?.tags.length &&
                             mainAuthType?.tags.map((tag, index) => (
                                 <StyledTag
                                     key={tag}
@@ -202,7 +186,7 @@ const User: React.FunctionComponent = () => {
                         </Tooltip>
                         <Tooltip title="用户类型">
                             <StyledTag color="gold">
-                                {userType(userInfo.profile.userType)}
+                                {userType(userInfo.profile.userType, userInfo?.profile.mainAuthType?.desc)}
                             </StyledTag>
                         </Tooltip>
                         {userInfo.profile.vipType === 11 && (

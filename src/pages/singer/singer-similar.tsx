@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { notify, updateCurMenu } from "../../utils";
 import { Artist } from "./type";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 interface IProps {
     singerId: number;
@@ -63,8 +64,8 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                             >
                                 <div
                                     style={{
-                                        width: 150,
-                                        height: 150,
+                                        width: DEFAULT_IMG_WIDTH,
+                                        height: DEFAULT_IMG_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
@@ -74,15 +75,17 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                     >
                                         <img
                                             style={{ opacity: 0.85 }}
-                                            width={150}
-                                            height={150}
+                                            width={DEFAULT_IMG_WIDTH}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"
                                             src={item.picUrl}
                                         />
                                     </LazyLoad>
                                 </div>
 
-                                <StyledName width={150}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_IMG_WIDTH}>
+                                    {item.name}
+                                </StyledName>
                             </StyledItem>
                         );
                     })}

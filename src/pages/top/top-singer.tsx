@@ -14,6 +14,7 @@ import StyledName from "../../components/detail/StyledName";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledDivider from "../../components/StyledDivider";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 const INIT_LIMIT = 24;
 const Types = [
@@ -103,8 +104,8 @@ const TopSinger: React.FunctionComponent = () => {
                                 >
                                     <div
                                         style={{
-                                            width: 150,
-                                            height: 150,
+                                            width: DEFAULT_IMG_WIDTH,
+                                            height: DEFAULT_IMG_HEIGHT,
                                             position: "relative",
                                         }}
                                     >
@@ -114,8 +115,8 @@ const TopSinger: React.FunctionComponent = () => {
                                         >
                                             <img
                                                 style={{ opacity: 0.7 }}
-                                                width={150}
-                                                height={150}
+                                                width={DEFAULT_IMG_WIDTH}
+                                                height={DEFAULT_IMG_HEIGHT}
                                                 alt="detail-cover"
                                                 src={item.picUrl}
                                             />
@@ -124,12 +125,12 @@ const TopSinger: React.FunctionComponent = () => {
                                             <CustomerServiceOutlined />
                                             {countFormat(item.musicSize)}
                                         </StyledCount>
-                                        <StyledDesc width={150}>
+                                        <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                             热度：{item.score}
                                         </StyledDesc>
                                     </div>
 
-                                    <StyledName width={150}>
+                                    <StyledName width={DEFAULT_IMG_WIDTH}>
                                         {item.name}
                                     </StyledName>
                                 </StyledItem>

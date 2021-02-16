@@ -19,6 +19,7 @@ import {
     updateCurMenu,
 } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 const TopDetail: React.FunctionComponent = () => {
     const history = useHistory();
@@ -71,8 +72,8 @@ const TopDetail: React.FunctionComponent = () => {
                             >
                                 <div
                                     style={{
-                                        width: 150,
-                                        height: 150,
+                                        width: DEFAULT_IMG_WIDTH,
+                                        height: DEFAULT_IMG_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
@@ -82,8 +83,8 @@ const TopDetail: React.FunctionComponent = () => {
                                     >
                                         <img
                                             style={{ opacity: 0.65 }}
-                                            width={150}
-                                            height={150}
+                                            width={DEFAULT_IMG_WIDTH}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"
                                             src={item.coverImgUrl}
                                         />
@@ -92,12 +93,14 @@ const TopDetail: React.FunctionComponent = () => {
                                         <CustomerServiceOutlined />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
-                                    <StyledDesc width={150}>
+                                    <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                         {`${dateFormat(item.updateTime)} 更新`}
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={150}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_IMG_WIDTH}>
+                                    {item.name}
+                                </StyledName>
                             </StyledItem>
                         );
                     })}

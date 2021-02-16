@@ -11,7 +11,13 @@ const StyledName = styled.div`
     margin-top: 5px;
 
     ${(props: IStyledProps) =>
-        props.width ? `width: ${props.width}px` : `width: 100%`}
+        props.width ? `width: ${props.width}px` : `width: 100%`};
+
+    @media screen and (max-width: 768px) {
+        font-size: 13px;
+        height: 36px;
+        line-height: 18px;
+    }
 `;
 
 export default StyledName;
