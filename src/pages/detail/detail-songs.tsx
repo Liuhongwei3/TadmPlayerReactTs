@@ -21,6 +21,11 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
     const [songs, setSongs] = React.useState<ISong[]>([]);
 
     const getSongsDetail = React.useCallback(() => {
+        if (!trackIds || trackIds.length === 0) {
+            notify("warning", "该歌单暂无歌曲");
+            return;
+        }
+
         setLoading(true);
         req.netease
             .getMusicDetail(

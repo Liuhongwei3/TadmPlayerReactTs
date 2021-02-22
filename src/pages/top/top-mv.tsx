@@ -118,7 +118,7 @@ const TopMv: React.FunctionComponent = () => {
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.85 }}
+                                                style={{ opacity: 0.75 }}
                                                 width={DEFAULT_MV_SMALL_WIDTH}
                                                 height={DEFAULT_MV_SMALL_HEIGHT}
                                                 alt="mv-cover"

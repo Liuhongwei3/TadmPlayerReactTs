@@ -26,7 +26,6 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
         reqs.netease
             .simiSingers(+singerId)
             .then((res) => {
-                console.log(res);
                 setSimilarSingers(res.artists);
             })
             .catch((e) =>

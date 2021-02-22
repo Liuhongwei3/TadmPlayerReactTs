@@ -84,7 +84,7 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.85 }}
+                                                style={{ opacity: 0.65 }}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
                                                 alt="detail-cover"
