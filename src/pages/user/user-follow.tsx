@@ -7,7 +7,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { notify, updateCurMenu } from "../../utils";
+import { notify } from "../../utils";
 import { IFollowRes } from "./type";
 import reqs from "../../api/req";
 import StyledCount from "../../components/detail/StyledCount";
@@ -57,7 +57,6 @@ const UserFollow: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/user/${id}`);
-            updateCurMenu();
         },
         [history]
     );

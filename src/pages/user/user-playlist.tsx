@@ -60,7 +60,6 @@ const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
-            // updateCurMenu();
         },
         [history]
     );

@@ -1,11 +1,11 @@
 import React from "react";
-import { Avatar, Table, Image } from "antd";
+import { Avatar, Table, Image, Typography } from "antd";
 import { timeFormat, toTop } from "../../utils";
 import { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
 import { HotSong, ISong } from "./type";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
+import { Link } from "react-router-dom";
 
 interface IProps {
     hotSongs: HotSong[];
@@ -59,9 +59,7 @@ const SingerHotSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             width: "20%",
             render: (data: ISong) => {
                 return data.ar.length === 1 ? (
-                    <Link to={`/singer/${data.ar[0].id}`}>
-                        {data.ar[0].name}
-                    </Link>
+                    <Typography.Link>{data.ar[0].name}</Typography.Link>
                 ) : (
                     data.ar.map((ar) => (
                         <Link key={ar.id} to={`/singer/${ar.id}`}>
@@ -117,12 +115,12 @@ const SingerHotSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             }}
             onRow={(record) => {
                 return {
-                    onDoubleClick: (event) => {
+                    onDoubleClick: () => {
                         console.log(record);
                     },
-                    onContextMenu: (event) => {},
-                    onMouseEnter: (event) => {}, // 鼠标移入行
-                    onMouseLeave: (event) => {},
+                    onContextMenu: () => {},
+                    onMouseEnter: () => {}, // 鼠标移入行
+                    onMouseLeave: () => {},
                 };
             }}
         />

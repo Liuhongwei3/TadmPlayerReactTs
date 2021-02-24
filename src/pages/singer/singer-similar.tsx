@@ -7,7 +7,7 @@ import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
-import { notify, updateCurMenu } from "../../utils";
+import { notify } from "../../utils";
 import { Artist } from "./type";
 import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
@@ -46,7 +46,6 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/singer/${id}`);
-            updateCurMenu();
         },
         [history]
     );

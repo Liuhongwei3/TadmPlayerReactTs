@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import Album from "./pages/album";
 import Detail from "./pages/detail";
 
@@ -9,8 +9,17 @@ import Mv from "./pages/mv";
 import Singer from "./pages/singer";
 import Top from "./pages/top";
 import User from "./pages/user";
+import { RootStore } from "./store/root";
+import { updateCurMenu } from "./utils";
 
 const Routers: React.FunctionComponent = () => {
+    const location = useLocation();
+
+    React.useEffect(() => {
+        // 路由变化后更新 达到路由变化 menu 同步更新
+        RootStore.updateCurRoute(updateCurMenu());
+    }, [location]);
+
     return (
         <Switch>
             <Route exact path="/">

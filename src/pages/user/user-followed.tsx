@@ -7,7 +7,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { notify, toTop, updateCurMenu } from "../../utils";
+import { notify, toTop } from "../../utils";
 import { IFollowedRes } from "./type";
 import reqs from "../../api/req";
 import StyledCount from "../../components/detail/StyledCount";
@@ -66,7 +66,6 @@ const UserFollowed: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/user/${id}`);
-            updateCurMenu();
         },
         [history]
     );

@@ -19,19 +19,11 @@ import {
     DEFAULT_SINGER_ID,
     DEFAULT_USER_ID,
 } from "../../defaultConfig";
-import { updateCurMenu } from "../../utils";
+import { observer } from "mobx-react-lite";
+import { RootStore } from "../../store/root";
 
-const LeftSide: React.FunctionComponent = () => {
+const LeftSide: React.FunctionComponent = observer(() => {
     const [collapsed, setCollapsed] = React.useState<boolean>(true);
-    const [selectedKeys, setSelectedKeys] = React.useState<Array<string>>([
-        "home",
-    ]);
-
-    const updateSelectedKeys = React.useCallback(() => {
-        setSelectedKeys(updateCurMenu());
-    }, []);
-
-    React.useEffect(updateSelectedKeys, [updateSelectedKeys]);
 
     return (
         <Layout.Sider
@@ -51,9 +43,8 @@ const LeftSide: React.FunctionComponent = () => {
             <Menu
                 theme="dark"
                 mode="vertical"
-                selectedKeys={selectedKeys}
+                selectedKeys={RootStore.curRoute}
                 defaultSelectedKeys={["home"]}
-                onClick={updateSelectedKeys}
             >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
                     <Link to="/">首页</Link>
@@ -82,6 +73,6 @@ const LeftSide: React.FunctionComponent = () => {
             </Menu>
         </Layout.Sider>
     );
-};
+});
 
 export default LeftSide;

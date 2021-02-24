@@ -8,11 +8,11 @@ export const DEFAULT_BG_IMG =
     "http://p2.music.126.net/ek5FsopWHRxf9tQSLaRnAA==/109951165643377225.jpg";
 
 export const DEFAULT_AVATAR =
-    "https://i.loli.net/2021/01/30/t3OwgJQEAnphYrm.jpg";
+    // "https://i.loli.net/2021/01/30/t3OwgJQEAnphYrm.jpg";
+    "http://p1.music.126.net/GgShTIn1JgFkYvjHQMdhGA==/109951165716168492.jpg";
 
 export const DEFAULT_LOADING_IMG =
     "https://i.loli.net/2021/01/25/QoPhZfYVWMUsA6J.gif";
-
 
 export const DEFAULT_ALBUM_ID = 21506;
 export const DEFAULT_DETAIL_ID = 3778678;
@@ -44,9 +44,7 @@ export const DEFAULT_MV_PC_SMALL_WIDTH = 200;
 export const DEFAULT_MV_PC_SMALL_HEIGHT = 150;
 
 export const DEFAULT_MV_SMALL_WIDTH =
-    clientWidth >= 768
-        ? DEFAULT_MV_PC_SMALL_WIDTH
-        : DEFAULT_MV_PC_SMALL_WIDTH;
+    clientWidth >= 768 ? DEFAULT_MV_PC_SMALL_WIDTH : DEFAULT_MV_PC_SMALL_WIDTH;
 export const DEFAULT_MV_SMALL_HEIGHT =
     clientWidth >= 768
         ? DEFAULT_MV_PC_SMALL_HEIGHT

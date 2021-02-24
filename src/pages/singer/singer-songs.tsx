@@ -1,9 +1,10 @@
 import React from "react";
-import { Table } from "antd";
+import { Link } from "react-router-dom";
+import { Table, Typography } from "antd";
+import { ColumnsType } from "antd/es/table";
+
 import req from "../../api/req";
 import { notify, timeFormat, toTop } from "../../utils";
-import { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
 import { EOrderType, ISong } from "./type";
 
 interface IProps {
@@ -79,9 +80,7 @@ const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             width: "20%",
             render: (data: ISong) => {
                 return data.ar.length === 1 ? (
-                    <Link to={`/singer/${data.ar[0].id}`}>
-                        {data.ar[0].name}
-                    </Link>
+                    <Typography.Link>{data.ar[0].name}</Typography.Link>
                 ) : (
                     data.ar.map((ar) => (
                         <Link key={ar.id} to={`/singer/${ar.id}`}>
@@ -133,12 +132,12 @@ const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             }}
             onRow={(record) => {
                 return {
-                    onDoubleClick: (event) => {
+                    onDoubleClick: () => {
                         console.log(record);
                     },
-                    onContextMenu: (event) => {},
-                    onMouseEnter: (event) => {}, // 鼠标移入行
-                    onMouseLeave: (event) => {},
+                    onContextMenu: () => {},
+                    onMouseEnter: () => {}, // 鼠标移入行
+                    onMouseLeave: () => {},
                 };
             }}
         />

@@ -9,7 +9,7 @@ import StyledName from "../../components/detail/StyledName";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { countFormat, notify, timeFormat, updateCurMenu } from "../../utils";
+import { countFormat, notify, timeFormat } from "../../utils";
 import reqs from "../../api/req";
 import { Mv } from "./type";
 import {
@@ -60,7 +60,6 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/mv/${id}`);
-            updateCurMenu();
         },
         [history]
     );

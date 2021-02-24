@@ -5,7 +5,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
-import { dateFormat, notify, updateCurMenu } from "../../utils";
+import { dateFormat, notify } from "../../utils";
 import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { HotAlbum } from "./type";
@@ -56,7 +56,6 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/album/${id}`);
-            updateCurMenu();
         },
         [history]
     );

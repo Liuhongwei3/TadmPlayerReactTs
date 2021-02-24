@@ -65,7 +65,6 @@ const TopSinger: React.FunctionComponent = () => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/singer/${id}`);
-            // updateCurMenu();
         },
         [history]
     );

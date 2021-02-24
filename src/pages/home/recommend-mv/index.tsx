@@ -46,7 +46,6 @@ const RecommendMv: React.FunctionComponent = () => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/mv/${id}`);
-            // updateCurMenu();
         },
         [history]
     );

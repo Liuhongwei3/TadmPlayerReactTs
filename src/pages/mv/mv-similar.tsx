@@ -10,7 +10,7 @@ import StyledName from "../../components/detail/StyledName";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import LoadingImg from "../../components/LoadingImg";
 import reqs from "../../api/req";
-import { countFormat, notify, timeFormat, updateCurMenu } from "../../utils";
+import { countFormat, notify, timeFormat } from "../../utils";
 import { Mv } from "./type";
 import StyledCount from "../../components/detail/StyledCount";
 import {
@@ -53,7 +53,6 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/mv/${id}`);
-            updateCurMenu();
         },
         [history]
     );

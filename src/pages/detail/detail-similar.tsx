@@ -9,7 +9,7 @@ import LoadingImg from "../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { Playlist } from "./type";
-import { notify, updateCurMenu } from "../../utils";
+import { notify } from "../../utils";
 import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
 interface IProps {
@@ -47,7 +47,6 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
-            updateCurMenu();
         },
         [history]
     );

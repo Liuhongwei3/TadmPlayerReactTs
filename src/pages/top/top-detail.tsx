@@ -11,13 +11,7 @@ import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
-import {
-    countFormat,
-    dateFormat,
-    notify,
-    toTop,
-    updateCurMenu,
-} from "../../utils";
+import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
 
@@ -55,7 +49,6 @@ const TopDetail: React.FunctionComponent = () => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
-            updateCurMenu();
         },
         [history]
     );

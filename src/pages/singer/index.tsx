@@ -1,7 +1,16 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { useParams } from "react-router-dom";
-import { Avatar, Empty, Spin, Image, Collapse, Tabs, Tooltip } from "antd";
+import { useHistory, useParams } from "react-router-dom";
+import {
+    Avatar,
+    Empty,
+    Spin,
+    Image,
+    Collapse,
+    Tabs,
+    Tooltip,
+    Button,
+} from "antd";
 import {
     CustomerServiceOutlined,
     StarFilled,
@@ -30,6 +39,7 @@ interface IRouteParams {
 }
 
 const Singer: React.FunctionComponent = () => {
+    const history = useHistory();
     let { singerId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
@@ -70,6 +80,13 @@ const Singer: React.FunctionComponent = () => {
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
     }, []);
+
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/user/${id}`);
+        },
+        [history]
+    );
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -116,6 +133,17 @@ const Singer: React.FunctionComponent = () => {
                                 {dateFormat(singerInfo?.artist.publishTime)}
                             </StyledTag>
                         </Tooltip>
+
+                        {singerInfo.artist.accountId && (
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    toDetail(singerInfo.artist.accountId)
+                                }
+                            >
+                                去个人主页 &gt;
+                            </Button>
+                        )}
 
                         {singerInfo.artist.followed ? (
                             <Tooltip title="取消关注">

@@ -6,14 +6,7 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
 import { IHotDetail } from "./type";
-import {
-    countFormat,
-    dateFormat,
-    notify,
-    toTop,
-    uniqueId,
-    updateCurMenu,
-} from "../../utils";
+import { countFormat, dateFormat, notify, toTop, uniqueId } from "../../utils";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
@@ -62,7 +55,6 @@ const HotDetail: React.FunctionComponent = () => {
     const toDetail = React.useCallback(
         (id: number) => {
             history.push(`/detail/${id}`);
-            updateCurMenu();
         },
         [history]
     );

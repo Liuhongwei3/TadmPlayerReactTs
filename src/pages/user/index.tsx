@@ -75,9 +75,20 @@ const User: React.FunctionComponent = () => {
         getUserInfo();
     }, [getUserInfo]);
 
+    React.useEffect(() => {
+        setActiveKey("1");
+    }, [userId]);
+
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
     }, []);
+
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/singer/${id}`);
+        },
+        [history]
+    );
 
     const Binds = React.useCallback(() => {
         return userInfo &&
@@ -106,7 +117,7 @@ const User: React.FunctionComponent = () => {
 
     const AuthTypes = React.useCallback(() => {
         return userInfo && userInfo.profile.allAuthTypes?.length ? (
-            <div>
+            <div style={{ width: "100%" }}>
                 <span>认证标签：</span>
                 {userInfo.profile.allAuthTypes
                     ?.filter((type) => type.desc.length)
@@ -130,7 +141,6 @@ const User: React.FunctionComponent = () => {
                         音乐人：
                         <StyledTag color="blue">{name}</StyledTag>
                         {mainAuthType?.tags &&
-                            mainAuthType?.tags.length &&
                             mainAuthType?.tags.map((tag, index) => (
                                 <StyledTag
                                     key={tag}
@@ -139,10 +149,7 @@ const User: React.FunctionComponent = () => {
                                     {tag}
                                 </StyledTag>
                             ))}
-                        <Button
-                            type="primary"
-                            onClick={() => history.push(`/singer/${id}`)}
-                        >
+                        <Button type="primary" onClick={() => toDetail(id)}>
                             去歌手页 &gt;
                         </Button>
                     </div>
@@ -186,7 +193,10 @@ const User: React.FunctionComponent = () => {
                         </Tooltip>
                         <Tooltip title="用户类型">
                             <StyledTag color="gold">
-                                {userType(userInfo.profile.userType, userInfo?.profile.mainAuthType?.desc)}
+                                {userType(
+                                    userInfo.profile.userType,
+                                    userInfo?.profile.mainAuthType?.desc
+                                )}
                             </StyledTag>
                         </Tooltip>
                         {userInfo.profile.vipType === 11 && (
@@ -195,7 +205,7 @@ const User: React.FunctionComponent = () => {
                                 黑胶 VIP
                             </StyledTag>
                         )}
-                        <Tooltip title="累计听歌">
+                        <Tooltip title={`累计听歌(${userInfo.listenSongs})`}>
                             <StyledTag color="orange">
                                 <CustomerServiceOutlined />
                                 {countFormat(userInfo.listenSongs)}

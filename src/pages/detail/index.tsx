@@ -27,7 +27,7 @@ interface IRouteParams {
     detailId: string;
 }
 
-const Detail: React.FunctionComponent = (props) => {
+const Detail: React.FunctionComponent = () => {
     let { detailId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
