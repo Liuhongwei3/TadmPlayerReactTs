@@ -38,6 +38,13 @@ import {
     ISongRes,
 } from "../../pages/singer/type";
 import { IMvDetailRes, IMvUrlRes, ISimiMvRes } from "../../pages/mv/type";
+import {
+    ESearchType,
+    IHotSearchDetailRes,
+    IHotSearchRes,
+    ISearchs,
+    ISearchSuggestRes,
+} from "../../pages/search/type";
 
 // -----------------------------------------------------
 // 首页
@@ -93,6 +100,29 @@ const hotDetailCats = () => {
 
 const hotDetails = (cat = "全部", limit = 24) => {
     return api.get<IHotdetailRes>(`/top/playlist?cat=${cat}&limit=${limit}`);
+};
+
+// -----------------------------------------------------------------------
+// 搜索
+
+const hotSearchList = () => {
+    return api.get<IHotSearchRes>(`/search/hot`);
+};
+
+const hotSearchDetailList = () => {
+    return api.get<IHotSearchDetailRes>(`/search/hot/detail`);
+};
+
+const searchSuggest = (keyword: string) => {
+    return api.get<ISearchSuggestRes>(
+        `/search/suggest?keywords=${keyword}&type=mobile`
+    );
+};
+
+const search = (keyword: string, type = ESearchType.SONG) => {
+    return api.get<{ result: ISearchs; code: number }>(
+        `/search?keywords=${keyword}&type=${type}`
+    );
 };
 
 // ---------------------------------------------------------------------
@@ -321,6 +351,10 @@ const reqFuncs = {
     toplist,
     topSinger,
     topMv,
+    hotSearchList,
+    hotSearchDetailList,
+    searchSuggest,
+    search,
     hotDetailCats,
     hotDetails,
     userDetail,

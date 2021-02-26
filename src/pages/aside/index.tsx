@@ -10,6 +10,7 @@ import {
     VideoCameraOutlined,
     TrophyOutlined,
     UserSwitchOutlined,
+    SearchOutlined,
 } from "@ant-design/icons";
 import {
     DEFAULT_ALBUM_ID,
@@ -20,9 +21,10 @@ import {
     DEFAULT_USER_ID,
 } from "../../defaultConfig";
 import { observer } from "mobx-react-lite";
-import { RootStore } from "../../store/root";
+import { useStore } from "../../hooks/useStore";
 
 const LeftSide: React.FunctionComponent = observer(() => {
+    const store = useStore();
     const [collapsed, setCollapsed] = React.useState<boolean>(true);
 
     return (
@@ -43,7 +45,7 @@ const LeftSide: React.FunctionComponent = observer(() => {
             <Menu
                 theme="dark"
                 mode="vertical"
-                selectedKeys={RootStore.curRoute}
+                selectedKeys={store.curRoute}
                 defaultSelectedKeys={["home"]}
             >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
@@ -51,6 +53,9 @@ const LeftSide: React.FunctionComponent = observer(() => {
                 </Menu.Item>
                 <Menu.Item key="top" icon={<TrophyOutlined />}>
                     <Link to="/top">巅峰榜</Link>
+                </Menu.Item>
+                <Menu.Item key="search" icon={<SearchOutlined />}>
+                    <Link to="/search">搜索</Link>
                 </Menu.Item>
                 <Menu.Item key="hotDetail" icon={<CloudOutlined />}>
                     <Link to="/hotDetail">热门歌单</Link>

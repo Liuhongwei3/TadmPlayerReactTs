@@ -12,7 +12,7 @@ import {
 
 import req from "../../api/req";
 import { IHotDetailCats } from "./type";
-import { notify, toTop } from "../../utils";
+import { notify } from "../../utils";
 import StyledTag from "../../components/StyledTag";
 
 const INIT_LIMIT = 24;

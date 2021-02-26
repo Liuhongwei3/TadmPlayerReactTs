@@ -157,7 +157,7 @@ const User: React.FunctionComponent = () => {
                 </React.Fragment>
             );
         },
-        [history]
+        [toDetail]
     );
 
     return (

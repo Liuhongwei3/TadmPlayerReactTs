@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import React from "react";
 
 class Root {
     curRoute = ["home"];
@@ -12,4 +13,4 @@ class Root {
     }
 }
 
-export const RootStore = new Root();
+export const RootStore = React.createContext(new Root());
