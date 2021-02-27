@@ -4,7 +4,7 @@ import reqs from "../../api/req";
 import { notify } from "../../utils";
 import { IHotSearchDetail } from "./type";
 
-const HotSearchComp = () => {
+const HotSearchComp = (keyword: string) => {
     const [hotSearchs, setHotSearchs] = React.useState<IHotSearchDetail[]>([]);
 
     const getHotSearch = React.useCallback(() => {
@@ -19,42 +19,44 @@ const HotSearchComp = () => {
     }, []);
 
     React.useEffect(() => {
-        getHotSearch();
-    }, [getHotSearch]);
+        !keyword.length && getHotSearch();
+    }, [getHotSearch, keyword.length]);
 
-    return hotSearchs.map((hotSearch) => {
-        return {
-            value: hotSearch.searchWord,
-            label: (
-                <div key={hotSearch.searchWord}>
-                    <div>
-                        <span style={{ marginRight: 10 }}>
-                            {hotSearch.searchWord}
-                        </span>
-                        {hotSearch.iconUrl && (
-                            <img
-                                width={20}
-                                height={20}
-                                alt="hot-search-icon"
-                                src={hotSearch.iconUrl}
-                            />
-                        )}
-                        <span
-                            style={{
-                                color: "grey",
-                                marginLeft: 10,
-                            }}
-                        >
-                            {hotSearch.score}
-                        </span>
-                    </div>
-                    <StyledHotSearchContent>
-                        {hotSearch.content}
-                    </StyledHotSearchContent>
-                </div>
-            ),
-        };
-    });
+    return !keyword.length
+        ? hotSearchs.map((hotSearch) => {
+              return {
+                  value: hotSearch.searchWord,
+                  label: (
+                      <div key={hotSearch.searchWord}>
+                          <div>
+                              <span style={{ marginRight: 10 }}>
+                                  {hotSearch.searchWord}
+                              </span>
+                              {hotSearch.iconUrl && (
+                                  <img
+                                      width={20}
+                                      height={20}
+                                      alt="hot-search-icon"
+                                      src={hotSearch.iconUrl}
+                                  />
+                              )}
+                              <span
+                                  style={{
+                                      color: "grey",
+                                      marginLeft: 10,
+                                  }}
+                              >
+                                  {hotSearch.score}
+                              </span>
+                          </div>
+                          <StyledHotSearchContent>
+                              {hotSearch.content}
+                          </StyledHotSearchContent>
+                      </div>
+                  ),
+              };
+          })
+        : [];
 
     // return hotSearchs.map((hotSearch) => (
     //     <AutoComplete.Option

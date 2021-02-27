@@ -180,7 +180,7 @@ const Mv: React.FunctionComponent = () => {
                                 />
                             </Tabs.TabPane>
                             <Tabs.TabPane
-                                tab={`评论(${mvInfo?.data.commentCount})`}
+                                tab={`评论(${countFormat(mvInfo?.data.commentCount)})`}
                                 key="2"
                             >
                                 <MvComments

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Comment, Tooltip, Avatar, Image } from "antd";
 import { LikeFilled, LikeOutlined } from "@ant-design/icons";
 
-import { dateFormat } from "../utils";
+import { countFormat, dateFormat } from "../utils";
 import LoadingImg from "./LoadingImg";
 import { IComment, IHotComment } from "../pages/commType";
 
@@ -20,7 +20,9 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
             <Tooltip title="Like">
                 <span>
                     {comm.liked ? <LikeFilled /> : <LikeOutlined />}
-                    <span className="comment-action">{comm.likedCount}</span>
+                    <span className="comment-action">
+                        {countFormat(comm.likedCount)}
+                    </span>
                 </span>
             </Tooltip>,
             <span>Reply to</span>,

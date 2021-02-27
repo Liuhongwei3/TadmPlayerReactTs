@@ -119,9 +119,17 @@ const searchSuggest = (keyword: string) => {
     );
 };
 
-const search = (keyword: string, type = ESearchType.SONG) => {
+const search = (
+    keyword: string,
+    type = ESearchType.SONG,
+    limit?: number,
+    offset?: number
+) => {
+    const optional1 = limit ? `&limit=${limit}` : "";
+    const optional2 = offset ? `&offset=${offset}` : "";
+
     return api.get<{ result: ISearchs; code: number }>(
-        `/search?keywords=${keyword}&type=${type}`
+        `/search?keywords=${keyword}&type=${type}${optional1}${optional2}`
     );
 };
 
@@ -142,7 +150,7 @@ const userPlaylist = (uid: number, limit?: number, offset?: number) => {
 };
 
 const userFollow = (uid: number, limit?: number, offset?: number) => {
-    const optional1 = limit ? `&limit=${limit - 1}` : "";
+    const optional1 = limit ? `&limit=${limit}` : "";
     const optional2 = offset ? `&offset=${offset}` : "";
 
     return api.get<IFollowRes>(
@@ -150,9 +158,9 @@ const userFollow = (uid: number, limit?: number, offset?: number) => {
     );
 };
 
-const userFollowed = (uid: number, limit?: number, lasttime?: number) => {
+const userFollowed = (uid: number, limit?: number, offset?: number) => {
     const optional1 = limit ? `&limit=${limit}` : "";
-    const optional2 = lasttime ? `&lasttime=${lasttime}` : "";
+    const optional2 = offset ? `&offset=${offset}` : "";
 
     return api.get<IFollowedRes>(
         `/user/followeds?uid=${uid}${optional1}${optional2}`
@@ -200,6 +208,7 @@ const detailComment = (
     return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
 };
 
+// 注意：该接口不会返回所有的收藏者，所以总数应以这里返回的 total 为准 (目前 max --> 2000)
 const detailSubscribe = (id: number, limit = 20, offset?: number) => {
     const optional = offset ? `&offset=${offset}` : "";
     return api.get<IDetailSubUsersRes>(

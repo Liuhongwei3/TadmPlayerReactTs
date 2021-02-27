@@ -50,7 +50,7 @@ const Details: React.FC<IProps> = (props: IProps) => {
                                     placeholder={<LoadingImg />}
                                 >
                                     <img
-                                        style={{ opacity: 0.6 }}
+                                        style={{ opacity: 0.8 }}
                                         width={DEFAULT_IMG_WIDTH}
                                         height={DEFAULT_IMG_HEIGHT}
                                         alt="mv-cover"

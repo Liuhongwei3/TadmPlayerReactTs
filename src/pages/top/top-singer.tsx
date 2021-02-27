@@ -71,7 +71,7 @@ const TopSinger: React.FunctionComponent = () => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            <div>
+            <div style={{ padding: "0 20px" }}>
                 <span>地区：</span>
                 <Radio.Group
                     buttonStyle="solid"

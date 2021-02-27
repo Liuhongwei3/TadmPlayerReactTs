@@ -1,6 +1,8 @@
 import netease from "./netease/requests";
+import neteaseLogined from "./netease/request-logined";
 
 const reqs = {
-    netease
-}
+    netease,
+    neteaseLogined,
+};
 export default reqs;

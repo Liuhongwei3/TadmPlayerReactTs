@@ -22,8 +22,9 @@ interface IProps {
 const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
     props: IProps
 ) => {
-    const { detailId, subUserCount } = props;
+    const { detailId } = props;
     const history = useHistory();
+    const [total, setTotal] = React.useState<number>(0);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(24);
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -34,6 +35,7 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
         reqs.netease
             .detailSubscribe(detailId, pageSize, (page - 1) * pageSize)
             .then((res) => {
+                setTotal(res.total);
                 setSubsUsers(res.subscribers);
             })
             .catch((e) =>
@@ -115,7 +117,8 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                         style={{ float: "right" }}
                         current={page}
                         pageSize={pageSize}
-                        total={subUserCount}
+                        // total={subUserCount}
+                        total={total}
                         showQuickJumper={true}
                         showTotal={(total) => `共 ${total} 条`}
                         onChange={(page, pageSize) =>

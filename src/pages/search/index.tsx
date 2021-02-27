@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AutoComplete, Input, Select, Spin, Tabs } from "antd";
 
 import reqs from "../../api/req";
-import { notify } from "../../utils";
+import { notify, throttle } from "../../utils";
 import HotSearchComp from "./hot-search-detail";
 import Albums from "./result-display/albums";
 import Details from "./result-display/details";
@@ -13,13 +13,21 @@ import SearchSuggest from "./search-suggest";
 import { ESearchType, ISearchs } from "./type";
 import Users from "./result-display/users";
 import Mvs from "./result-display/mvs";
+import HandleMore from "./result-display/handleMore";
+
+const SEARCH_THROTTLE_TIME = 500;
+const LIMIT = 16;
 
 const SearchComp: React.FunctionComponent = () => {
+    const firstRender = React.useRef(true);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<ESearchType>(
         ESearchType.SONG
     );
     const [keyword, setKeyword] = React.useState<string>("");
+    // 避免输入关键词时结果页也直接就搜索
+    const [keywordSugg, setKeywordSugg] = React.useState<string>("");
+    const [limit, setLimit] = React.useState<number>(LIMIT);
     const [result, setResult] = React.useState<ISearchs>();
 
     const SEARCH_RES_TABS = React.useMemo(
@@ -63,21 +71,27 @@ const SearchComp: React.FunctionComponent = () => {
         [result]
     );
 
+    const resCount = React.useMemo(() => {
+        return (
+            result?.songCount ||
+            result?.artistCount ||
+            result?.albumCount ||
+            result?.playlistCount ||
+            result?.userprofileCount ||
+            result?.mvCount ||
+            0
+        );
+    }, [result]);
+
     const onSearchSuggest = React.useCallback((keyword: string) => {
-        setKeyword(keyword);
+        setKeywordSugg(keyword);
     }, []);
 
     const onSearch = React.useCallback(
         (keyword1: string, type = activeKey) => {
-            if (!keyword1) {
-                notify("warning", "请输入关键词后搜索");
-                return;
-            }
-
-            setKeyword(keyword1);
             setLoading(true);
             reqs.netease
-                .search(keyword1, type)
+                .search(keyword1, type, limit)
                 .then((res) => {
                     setResult(res.result);
                 })
@@ -86,16 +100,26 @@ const SearchComp: React.FunctionComponent = () => {
                 })
                 .finally(() => setLoading(false));
         },
-        [activeKey]
+        [activeKey, limit]
     );
 
-    const updateActiveKey = React.useCallback(
-        (activeKey: string) => {
-            setActiveKey(+activeKey);
-            onSearch(keyword, +activeKey);
-        },
-        [keyword, onSearch]
-    );
+    React.useEffect(() => {
+        // 屏蔽掉第一次渲染时的作用
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+        if (!keyword) {
+            notify("warning", "请输入关键词后搜索");
+            return;
+        }
+        onSearch(keyword);
+    }, [firstRender, keyword, limit, onSearch]);
+
+    const updateActiveKey = React.useCallback((activeKey: string) => {
+        setLimit(LIMIT);
+        setActiveKey(+activeKey);
+    }, []);
 
     return (
         <StyledWrapper>
@@ -114,40 +138,40 @@ const SearchComp: React.FunctionComponent = () => {
                 </Select>
                 <AutoComplete
                     style={{ width: "60%" }}
-                    options={[...SearchSuggest(keyword), ...HotSearchComp()]}
-                    onSearch={onSearchSuggest}
-                    onSelect={(keyword) => onSearch(keyword)}
+                    options={[
+                        ...SearchSuggest(keywordSugg),
+                        ...HotSearchComp(keywordSugg),
+                    ]}
+                    onSearch={throttle(onSearchSuggest, SEARCH_THROTTLE_TIME)}
+                    onSelect={(keyword) => setKeyword(keyword)}
                 >
                     {/* {SearchSuggest(keyword)}
                     {HotSearchComp()} */}
                     <Input.Search
                         placeholder="please input keyword"
+                        allowClear={true}
                         enterButton={true}
                         loading={loading}
-                        onSearch={(keyword) => onSearch(keyword)}
+                        onSearch={(keyword) => setKeyword(keyword)}
                     />
                 </AutoComplete>
             </Input.Group>
 
-            <div>
-                {`找到
-                ${
-                    result?.songCount ||
-                    result?.artistCount ||
-                    result?.albumCount ||
-                    result?.playlistCount ||
-                    result?.userprofileCount ||
-                    result?.mvCount ||
-                    0
-                }
-                条结果`}
-            </div>
+            <div>{`找到${resCount}条结果`}</div>
 
             <Tabs activeKey={String(activeKey)} onChange={updateActiveKey}>
                 {SEARCH_RES_TABS.map((tab) => {
                     return (
                         <Tabs.TabPane key={tab.key} tab={tab.title}>
-                            <Spin spinning={loading}>{tab.component}</Spin>
+                            <Spin spinning={loading}>
+                                {tab.component}
+                                <HandleMore
+                                    loading={loading}
+                                    resCount={resCount}
+                                    limit={limit}
+                                    setLimit={setLimit}
+                                />
+                            </Spin>
                         </Tabs.TabPane>
                     );
                 })}

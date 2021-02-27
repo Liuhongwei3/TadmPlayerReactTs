@@ -87,7 +87,7 @@ const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
                                             placeholder={<LoadingImg />}
                                         >
                                             <img
-                                                style={{ opacity: 0.7 }}
+                                                style={{ opacity: 0.8 }}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
                                                 alt="mv-cover"

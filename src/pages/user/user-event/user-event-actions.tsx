@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 
 import { Event } from "../type";
+import { countFormat } from "../../../utils";
 
 interface IProps {
     event: Event;
@@ -43,7 +44,7 @@ const UserEventActions: React.FunctionComponent<IProps> = (props: IProps) => {
                 <span>
                     {event.info.liked ? <LikeFilled /> : <LikeOutlined />}
                     <span className="comment-action">
-                        {event.info.likedCount}
+                        {countFormat(event.info.likedCount)}
                     </span>
                 </span>
             </Tooltip>

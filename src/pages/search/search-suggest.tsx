@@ -1,4 +1,3 @@
-import { AutoComplete } from "antd";
 import React from "react";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
@@ -23,11 +22,15 @@ const SearchSuggest = (keyword: string) => {
         onSearchSuggest(keyword);
     }, [keyword, onSearchSuggest]);
 
-    return keyword.length
-        ? allMatch.map((hotSearch) => {
+    return keyword.length && allMatch && allMatch.length
+        ? allMatch.map((hotSearch, index) => {
               return {
                   value: hotSearch.keyword,
-                  label: <div key={hotSearch.feature}>{hotSearch.keyword}</div>,
+                  label: (
+                      <div key={hotSearch.feature + index}>
+                          {hotSearch.keyword}
+                      </div>
+                  ),
               };
           })
         : [];

@@ -22,46 +22,37 @@ interface IProps {
 const UserFollowed: React.FunctionComponent<IProps> = (props: IProps) => {
     const { userId, followedCount } = props;
     const history = useHistory();
-    // const [page, setPage] = React.useState<number>(1);
-    // const [pageSize, setPageSize] = React.useState<number>(24);
+    const [page, setPage] = React.useState<number>(1);
+    const [pageSize, setPageSize] = React.useState<number>(24);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [userFolloweds, setUserFolloweds] = React.useState<IFollowedRes>();
-
-    // const lasttime = React.useMemo(() => {
-    //     return userFolloweds &&
-    //         userFolloweds.followeds.length &&
-    //         userFolloweds.followeds[pageSize - 1]
-    //         ? userFolloweds.followeds[pageSize - 1].time
-    //         : undefined;
-    // }, [pageSize, userFolloweds]);
 
     const getUserFolloweds = React.useCallback(() => {
         setLoading(true);
         reqs.netease
-            .userFollowed(userId)
+            .userFollowed(userId, pageSize, (page - 1) * pageSize)
             .then((res) => {
                 setUserFolloweds(res);
             })
-            .catch((e) =>
+            .catch((e) => {
                 notify(
                     "error",
                     (e.response && e.response.statusText) ||
-                        e.message ||
                         "加载用户粉丝列表数据失败"
-                )
-            )
+                );
+            })
             .finally(() => setLoading(false));
-    }, [userId]);
+    }, [userId, pageSize, page]);
 
     React.useEffect(() => {
         followedCount && getUserFolloweds();
-    }, [followedCount, getUserFolloweds]);
+    }, [followedCount, getUserFolloweds, page, pageSize]);
 
-    // const pageChange = React.useCallback((page1, pageSize1) => {
-    //     setPage(page1);
-    //     setPageSize(pageSize1);
-    //     toTop();
-    // }, []);
+    const pageChange = React.useCallback((page1, pageSize1) => {
+        setPage(page1);
+        setPageSize(pageSize1);
+        toTop();
+    }, []);
 
     const toDetail = React.useCallback(
         (id: number) => {
@@ -112,7 +103,7 @@ const UserFollowed: React.FunctionComponent<IProps> = (props: IProps) => {
                             );
                         })}
                     </StyledWrapper>
-                    {/* <Pagination
+                    <Pagination
                         style={{ float: "right" }}
                         current={page}
                         pageSize={pageSize}
@@ -122,7 +113,7 @@ const UserFollowed: React.FunctionComponent<IProps> = (props: IProps) => {
                         onChange={(page, pageSize) =>
                             pageChange(page, pageSize)
                         }
-                    /> */}
+                    />
                 </React.Fragment>
             ) : (
                 <Empty />

@@ -1,7 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { Empty } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import StyledCount from "../../../components/detail/StyledCount";
 import StyledDesc from "../../../components/detail/StyledDesc";
@@ -10,7 +9,6 @@ import StyledName from "../../../components/detail/StyledName";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import LoadingImg from "../../../components/LoadingImg";
 import { DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT } from "../../../defaultConfig";
-import { countFormat } from "../../../utils";
 import { ISearchs } from "../type";
 import { useHistory } from "react-router-dom";
 import UserSex from "../../user/user-sex";
@@ -51,7 +49,7 @@ const Users: React.FC<IProps> = (props: IProps) => {
                                     placeholder={<LoadingImg />}
                                 >
                                     <img
-                                        style={{ opacity: 0.6 }}
+                                        style={{ opacity: 0.8 }}
                                         width={DEFAULT_IMG_WIDTH}
                                         height={DEFAULT_IMG_HEIGHT}
                                         alt="mv-cover"

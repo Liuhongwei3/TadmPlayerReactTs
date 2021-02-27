@@ -75,7 +75,7 @@ const TopDetail: React.FunctionComponent = () => {
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
-                                            style={{ opacity: 0.65 }}
+                                            style={{ opacity: 0.8 }}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"

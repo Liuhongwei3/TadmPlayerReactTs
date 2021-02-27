@@ -1,7 +1,7 @@
 import React from "react";
 import { Empty, Table } from "antd";
 
-import { dateFormat, timeFormat, toTop } from "../../../utils";
+import { dateFormat, timeFormat } from "../../../utils";
 import { ISearchs, Song } from "../type";
 import { Link } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
@@ -12,14 +12,6 @@ interface IProps {
 
 const Songs: React.FC<IProps> = (props: IProps) => {
     const { result } = props;
-    const [page, setPage] = React.useState<number>(1);
-    const [pageSize, setPageSize] = React.useState<number>(10);
-
-    const pageChange = React.useCallback((page1, pageSize1) => {
-        setPage(page1);
-        setPageSize(pageSize1);
-        toTop();
-    }, []);
 
     const columns: ColumnsType<Song> = [
         {
@@ -90,18 +82,11 @@ const Songs: React.FC<IProps> = (props: IProps) => {
             <Table<Song>
                 rowKey="id"
                 bordered={false}
+                pagination={false}
                 columns={columns}
                 dataSource={result.songs.map((item, index) => {
                     return { ...item, index: index + 1 };
                 })}
-                pagination={{
-                    showQuickJumper: true,
-                    total: result.songs.length,
-                    current: page,
-                    pageSize,
-                    onChange: (page, pageSize) => pageChange(page, pageSize),
-                    showTotal: (total) => `共 ${total} 条`,
-                }}
                 onRow={(record) => {
                     return {
                         onDoubleClick: () => {
