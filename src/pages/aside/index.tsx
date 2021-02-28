@@ -35,8 +35,9 @@ const LeftSide: React.FunctionComponent = observer(() => {
                 position: "sticky",
                 left: 0,
                 top: 0,
+                transition: "all 0.3s",
             }}
-            width={160}
+            width={collapsed ? 80 : 160}
             collapsible={true}
             collapsed={collapsed}
             onCollapse={setCollapsed}

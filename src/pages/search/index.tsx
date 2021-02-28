@@ -137,7 +137,7 @@ const SearchComp: React.FunctionComponent = () => {
                     </Select.Option>
                 </Select>
                 <AutoComplete
-                    style={{ width: "60%" }}
+                   className="input"
                     options={[
                         ...SearchSuggest(keywordSugg),
                         ...HotSearchComp(keywordSugg),
@@ -185,7 +185,15 @@ export default SearchComp;
 const StyledWrapper = styled.div`
     padding: 20px;
 
+    .input {
+        width: 40%;
+    }
+
     @media screen and (max-width: 768px) {
         padding: 5px;
+
+        .input {
+            width: 64%;
+        }
     }
 `;
