@@ -1,4 +1,4 @@
-import { shuffle } from "./utils";
+import { shuffle } from "../utils";
 
 export const DEFAULT_DEV_BASE_URL = "http://localhost:3000/";
 // export const DEFAULT_PROD_BASE_URL = "https://api.mtnhao.com/";
@@ -22,8 +22,8 @@ export const DEFAULT_MV_ID = 393006; // IU: 14239660
 
 export const clientWidth = window.document.body.clientWidth;
 
-export const DEFAULT_IMG_PC_WIDTH = 150;
-export const DEFAULT_IMG_PC_HEIGHT = 150;
+export const DEFAULT_IMG_PC_WIDTH = 155;
+export const DEFAULT_IMG_PC_HEIGHT = 155;
 export const DEFAULT_IMG_PH_WIDTH = 120;
 export const DEFAULT_IMG_PH_HEIGHT = 120;
 
@@ -40,7 +40,7 @@ export const DEFAULT_MV_WIDTH =
 export const DEFAULT_MV_HEIGHT =
     clientWidth >= 768 ? DEFAULT_MV_PC_HEIGHT : DEFAULT_MV_PC_HEIGHT * 0.8;
 
-export const DEFAULT_MV_PC_SMALL_WIDTH = 200;
+export const DEFAULT_MV_PC_SMALL_WIDTH = 220;
 export const DEFAULT_MV_PC_SMALL_HEIGHT = 150;
 
 export const DEFAULT_MV_SMALL_WIDTH =

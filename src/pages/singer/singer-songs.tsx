@@ -119,6 +119,7 @@ const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         <Table<ISong>
             rowKey="id"
             bordered={false}
+            scroll={{ x: true }}
             columns={columns}
             loading={loading}
             dataSource={songs}

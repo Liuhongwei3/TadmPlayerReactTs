@@ -9,7 +9,7 @@ import StyledItem from "../../../components/detail/StyledItem";
 import StyledName from "../../../components/detail/StyledName";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import LoadingImg from "../../../components/LoadingImg";
-import { DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT } from "../../../defaultConfig";
+import { DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT } from "../../../web-config/defaultConfig";
 import { countFormat } from "../../../utils";
 import { ISearchs } from "../type";
 import { useHistory } from "react-router-dom";

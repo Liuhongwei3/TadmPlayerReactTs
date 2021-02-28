@@ -13,7 +13,7 @@ import LoadingImg from "../../../components/LoadingImg";
 import {
     DEFAULT_MV_SMALL_HEIGHT,
     DEFAULT_MV_SMALL_WIDTH,
-} from "../../../defaultConfig";
+} from "../../../web-config/defaultConfig";
 import { countFormat } from "../../../utils";
 import { ISearchs } from "../type";
 

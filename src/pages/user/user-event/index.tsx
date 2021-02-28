@@ -10,6 +10,7 @@ import ShareDetail from "./share-detail";
 import UserEventActions from "./user-event-actions";
 import { handleJson } from "../content-util";
 import UserEventComm from "./user-event-comm";
+import StyledDivider from "../../../components/StyledDivider";
 
 interface IProps {
     userId: number;
@@ -111,6 +112,8 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
                             )}
                         </div>
                     ))}
+
+                    <StyledDivider />
                     <Button
                         style={{ margin: "0 auto", display: "flex" }}
                         type="primary"

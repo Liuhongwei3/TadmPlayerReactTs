@@ -12,7 +12,7 @@ import { IFollowedRes } from "./type";
 import reqs from "../../api/req";
 import StyledCount from "../../components/detail/StyledCount";
 import UserSex from "./user-sex";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
 
 interface IProps {
     userId: number;

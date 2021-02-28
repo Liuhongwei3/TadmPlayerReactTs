@@ -17,7 +17,7 @@ import StyledDivider from "../../components/StyledDivider";
 import {
     DEFAULT_MV_SMALL_HEIGHT,
     DEFAULT_MV_SMALL_WIDTH,
-} from "../../defaultConfig";
+} from "../../web-config/defaultConfig";
 
 const INIT_LIMIT = 18;
 const Types = [

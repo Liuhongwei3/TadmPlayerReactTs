@@ -12,7 +12,7 @@ import LeftSide from "./pages/aside";
 import ContentHeader from "./pages/header";
 import Footer from "./pages/footer";
 import Routers from "./routers";
-import { DEFAULT_BG_IMG } from "./defaultConfig";
+import { DEFAULT_BG_IMG } from "./web-config/defaultConfig";
 
 const StyledBg = styled.div`
     width: 100%;

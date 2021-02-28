@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { Playlist } from "./type";
 import { notify } from "../../utils";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
 
 interface IProps {
     detailId: number;

@@ -72,6 +72,8 @@ export function timeFormat(timeIn = 0) {
 }
 
 export function countFormat(value) {
+    if (!value) return "";
+
     if (value < 1000) {
         return value;
     } else if (value > 1000 && value < 10000) {

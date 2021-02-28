@@ -15,7 +15,7 @@ import { Mv } from "./type";
 import {
     DEFAULT_MV_SMALL_HEIGHT,
     DEFAULT_MV_SMALL_WIDTH,
-} from "../../defaultConfig";
+} from "../../web-config/defaultConfig";
 
 interface IProps {
     singerId: number;
@@ -69,51 +69,61 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
             {mvs.length ? (
                 <React.Fragment>
                     <StyledWrapper>
-                        {mvs.map((item: Mv) => {
-                            return (
-                                <StyledItem
-                                    key={item.id}
-                                    onClick={() => toDetail(item.id)}
-                                >
-                                    <div
-                                        style={{
-                                            width: DEFAULT_MV_SMALL_WIDTH,
-                                            height: DEFAULT_MV_SMALL_HEIGHT,
-                                            position: "relative",
-                                        }}
+                        {mvs
+                            .sort((a, b) => b.playCount - a.playCount)
+                            .map((item: Mv) => {
+                                return (
+                                    <StyledItem
+                                        key={item.id}
+                                        onClick={() => toDetail(item.id)}
                                     >
-                                        <LazyLoad
-                                            height={DEFAULT_MV_SMALL_HEIGHT}
-                                            placeholder={<LoadingImg />}
+                                        <div
+                                            style={{
+                                                width: DEFAULT_MV_SMALL_WIDTH,
+                                                height: DEFAULT_MV_SMALL_HEIGHT,
+                                                position: "relative",
+                                            }}
                                         >
-                                            <img
-                                                style={{ opacity: 0.75 }}
-                                                width={DEFAULT_MV_SMALL_WIDTH}
+                                            <LazyLoad
                                                 height={DEFAULT_MV_SMALL_HEIGHT}
-                                                alt="detail-cover"
-                                                src={item.imgurl}
-                                            />
-                                        </LazyLoad>
-                                        <StyledCount>
-                                            <VideoCameraOutlined />
-                                            {countFormat(item.playCount)}
-                                        </StyledCount>
-                                        <StyledDesc
+                                                placeholder={<LoadingImg />}
+                                            >
+                                                <img
+                                                    style={{ opacity: 0.75 }}
+                                                    width={
+                                                        DEFAULT_MV_SMALL_WIDTH
+                                                    }
+                                                    height={
+                                                        DEFAULT_MV_SMALL_HEIGHT
+                                                    }
+                                                    alt="detail-cover"
+                                                    src={item.imgurl}
+                                                />
+                                            </LazyLoad>
+                                            <StyledCount>
+                                                <VideoCameraOutlined />
+                                                {countFormat(item.playCount)}
+                                            </StyledCount>
+                                            <StyledDesc
+                                                width={DEFAULT_MV_SMALL_WIDTH}
+                                            >
+                                                <FieldTimeOutlined />
+                                                {timeFormat(
+                                                    Math.floor(
+                                                        item.duration / 1000
+                                                    )
+                                                )}
+                                            </StyledDesc>
+                                        </div>
+
+                                        <StyledName
                                             width={DEFAULT_MV_SMALL_WIDTH}
                                         >
-                                            <FieldTimeOutlined />
-                                            {timeFormat(
-                                                Math.floor(item.duration / 1000)
-                                            )}
-                                        </StyledDesc>
-                                    </div>
-
-                                    <StyledName width={DEFAULT_MV_SMALL_WIDTH}>
-                                        {item.name}
-                                    </StyledName>
-                                </StyledItem>
-                            );
-                        })}
+                                            {item.name}
+                                        </StyledName>
+                                    </StyledItem>
+                                );
+                            })}
                     </StyledWrapper>
                     <Pagination
                         style={{ float: "right" }}

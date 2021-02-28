@@ -29,7 +29,7 @@ import { IUserDetail, MainAuthType } from "./type";
 import StyledDivider from "../../components/StyledDivider";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
-import { DEFAULT_RANDOM_COLORS, DEFAULT_USER_ID } from "../../defaultConfig";
+import { DEFAULT_RANDOM_COLORS, DEFAULT_USER_ID } from "../../web-config/defaultConfig";
 import UserPlaylist from "./user-playlist";
 import UserFollow from "./user-follow";
 import UserSex from "./user-sex";

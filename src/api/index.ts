@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DEFAULT_DEV_BASE_URL, DEFAULT_PROD_BASE_URL } from "../defaultConfig";
+import { DEFAULT_DEV_BASE_URL, DEFAULT_PROD_BASE_URL } from "../web-config/defaultConfig";
 import { notify } from "../utils";
 import { parseResponseData } from "./tools";
 import { cacheAdapterEnhancer } from "axios-extensions";

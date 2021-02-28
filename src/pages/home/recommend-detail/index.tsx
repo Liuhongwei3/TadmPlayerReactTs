@@ -13,7 +13,7 @@ import StyledName from "../../../components/detail/StyledName";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../web-config/defaultConfig";
 
 const RecommendDetail: React.FunctionComponent = () => {
     const history = useHistory();
@@ -74,7 +74,7 @@ const RecommendDetail: React.FunctionComponent = () => {
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
-                                            style={{ opacity: 0.65 }}
+                                            style={{ opacity: 0.7 }}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"

@@ -138,7 +138,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         {
             title: "MV",
             key: "mv",
-            width: "14%",
+            width: "10%",
             render: (data: ISong) =>
                 data.mv ? <Link to={`/mv/${data.mv}`}>去欣赏</Link> : null,
         },
@@ -154,6 +154,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         <Table<ISong>
             rowKey="id"
             bordered={false}
+            scroll={{ x: true }}
             columns={columns}
             loading={loading}
             dataSource={songs}

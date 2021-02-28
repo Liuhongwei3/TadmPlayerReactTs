@@ -16,7 +16,7 @@ import StyledCount from "../../components/detail/StyledCount";
 import {
     DEFAULT_MV_SMALL_HEIGHT,
     DEFAULT_MV_SMALL_WIDTH,
-} from "../../defaultConfig";
+} from "../../web-config/defaultConfig";
 
 interface IProps {
     mvId: number;

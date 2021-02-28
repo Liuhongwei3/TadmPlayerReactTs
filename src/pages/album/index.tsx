@@ -20,7 +20,7 @@ import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledDivider from "../../components/StyledDivider";
 import AlbumSongs from "./album-songs";
 import AlbumComments from "./album-comments";
-import { DEFAULT_ALBUM_ID } from "../../defaultConfig";
+import { DEFAULT_ALBUM_ID } from "../../web-config/defaultConfig";
 
 interface IRouteParams {
     albumId: string;
@@ -143,7 +143,7 @@ const Album: React.FunctionComponent = () => {
                 <StyledDivider />
 
                 <Tabs
-                    style={{ width: "calc(100vw - 104px)" }}
+                    style={{ width: "99%" }}
                     activeKey={activeKey}
                     defaultActiveKey="1"
                     onChange={(activeKey) => onTabChange(activeKey)}

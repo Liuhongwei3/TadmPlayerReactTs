@@ -11,7 +11,7 @@ import reqs from "../../api/req";
 import { HotAlbum } from "./type";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledCount from "../../components/detail/StyledCount";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
 
 interface IProps {
     singerId: number;

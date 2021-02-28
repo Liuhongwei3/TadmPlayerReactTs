@@ -10,7 +10,7 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
 import { notify } from "../../../utils";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../web-config/defaultConfig";
 
 const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -58,7 +58,7 @@ const NewSongs: React.FunctionComponent = () => {
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
-                                            style={{ opacity: 0.65 }}
+                                            style={{ opacity: 0.8 }}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
                                             alt="detail-cover"

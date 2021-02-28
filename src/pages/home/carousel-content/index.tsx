@@ -42,7 +42,7 @@ const StyledImage = styled.img`
     margin: 0 auto;
 
     @media screen and (max-width: 768px) {
-        height: 36vh;
+        height: 25vh;
     }
 `;
 

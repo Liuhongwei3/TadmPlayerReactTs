@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { Artist, IJson, Pic } from "../type";
 import { getEventType, notify } from "../../../utils";
-import { DEFAULT_RANDOM_COLORS } from "../../../defaultConfig";
+import { DEFAULT_RANDOM_COLORS } from "../../../web-config/defaultConfig";
 
 const StyledDetailDiv = styled.div`
     width: 100%;

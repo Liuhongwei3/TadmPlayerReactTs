@@ -19,7 +19,7 @@ import {
     DEFAULT_MV_ID,
     DEFAULT_SINGER_ID,
     DEFAULT_USER_ID,
-} from "../../defaultConfig";
+} from "../../web-config/defaultConfig";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../hooks/useStore";
 

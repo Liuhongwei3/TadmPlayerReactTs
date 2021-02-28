@@ -98,6 +98,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         <Table<Song>
             rowKey="id"
             bordered={false}
+            scroll={{ x: true }}
             columns={columns}
             dataSource={songs.map((item, index) => {
                 return {

@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
 import { Artist } from "./type";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
 
 interface IProps {
     singerId: number;
@@ -52,7 +52,7 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {similarSingers.length ? (
+            {similarSingers && similarSingers.length ? (
                 <StyledWrapper>
                     {similarSingers.map((item: Artist) => {
                         return (

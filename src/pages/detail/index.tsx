@@ -17,7 +17,7 @@ import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_DETAIL_ID, DEFAULT_RANDOM_COLORS } from "../../defaultConfig";
+import { DEFAULT_DETAIL_ID, DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
 import DetailSongs from "./detail-songs";
 import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
@@ -188,9 +188,9 @@ const Detail: React.FunctionComponent = () => {
                     )}
 
                     <Tabs
-                        style={{ width: "calc(100vw - 104px)" }}
-                        activeKey={activeKey}
+                        style={{ width: "99%" }}
                         defaultActiveKey="1"
+                        activeKey={activeKey}
                         onChange={(activeKey) => onTabChange(activeKey)}
                     >
                         <Tabs.TabPane

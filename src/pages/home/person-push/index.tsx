@@ -11,7 +11,7 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
 import { notify } from "../../../utils";
-import { DEFAULT_MV_HEIGHT, DEFAULT_MV_WIDTH } from "../../../defaultConfig";
+import { DEFAULT_MV_HEIGHT, DEFAULT_MV_WIDTH } from "../../../web-config/defaultConfig";
 
 const PersonPush: React.FunctionComponent = () => {
     const history = useHistory();
@@ -70,7 +70,7 @@ const PersonPush: React.FunctionComponent = () => {
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
-                                            style={{ opacity: 0.65 }}
+                                            style={{ opacity: 0.8 }}
                                             width={DEFAULT_MV_WIDTH}
                                             height={DEFAULT_MV_HEIGHT}
                                             alt="detail-cover"

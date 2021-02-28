@@ -13,6 +13,10 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import StyledCount from "../../../components/detail/StyledCount";
 import LoadingImg from "../../../components/LoadingImg";
+import {
+    DEFAULT_MV_WIDTH,
+    DEFAULT_MV_HEIGHT,
+} from "../../../web-config/defaultConfig";
 
 const RecommendMv: React.FunctionComponent = () => {
     const history = useHistory();
@@ -63,19 +67,19 @@ const RecommendMv: React.FunctionComponent = () => {
                             >
                                 <div
                                     style={{
-                                        width: 320,
-                                        height: 200,
+                                        width: DEFAULT_MV_WIDTH,
+                                        height: DEFAULT_MV_HEIGHT,
                                         position: "relative",
                                     }}
                                 >
                                     <LazyLoad
-                                        height={200}
+                                        height={DEFAULT_MV_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
                                         <img
-                                            style={{ opacity: 0.65 }}
-                                            width={320}
-                                            height={200}
+                                            style={{ opacity: 0.8 }}
+                                            width={DEFAULT_MV_WIDTH}
+                                            height={DEFAULT_MV_HEIGHT}
                                             alt="detail-cover"
                                             src={item.picUrl}
                                         />
@@ -84,12 +88,12 @@ const RecommendMv: React.FunctionComponent = () => {
                                         <VideoCameraOutlined />
                                         {countFormat(item.playCount)}
                                     </StyledCount>
-                                    <StyledDesc width={320}>
+                                    <StyledDesc width={DEFAULT_MV_WIDTH}>
                                         {item.copywriter}
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={320}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_MV_WIDTH}>{item.name}</StyledName>
                             </StyledItem>
                         );
                     })}

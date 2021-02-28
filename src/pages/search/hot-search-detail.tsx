@@ -22,7 +22,7 @@ const HotSearchComp = (keyword: string) => {
         !keyword.length && getHotSearch();
     }, [getHotSearch, keyword.length]);
 
-    return !keyword.length
+    return !keyword.length && hotSearchs
         ? hotSearchs.map((hotSearch) => {
               return {
                   value: hotSearch.searchWord,

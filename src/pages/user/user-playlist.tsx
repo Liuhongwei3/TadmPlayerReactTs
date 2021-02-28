@@ -12,7 +12,8 @@ import LoadingImg from "../../components/LoadingImg";
 import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import req from "../../api/req";
 import { IUserPlaylistRes } from "./type";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import StyledDivider from "../../components/StyledDivider";
 
 interface IProps {
     userId: number;
@@ -111,16 +112,18 @@ const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
                                 </StyledItem>
                             );
                         })}
+
+                        <StyledDivider />
+                        <Button
+                            style={{ margin: "0 auto", display: "flex" }}
+                            type="primary"
+                            disabled={!playlistsRes.more}
+                            loading={loading}
+                            onClick={() => setLimit(limit + 12)}
+                        >
+                            Loading More
+                        </Button>
                     </StyledWrapper>
-                    <Button
-                        style={{ margin: "0 auto", display: "flex" }}
-                        type="primary"
-                        disabled={!playlistsRes.more}
-                        loading={loading}
-                        onClick={() => setLimit(limit + 12)}
-                    >
-                        Loading More
-                    </Button>
                 </>
             ) : (
                 <Empty />

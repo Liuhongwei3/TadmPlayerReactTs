@@ -14,7 +14,7 @@ import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
 import LoadingImg from "../../components/LoadingImg";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../defaultConfig";
+import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
 import HotDetailCats from "./hot-detail-cats";
 
 const INIT_LIMIT = 24;
@@ -113,16 +113,18 @@ const HotDetail: React.FunctionComponent = () => {
                                 </StyledItem>
                             );
                         })}
+
+                        <StyledDivider />
+                        <Button
+                            style={{ margin: "0 auto", display: "flex" }}
+                            type="primary"
+                            disabled={limit >= 100}
+                            loading={loading}
+                            onClick={() => setLimit(limit + 12)}
+                        >
+                            Loading More
+                        </Button>
                     </StyledWrapper>
-                    <Button
-                        style={{ margin: "0 auto", display: "flex" }}
-                        type="primary"
-                        disabled={limit >= 100}
-                        loading={loading}
-                        onClick={() => setLimit(limit + 12)}
-                    >
-                        Loading More
-                    </Button>
                 </React.Fragment>
             ) : (
                 <Empty />

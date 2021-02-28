@@ -10,11 +10,12 @@ import {
     ShareAltOutlined,
     CommentOutlined,
 } from "@ant-design/icons";
+import DPlayer from "dplayer";
 
 import StyledDivider from "../../components/StyledDivider";
 import { countFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
-import { DEFAULT_MV_ID } from "../../defaultConfig";
+import { DEFAULT_MV_ID } from "../../web-config/defaultConfig";
 import reqs from "../../api/req";
 import { IMvDetailRes, IMvUrl } from "./type";
 import StyledTag from "../../components/StyledTag";
@@ -22,6 +23,26 @@ import StyledWrapper from "../../components/detail/StyledWrapper";
 import MvComments from "./mv-comments";
 import MvDesc from "./mv-desc";
 import MvSimilar from "./mv-similar";
+import styled from "styled-components";
+
+const StyledDPlayer = styled.div`
+    width: 75%;
+    max-height: 520px;
+    border-radius: 10px;
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: 240px;
+
+        .dplayer-controller .dplayer-icons .dplayer-icon {
+            width: 30px;
+        }
+        .dplayer-time {
+            font-size: 10px !important;
+        }
+    }
+`;
 
 interface IRouteParams {
     mvId: string;
@@ -41,7 +62,9 @@ const Mv: React.FunctionComponent = () => {
         Promise.all([reqs.netease.mvDetail(+mvId), reqs.netease.mvUrl(+mvId)])
             .then((res) => {
                 setMvInfo(res[0]);
-                res[1].code === 200 && setMvUrl(res[1].data);
+                if (res[1].code === 200) {
+                    setMvUrl(res[1].data);
+                }
             })
             .catch((err) => {
                 notify(
@@ -57,6 +80,42 @@ const Mv: React.FunctionComponent = () => {
     React.useEffect(() => {
         getAlbumDetail();
     }, [getAlbumDetail]);
+
+    React.useEffect(() => {
+        if (mvUrl) {
+            const dp = new DPlayer({
+                container: document.getElementById("dplayer"),
+                screenshot: true,
+                volume: 1,
+                theme: "#faa3a3",
+                // theme: "#FADFA3",
+                // logo:
+                //     "https://user-gold-cdn.xitu.io/2020/3/22/171012d7cd64fae9?imageView2/1/w/180/h/180/q/85/format/webp/interlace/1",
+                video: {
+                    // quality: [
+                    //     {
+                    //         name: '蓝光',
+                    //         url: res[1].data.url,
+                    //         type: 'mp4',
+                    //     },
+                    // ],
+                    // defaultQuality: 0,
+                    url: mvUrl.url,
+                },
+                contextmenu: [
+                    {
+                        text: "Tadm",
+                        link:
+                            "https://github.com/Liuhongwei3/TadmPlayerReactTs",
+                    },
+                ],
+            });
+
+            return () => {
+                dp.destroy();
+            };
+        }
+    }, [mvUrl]);
 
     React.useEffect(() => {
         setActiveKey("2");
@@ -156,13 +215,16 @@ const Mv: React.FunctionComponent = () => {
 
                         <StyledDivider />
 
-                        {mvUrl?.url && (
-                            <video
-                                width={"100%"}
-                                height={520}
-                                controls={true}
-                                src={mvUrl.url}
-                            />
+                        {mvUrl && mvUrl?.url && (
+                            <>
+                                {/* <video
+                                    width={"100%"}
+                                    height={520}
+                                    controls={true}
+                                    src={mvUrl.url}
+                                /> */}
+                                <StyledDPlayer id="dplayer"></StyledDPlayer>
+                            </>
                         )}
 
                         <StyledDivider />
@@ -180,7 +242,9 @@ const Mv: React.FunctionComponent = () => {
                                 />
                             </Tabs.TabPane>
                             <Tabs.TabPane
-                                tab={`评论(${countFormat(mvInfo?.data.commentCount)})`}
+                                tab={`评论(${countFormat(
+                                    mvInfo?.data.commentCount
+                                )})`}
                                 key="2"
                             >
                                 <MvComments

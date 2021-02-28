@@ -157,7 +157,7 @@ const SearchComp: React.FunctionComponent = () => {
                 </AutoComplete>
             </Input.Group>
 
-            <div>{`找到${resCount}条结果`}</div>
+            <div>{`找到 ${resCount} 条结果`}</div>
 
             <Tabs activeKey={String(activeKey)} onChange={updateActiveKey}>
                 {SEARCH_RES_TABS.map((tab) => {

@@ -25,7 +25,7 @@ import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_RANDOM_COLORS, DEFAULT_SINGER_ID } from "../../defaultConfig";
+import { DEFAULT_RANDOM_COLORS, DEFAULT_SINGER_ID } from "../../web-config/defaultConfig";
 import { ISingerRes } from "./type";
 import SingerSongs from "./singer-songs";
 import SingerHotSongs from "./singer-hot-songs";
@@ -197,7 +197,7 @@ const Singer: React.FunctionComponent = () => {
                     <StyledDivider />
 
                     <Tabs
-                        style={{ width: "calc(100vw - 104px)" }}
+                        style={{ width: "99%" }}
                         activeKey={activeKey}
                         defaultActiveKey="1"
                         onChange={(activeKey) => onTabChange(activeKey)}
