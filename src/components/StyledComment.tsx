@@ -34,12 +34,8 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
             <Avatar
                 alt={comm.user.nickname}
                 src={
-                    <LazyLoad height={50} placeholder={<LoadingImg />}>
-                        <Image
-                            width={50}
-                            height={50}
-                            src={comm.user.avatarUrl}
-                        />
+                    <LazyLoad height={32} placeholder={<LoadingImg />}>
+                        <Image src={comm.user.avatarUrl} />
                     </LazyLoad>
                 }
             />

@@ -30,8 +30,8 @@ const LeftSide: React.FunctionComponent = observer(() => {
     return (
         <Layout.Sider
             style={{
-                overflow: "auto",
-                height: "100vh",
+                overflow: "hidden",
+                height: "calc(100vh - 48px)",
                 position: "sticky",
                 left: 0,
                 top: 0,
@@ -44,6 +44,11 @@ const LeftSide: React.FunctionComponent = observer(() => {
         >
             <Image width={collapsed ? 80 : 160} src={DEFAULT_AVATAR} />
             <Menu
+                style={{
+                    height: "100%",
+                    overflowY: "scroll",
+                    paddingBottom: 40,
+                }}
                 theme="dark"
                 mode="vertical"
                 selectedKeys={store.curRoute}

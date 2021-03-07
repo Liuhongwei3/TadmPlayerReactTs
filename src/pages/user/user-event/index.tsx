@@ -61,13 +61,8 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
             <Avatar
                 alt={event.user.nickname}
                 src={
-                    <LazyLoad height={50} placeholder={<LoadingImg />}>
-                        <Image
-                            preview={false}
-                            width={50}
-                            height={50}
-                            src={event.user.avatarUrl}
-                        />
+                    <LazyLoad height={32} placeholder={<LoadingImg />}>
+                        <Image preview={false} src={event.user.avatarUrl} />
                     </LazyLoad>
                 }
             />

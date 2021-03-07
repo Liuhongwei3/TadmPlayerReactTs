@@ -73,6 +73,7 @@ export function timeFormat(timeIn = 0) {
 }
 
 export function countFormat(value) {
+    if (value === 0) return 0;
     if (!value) return "暂无";
 
     if (value < 1000) {
@@ -182,7 +183,7 @@ export function getEventType(str = 0) {
     if (str === 0) return "";
 
     if (str) {
-        return IEventTypeText[+str];
+        return IEventTypeText[+str] || "发布动态";
     }
     return str;
 }

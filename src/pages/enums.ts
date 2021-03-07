@@ -41,12 +41,13 @@ export enum ESingerType {
 // 35 发布动态
 export enum EEventType {
     SHARE_DETAIL = 13,
+    SHARE_DJ_PROGRAM = 17,
     SHARE_SONG = 18,
-    SHARE_DJRADIO = 17 | 28,
     SHARE_ALBUM = 19,
     SHARE_MV = 21,
     REWARD = 22,
     SHARE_ARTICLE = 24,
+    SHARE_DJ_RADIO = 28,
     PUBILSH_EVENT = 35,
     PUBLISH_VIDEO = 39,
     SHARE_VIDEO = 41,
@@ -54,12 +55,13 @@ export enum EEventType {
 
 export const IEventTypeText: Record<EEventType, string> = {
     [EEventType.SHARE_DETAIL]: "分享歌单",
+    [EEventType.SHARE_DJ_PROGRAM]: "分享节目",
     [EEventType.SHARE_SONG]: "分享单曲",
-    [EEventType.SHARE_DJRADIO]: "分享电台节目",
     [EEventType.SHARE_ALBUM]: "分享专辑",
     [EEventType.SHARE_MV]: "分享 MV",
     [EEventType.REWARD]: "转发",
     [EEventType.SHARE_ARTICLE]: "发布专栏文章",
+    [EEventType.SHARE_DJ_RADIO]: "分享电台",
     [EEventType.PUBILSH_EVENT]: "发布动态",
     [EEventType.PUBLISH_VIDEO]: "发布视频",
     [EEventType.SHARE_VIDEO]: "分享视频",
