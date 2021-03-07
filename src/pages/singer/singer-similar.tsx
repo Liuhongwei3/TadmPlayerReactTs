@@ -1,5 +1,5 @@
 import React from "react";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 import LazyLoad from "react-lazyload";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
@@ -9,7 +9,10 @@ import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
 import { Artist } from "./type";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 
 interface IProps {
     singerId: number;
@@ -71,12 +74,15 @@ const SingerSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                         height={100}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
-                                            style={{ opacity: 0.85 }}
+                                        <Image
+                                            alt="ainger-cover"
+                                            loading="lazy"
+                                            style={{ opacity: 0.8 }}
+                                            preview={false}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
-                                            alt="detail-cover"
                                             src={item.picUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
                                 </div>

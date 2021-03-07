@@ -36,11 +36,13 @@ const SingerHotSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             render: (data: ISong) => (
                 <Avatar
                     src={
-                        <LazyLoad height={50} placeholder={<LoadingImg />}>
+                        <LazyLoad height={32} placeholder={<LoadingImg />}>
                             <Image
-                                width={50}
-                                height={50}
+                                alt="detail-cover"
+                                loading="lazy"
+                                style={{ opacity: 0.8 }}
                                 src={data.al.picUrl}
+                                placeholder={<LoadingImg />}
                             />
                         </LazyLoad>
                     }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Image } from "antd";
+import { Menu, Image, Button } from "antd";
 import {
     HomeOutlined,
     AppstoreOutlined,
@@ -25,34 +25,30 @@ import { useStore } from "../../hooks/useStore";
 
 const LeftSide: React.FunctionComponent = observer(() => {
     const store = useStore();
-    const [collapsed, setCollapsed] = React.useState<boolean>(true);
 
     return (
-        <Layout.Sider
+        <div
             style={{
+                width: 80,
+                height: "100vh",
+                position: "fixed",
                 overflow: "hidden",
-                height: "calc(100vh - 48px)",
-                position: "sticky",
                 left: 0,
                 top: 0,
                 transition: "all 0.3s",
             }}
-            width={collapsed ? 80 : 160}
-            collapsible={true}
-            collapsed={collapsed}
-            onCollapse={setCollapsed}
         >
-            <Image width={collapsed ? 80 : 160} src={DEFAULT_AVATAR} />
+            <Image width={80} height={80} src={DEFAULT_AVATAR} />
             <Menu
                 style={{
-                    height: "100%",
+                    height: "calc(100vh - 80px)",
                     overflowY: "scroll",
-                    paddingBottom: 40,
                 }}
                 theme="dark"
-                mode="vertical"
-                selectedKeys={store.curRoute}
+                mode="inline"
+                inlineCollapsed={true}
                 defaultSelectedKeys={["home"]}
+                selectedKeys={store.curRoute}
             >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
                     <Link to="/">首页</Link>
@@ -82,7 +78,17 @@ const LeftSide: React.FunctionComponent = observer(() => {
                     <Link to={`/mv/${DEFAULT_MV_ID}`}>MV</Link>
                 </Menu.Item>
             </Menu>
-        </Layout.Sider>
+            <Button
+                type="primary"
+                onClick={() => console.log("click")}
+                style={{ marginBottom: 16 }}
+            >
+                {/* {React.createElement(
+                    this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+                )} */}
+                hello
+            </Button>
+        </div>
     );
 });
 

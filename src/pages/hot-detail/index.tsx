@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import LazyLoad from "react-lazyload";
-import { Button, Empty, Spin } from "antd";
+import { Button, Empty, Image, Spin } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
@@ -92,13 +92,15 @@ const HotDetail: React.FunctionComponent = () => {
                                             height={DEFAULT_IMG_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
-                                                style={{ opacity: 0.65 }}
-                                                width={DEFAULT_IMG_WIDTH}
-                                                height={DEFAULT_IMG_HEIGHT}
+                                            <Image
                                                 alt="detail-cover"
                                                 loading="lazy"
+                                                style={{ opacity: 0.8 }}
+                                                preview={false}
+                                                width={DEFAULT_IMG_WIDTH}
+                                                height={DEFAULT_IMG_HEIGHT}
                                                 src={item.coverImgUrl}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>

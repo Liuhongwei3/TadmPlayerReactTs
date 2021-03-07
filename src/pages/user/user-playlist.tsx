@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Button, Empty, Spin } from "antd";
+import { Button, Empty, Spin, Image } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
@@ -12,7 +12,10 @@ import LoadingImg from "../../components/LoadingImg";
 import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import req from "../../api/req";
 import { IUserPlaylistRes } from "./type";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 import StyledDivider from "../../components/StyledDivider";
 
 interface IProps {
@@ -87,12 +90,15 @@ const UserPlaylist: React.FunctionComponent<IProps> = (props: IProps) => {
                                             height={DEFAULT_IMG_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
+                                            <Image
+                                                alt="detail-cover"
+                                                loading="lazy"
                                                 style={{ opacity: 0.8 }}
+                                                preview={false}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
-                                                alt="mv-cover"
                                                 src={item.coverImgUrl}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>

@@ -1,6 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { Empty } from "antd";
+import { Empty, Image } from "antd";
 
 import StyledCount from "../../../components/detail/StyledCount";
 import StyledDesc from "../../../components/detail/StyledDesc";
@@ -8,7 +8,10 @@ import StyledItem from "../../../components/detail/StyledItem";
 import StyledName from "../../../components/detail/StyledName";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import LoadingImg from "../../../components/LoadingImg";
-import { DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT } from "../../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_WIDTH,
+    DEFAULT_IMG_HEIGHT,
+} from "../../../web-config/defaultConfig";
 import { ISearchs } from "../type";
 import { useHistory } from "react-router-dom";
 import UserSex from "../../user/user-sex";
@@ -48,12 +51,15 @@ const Users: React.FC<IProps> = (props: IProps) => {
                                     height={DEFAULT_IMG_HEIGHT}
                                     placeholder={<LoadingImg />}
                                 >
-                                    <img
+                                    <Image
+                                        alt="user-cover"
+                                        loading="lazy"
                                         style={{ opacity: 0.8 }}
+                                        preview={false}
                                         width={DEFAULT_IMG_WIDTH}
                                         height={DEFAULT_IMG_HEIGHT}
-                                        alt="mv-cover"
                                         src={item.avatarUrl}
+                                        placeholder={<LoadingImg />}
                                     />
                                 </LazyLoad>
                                 <StyledCount>

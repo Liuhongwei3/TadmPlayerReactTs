@@ -1,6 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 
 import req from "../../../api/req";
 import { IArtist, INewSongs } from "../type";
@@ -10,7 +10,10 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
 import { notify } from "../../../utils";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../../web-config/defaultConfig";
 
 const NewSongs: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -57,13 +60,15 @@ const NewSongs: React.FunctionComponent = () => {
                                         height={160}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
-                                            style={{ opacity: 0.8 }}
-                                            width={DEFAULT_IMG_WIDTH}
-                                            height={DEFAULT_IMG_HEIGHT}
+                                        <Image
                                             alt="detail-cover"
                                             loading="lazy"
+                                            style={{ opacity: 0.8 }}
+                                            preview={false}
+                                            width={DEFAULT_IMG_WIDTH}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             src={item.picUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
                                     <StyledDesc width={DEFAULT_IMG_WIDTH}>

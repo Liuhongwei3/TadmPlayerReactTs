@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 
 import req from "../../../api/req";
 import { IPersonPush } from "../type";
@@ -11,7 +11,10 @@ import StyledDesc from "../../../components/detail/StyledDesc";
 import StyledName from "../../../components/detail/StyledName";
 import LoadingImg from "../../../components/LoadingImg";
 import { notify } from "../../../utils";
-import { DEFAULT_MV_HEIGHT, DEFAULT_MV_WIDTH } from "../../../web-config/defaultConfig";
+import {
+    DEFAULT_MV_HEIGHT,
+    DEFAULT_MV_WIDTH,
+} from "../../../web-config/defaultConfig";
 
 const PersonPush: React.FunctionComponent = () => {
     const history = useHistory();
@@ -69,12 +72,15 @@ const PersonPush: React.FunctionComponent = () => {
                                         height={DEFAULT_MV_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
+                                        <Image
+                                            alt="detail-cover"
+                                            loading="lazy"
                                             style={{ opacity: 0.8 }}
+                                            preview={false}
                                             width={DEFAULT_MV_WIDTH}
                                             height={DEFAULT_MV_HEIGHT}
-                                            alt="detail-cover"
                                             src={item.picUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
                                     <StyledDesc width={DEFAULT_MV_WIDTH}>

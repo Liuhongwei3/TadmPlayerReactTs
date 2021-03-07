@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 import { VideoCameraOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
@@ -76,12 +76,15 @@ const RecommendMv: React.FunctionComponent = () => {
                                         height={DEFAULT_MV_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
+                                        <Image
+                                            alt="detail-cover"
+                                            loading="lazy"
                                             style={{ opacity: 0.8 }}
+                                            preview={false}
                                             width={DEFAULT_MV_WIDTH}
                                             height={DEFAULT_MV_HEIGHT}
-                                            alt="detail-cover"
                                             src={item.picUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
                                     <StyledCount>
@@ -93,7 +96,9 @@ const RecommendMv: React.FunctionComponent = () => {
                                     </StyledDesc>
                                 </div>
 
-                                <StyledName width={DEFAULT_MV_WIDTH}>{item.name}</StyledName>
+                                <StyledName width={DEFAULT_MV_WIDTH}>
+                                    {item.name}
+                                </StyledName>
                             </StyledItem>
                         );
                     })}

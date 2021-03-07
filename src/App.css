@@ -53,16 +53,21 @@ svg {
     margin-right: 5px;
 }
 
+.ant-popover-arrow {
+    border-top-color: rgb(145, 144, 144) !important;
+    border-left-color: rgb(145, 144, 144) !important;
+}
+
 .ant-popover-inner {
-    width: 80vw;
-    height: 80vh;
+    width: 66vw;
+    height: 66vh;
     color: white;
-    background-color: #777777;
+    background-color: #777;
     overflow-y: scroll;
 }
 
 .ant-collapse-content-active {
-    overflow: hidden;
+    overflow: auto;
     background: rgba(255, 255, 255, 0.7);
 }
 

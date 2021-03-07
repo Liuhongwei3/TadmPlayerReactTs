@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Artist, IJson, Pic } from "../type";
 import { getEventType, notify } from "../../../utils";
 import { DEFAULT_RANDOM_COLORS } from "../../../web-config/defaultConfig";
+import LoadingImg from "../../../components/LoadingImg";
 
 const StyledDetailDiv = styled.div`
     width: 100%;
@@ -130,9 +131,12 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
                 <Image.PreviewGroup>
                     {pics.map((pic) => (
                         <Image
+                            alt="event-cover"
+                            loading="lazy"
+                            height={250}
                             style={{ padding: 10 }}
                             width={+(pic.width / pic.height).toFixed(2) * 250}
-                            height={250}
+                            placeholder={<LoadingImg />}
                             key={pic.originUrl}
                             src={pic.originUrl}
                         />

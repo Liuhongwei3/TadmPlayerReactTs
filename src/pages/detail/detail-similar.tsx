@@ -1,5 +1,5 @@
 import React from "react";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 import LazyLoad from "react-lazyload";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
@@ -10,7 +10,10 @@ import { useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { Playlist } from "./type";
 import { notify } from "../../utils";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 
 interface IProps {
     detailId: number;
@@ -72,12 +75,15 @@ const DetailSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                         height={100}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
-                                            style={{ opacity: 0.65 }}
+                                        <Image
+                                            alt="detail-cover"
+                                            loading="lazy"
+                                            style={{ opacity: 0.8 }}
+                                            preview={false}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
-                                            alt="detail-cover"
                                             src={item.coverImgUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
                                     <StyledDesc width={DEFAULT_IMG_WIDTH}>

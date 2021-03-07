@@ -1,5 +1,5 @@
 import React from "react";
-import { Empty, Pagination, Spin } from "antd";
+import { Empty, Pagination, Spin, Image } from "antd";
 import LazyLoad from "react-lazyload";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledItem from "../../components/detail/StyledItem";
@@ -12,7 +12,10 @@ import { ISubscriber } from "./type";
 import reqs from "../../api/req";
 import StyledCount from "../../components/detail/StyledCount";
 import UserSex from "../user/user-sex";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 
 interface IProps {
     detailId: number;
@@ -87,12 +90,15 @@ const DetailSubscribedUsers: React.FunctionComponent<IProps> = (
                                             height={DEFAULT_IMG_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
-                                                style={{ opacity: 0.65 }}
+                                            <Image
+                                                alt="detail-cover"
+                                                loading="lazy"
+                                                style={{ opacity: 0.8 }}
+                                                preview={false}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
-                                                alt="detail-cover"
                                                 src={item.avatarUrl}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Empty, Pagination, Spin } from "antd";
+import { Empty, Pagination, Spin, Image } from "antd";
 import LazyLoad from "react-lazyload";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledName from "../../components/detail/StyledName";
@@ -11,7 +11,10 @@ import reqs from "../../api/req";
 import { HotAlbum } from "./type";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledCount from "../../components/detail/StyledCount";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 
 interface IProps {
     singerId: number;
@@ -82,12 +85,15 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
                                             height={100}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
-                                                style={{ opacity: 0.65 }}
+                                            <Image
+                                                alt="album-cover"
+                                                loading="lazy"
+                                                style={{ opacity: 0.8 }}
+                                                preview={false}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
-                                                alt="detail-cover"
                                                 src={item.picUrl}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>

@@ -129,11 +129,11 @@ const HotDetailCats: React.FunctionComponent<IProps> = (props: IProps) => {
                     padding: "24px 0 0 24px",
                 }}
             >
-                <span>选择分类：</span>
+                <span>热门歌单分类：</span>
                 <Popover
                     placement="bottomLeft"
-                    visible={visible}
                     trigger="click"
+                    visible={visible}
                     title={
                         hotDetailCats ? (
                             <StyledTag

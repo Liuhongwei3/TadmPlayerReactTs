@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { Carousel, Tag } from "antd";
+import { Carousel, Tag, Image } from "antd";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
@@ -9,6 +9,7 @@ import { IBanner } from "../type";
 import { CarouselRef } from "antd/lib/carousel";
 import { notify } from "../../../utils";
 import { ETartgetType } from "../../enums";
+import LoadingImg from "../../../components/LoadingImg";
 
 const CarouselContent: React.FunctionComponent = () => {
     const history = useHistory();
@@ -83,6 +84,9 @@ const CarouselContent: React.FunctionComponent = () => {
                             <StyledImage
                                 alt="banner-cover"
                                 src={item.imageUrl}
+                                loading="lazy"
+                                preview={false}
+                                placeholder={<LoadingImg />}
                             />
                             <StyledTag color={item.titleColor}>
                                 {item.typeTitle}
@@ -126,7 +130,7 @@ const StyledCarouselItem = styled.div`
     }
 `;
 
-const StyledImage = styled.img`
+const StyledImage = styled(Image)`
     width: 100%;
     height: 300px;
     border-radius: 10px;

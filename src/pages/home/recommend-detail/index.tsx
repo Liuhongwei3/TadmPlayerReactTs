@@ -1,5 +1,5 @@
 import React from "react";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
@@ -13,7 +13,10 @@ import StyledName from "../../../components/detail/StyledName";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../../components/LoadingImg";
 import { useHistory } from "react-router-dom";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../../web-config/defaultConfig";
 
 const RecommendDetail: React.FunctionComponent = () => {
     const history = useHistory();
@@ -73,12 +76,15 @@ const RecommendDetail: React.FunctionComponent = () => {
                                         height={DEFAULT_IMG_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
+                                        <Image
+                                            alt="detail-cover"
+                                            loading="lazy"
                                             style={{ opacity: 0.8 }}
+                                            preview={false}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
-                                            alt="detail-cover"
                                             src={item.picUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
 

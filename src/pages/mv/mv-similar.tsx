@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 import { VideoCameraOutlined, FieldTimeOutlined } from "@ant-design/icons";
 
 import StyledDesc from "../../components/detail/StyledDesc";
@@ -79,12 +79,15 @@ const MvSimilar: React.FunctionComponent<IProps> = (props: IProps) => {
                                             height={DEFAULT_MV_SMALL_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
-                                                style={{ opacity: 0.85 }}
+                                            <Image
+                                                alt="detail-cover"
+                                                loading="lazy"
+                                                style={{ opacity: 0.8 }}
+                                                preview={false}
                                                 width={DEFAULT_MV_SMALL_WIDTH}
                                                 height={DEFAULT_MV_SMALL_HEIGHT}
-                                                alt="detail-cover"
                                                 src={item.cover}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>

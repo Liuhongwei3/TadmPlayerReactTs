@@ -36,11 +36,13 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             render: (data: Song) => (
                 <Avatar
                     src={
-                        <LazyLoad height={50} placeholder={<LoadingImg />}>
+                        <LazyLoad height={32} placeholder={<LoadingImg />}>
                             <Image
-                                width={50}
-                                height={50}
+                                alt="album-cover"
+                                loading="lazy"
+                                style={{ opacity: 0.8 }}
                                 src={data.al.picUrl}
+                                placeholder={<LoadingImg />}
                             />
                         </LazyLoad>
                     }
@@ -65,7 +67,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 ) : (
                     data.ar.map((ar) => (
                         <Link key={ar.id} to={`/singer/${ar.id}`}>
-                            {ar.name} / 
+                            {ar.name} /
                         </Link>
                     ))
                 );

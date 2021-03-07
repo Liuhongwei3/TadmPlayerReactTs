@@ -9,7 +9,7 @@ interface IProps {
 const LoadingImg: React.FC = () => {
     return (
         <img
-            style={{ backgroundColor: "transparent" }}
+            style={{ backgroundColor: "transparent", opacity: 0.7 }}
             width="100%"
             height="100%"
             alt="loading-cover"

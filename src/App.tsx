@@ -35,10 +35,16 @@ const App: React.FunctionComponent = () => {
     return (
         <Router>
             <ConfigProvider locale={locale}>
-                <Layout>
+                <div style={{ display: "flex" }}>
                     <LeftSide />
 
-                    <Layout style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
+                    <div
+                        style={{
+                            backgroundColor: "rgba(0, 0, 0, 0.2)",
+                            width: "calc(100vw - 80px)",
+                            marginLeft: 80,
+                        }}
+                    >
                         <ContentHeader changeLocale={changeLocale} />
 
                         <StyledBg>
@@ -49,12 +55,12 @@ const App: React.FunctionComponent = () => {
                             <Divider />
                             <Footer />
                         </StyledBg>
-                    </Layout>
+                    </div>
 
                     <BackTop>
                         <UpSquareTwoTone style={{ fontSize: 28 }} />
                     </BackTop>
-                </Layout>
+                </div>
             </ConfigProvider>
         </Router>
     );

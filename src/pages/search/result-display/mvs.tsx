@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty } from "antd";
+import { Empty, Image } from "antd";
 import { VideoCameraOutlined } from "@ant-design/icons";
 
 import StyledCount from "../../../components/detail/StyledCount";
@@ -52,12 +52,15 @@ const Mvs: React.FC<IProps> = (props: IProps) => {
                                     height={DEFAULT_MV_SMALL_HEIGHT}
                                     placeholder={<LoadingImg />}
                                 >
-                                    <img
-                                        style={{ opacity: 0.6 }}
+                                    <Image
+                                        alt="mv-cover"
+                                        loading="lazy"
+                                        style={{ opacity: 0.8 }}
+                                        preview={false}
                                         width={DEFAULT_MV_SMALL_WIDTH}
                                         height={DEFAULT_MV_SMALL_HEIGHT}
-                                        alt="mv-cover"
                                         src={item.cover}
+                                        placeholder={<LoadingImg />}
                                     />
                                 </LazyLoad>
                                 <StyledCount>

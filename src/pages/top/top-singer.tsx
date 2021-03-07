@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Button, Empty, Radio, Spin } from "antd";
+import { Button, Empty, Radio, Spin, Image } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import StyledItem from "../../components/detail/StyledItem";
@@ -116,12 +116,15 @@ const TopSinger: React.FunctionComponent = () => {
                                             height={100}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
-                                                style={{ opacity: 0.7 }}
+                                            <Image
+                                                alt="detail-cover"
+                                                loading="lazy"
+                                                style={{ opacity: 0.8 }}
+                                                preview={false}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
-                                                alt="detail-cover"
                                                 src={item.picUrl}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>

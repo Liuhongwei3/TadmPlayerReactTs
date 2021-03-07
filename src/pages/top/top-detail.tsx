@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Image } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
@@ -13,7 +13,10 @@ import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
 import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 
 const TopDetail: React.FunctionComponent = () => {
     const history = useHistory();
@@ -74,12 +77,15 @@ const TopDetail: React.FunctionComponent = () => {
                                         height={100}
                                         placeholder={<LoadingImg />}
                                     >
-                                        <img
+                                        <Image
+                                            alt="detail-cover"
+                                            loading="lazy"
                                             style={{ opacity: 0.8 }}
+                                            preview={false}
                                             width={DEFAULT_IMG_WIDTH}
                                             height={DEFAULT_IMG_HEIGHT}
-                                            alt="detail-cover"
                                             src={item.coverImgUrl}
+                                            placeholder={<LoadingImg />}
                                         />
                                     </LazyLoad>
                                     <StyledCount>

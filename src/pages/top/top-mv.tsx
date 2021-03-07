@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Button, Empty, Radio, Spin } from "antd";
+import { Button, Empty, Radio, Spin, Image } from "antd";
 import { VideoCameraOutlined } from "@ant-design/icons";
 
 import StyledItem from "../../components/detail/StyledItem";
@@ -112,17 +112,19 @@ const TopMv: React.FunctionComponent = () => {
                                             position: "relative",
                                         }}
                                     >
-                                        {/* <LoadingImg src={item.cover} /> */}
                                         <LazyLoad
                                             height={DEFAULT_MV_SMALL_WIDTH}
                                             placeholder={<LoadingImg />}
                                         >
-                                            <img
-                                                style={{ opacity: 0.75 }}
+                                            <Image
+                                                alt="mv-cover"
+                                                loading="lazy"
+                                                style={{ opacity: 0.8 }}
+                                                preview={false}
                                                 width={DEFAULT_MV_SMALL_WIDTH}
                                                 height={DEFAULT_MV_SMALL_HEIGHT}
-                                                alt="mv-cover"
                                                 src={item.cover}
+                                                placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>
                                         <StyledCount>
