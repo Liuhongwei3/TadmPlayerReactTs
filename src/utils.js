@@ -1,4 +1,5 @@
 import { message } from "antd";
+import { IEventTypeText } from "./pages/enums";
 
 export function toTop() {
     document.documentElement.scrollTop = document.body.scrollTop = 0;
@@ -72,7 +73,7 @@ export function timeFormat(timeIn = 0) {
 }
 
 export function countFormat(value) {
-    if (!value) return "";
+    if (!value) return "暂无";
 
     if (value < 1000) {
         return value;
@@ -178,62 +179,10 @@ export function uniqueId(arr) {
 }
 
 export function getEventType(str = 0) {
-    // 18 分享单曲
-    // 19 分享专辑
-    // 17、28 分享电台节目
-    // 22 转发
-    // 39 发布视频
-    // 13 分享歌单
-    // 24 分享专栏文章
-    // 41、21 分享视频
-    // 35 发布动态
     if (str === 0) return "";
-    switch (str) {
-        case 18: {
-            str = "分享单曲";
-            break;
-        }
-        case 19: {
-            str = "分享专辑";
-            break;
-        }
-        case 17:
-        case 28: {
-            str = "分享电台节目";
-            break;
-        }
-        case 22: {
-            str = "转发";
-            break;
-        }
-        case 39: {
-            str = "发布视频";
-            break;
-        }
-        case 35: {
-            str = "发布动态";
-            break;
-        }
-        case 13: {
-            str = "分享歌单";
-            break;
-        }
-        case 24: {
-            str = "分享专栏文章";
-            break;
-        }
-        case 21: {
-            str = "分享 MV";
-            break;
-        }
-        case 41: {
-            str = "分享视频";
-            break;
-        }
-        default: {
-            str = "";
-            break;
-        }
+
+    if (str) {
+        return IEventTypeText[+str];
     }
     return str;
 }

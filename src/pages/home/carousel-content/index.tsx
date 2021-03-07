@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Carousel, Tag } from "antd";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
@@ -7,6 +8,96 @@ import req from "../../../api/req";
 import { IBanner } from "../type";
 import { CarouselRef } from "antd/lib/carousel";
 import { notify } from "../../../utils";
+import { ETartgetType } from "../../enums";
+
+const CarouselContent: React.FunctionComponent = () => {
+    const history = useHistory();
+    const [currentSlide, setCurrentSlide] = React.useState<number>(0);
+    const [banners, setBanners] = React.useState<Array<IBanner>>([]);
+    const imgRef = React.useRef<CarouselRef | null>(null);
+
+    const getBanners = React.useCallback(() => {
+        req.netease
+            .getBanner()
+            .then((res) => {
+                setBanners(res.banners);
+            })
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载轮播图数据失败"
+                )
+            );
+    }, []);
+
+    React.useEffect(() => {
+        getBanners();
+    }, [getBanners]);
+
+    const handleClickItem = React.useCallback(
+        (item: IBanner) => {
+            if (!item.targetId && !item.url) return;
+
+            switch (item.targetType) {
+                case ETartgetType.SONG:
+                    notify("warning", "该功能暂未开放");
+                    break;
+                case ETartgetType.ALBUM:
+                    history.push(`/album/${item.targetId}`);
+                    break;
+                case ETartgetType.JUMP:
+                    window.open(item.url);
+                    break;
+                default:
+                    console.log(item.targetType);
+                    notify("warning", "该功能暂未开放");
+                    break;
+            }
+        },
+        [history]
+    );
+
+    return banners && banners.length ? (
+        <StyledCarousel
+            backImg={
+                banners[currentSlide] ? banners[currentSlide].imageUrl : null
+            }
+        >
+            <Carousel
+                effect={"fade"}
+                autoplay={true}
+                autoplaySpeed={5000}
+                ref={imgRef}
+                beforeChange={(currentSlide, nextSlide) =>
+                    setCurrentSlide(nextSlide)
+                }
+            >
+                {banners.map((item: IBanner) => {
+                    return (
+                        <StyledCarouselItem
+                            key={item.scm}
+                            onClick={() => handleClickItem(item)}
+                        >
+                            <StyledImage
+                                alt="banner-cover"
+                                src={item.imageUrl}
+                            />
+                            <StyledTag color={item.titleColor}>
+                                {item.typeTitle}
+                            </StyledTag>
+                        </StyledCarouselItem>
+                    );
+                })}
+            </Carousel>
+            <StyledLeftCircleOutlined onClick={() => imgRef.current?.prev()} />
+            <StyledRightCircleOutlined onClick={() => imgRef.current?.next()} />
+        </StyledCarousel>
+    ) : null;
+};
+
+export default CarouselContent;
 
 const StyledCarousel = styled.div`
     width: 100%;
@@ -66,6 +157,10 @@ const StyledLeftCircleOutlined = styled(LeftCircleOutlined)`
     position: absolute;
     top: 45%;
     left: 6%;
+
+    @media screen and (max-width: 768px) {
+        font-size: 20px;
+    }
 `;
 
 const StyledRightCircleOutlined = styled(RightCircleOutlined)`
@@ -74,66 +169,8 @@ const StyledRightCircleOutlined = styled(RightCircleOutlined)`
     position: absolute;
     top: 45%;
     right: 6%;
+
+    @media screen and (max-width: 768px) {
+        font-size: 20px;
+    }
 `;
-
-const CarouselContent: React.FunctionComponent = () => {
-    const [currentSlide, setCurrentSlide] = React.useState<number>(0);
-    const [banners, setBanners] = React.useState<Array<IBanner>>([]);
-    const imgRef = React.useRef<CarouselRef | null>(null);
-
-    const getBanners = React.useCallback(() => {
-        req.netease
-            .getBanner()
-            .then((res) => {
-                setBanners(res.banners);
-            })
-            .catch((e) =>
-                notify(
-                    "error",
-                    (e.response && e.response.statusText) ||
-                        e.message ||
-                        "加载轮播图数据失败"
-                )
-            );
-    }, []);
-
-    React.useEffect(() => {
-        getBanners();
-    }, [getBanners]);
-
-    return banners.length ? (
-        <StyledCarousel
-            backImg={
-                banners[currentSlide] ? banners[currentSlide].imageUrl : null
-            }
-        >
-            <Carousel
-                effect={"fade"}
-                autoplay={true}
-                autoplaySpeed={5000}
-                ref={imgRef}
-                beforeChange={(currentSlide, nextSlide) =>
-                    setCurrentSlide(nextSlide)
-                }
-            >
-                {banners.map((item: IBanner) => {
-                    return (
-                        <StyledCarouselItem key={item.scm}>
-                            <StyledImage
-                                alt="banner-cover"
-                                src={item.imageUrl}
-                            />
-                            <StyledTag color={item.titleColor}>
-                                {item.typeTitle}
-                            </StyledTag>
-                        </StyledCarouselItem>
-                    );
-                })}
-            </Carousel>
-            <StyledLeftCircleOutlined onClick={() => imgRef.current?.prev()} />
-            <StyledRightCircleOutlined onClick={() => imgRef.current?.next()} />
-        </StyledCarousel>
-    ) : null;
-};
-
-export default CarouselContent;

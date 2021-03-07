@@ -55,7 +55,9 @@ const SingerDesc: React.FunctionComponent<IProps> = (props: IProps) => {
                                     lineHeight: 2,
                                 }}
                                 dangerouslySetInnerHTML={{
-                                    __html: intro.txt.replaceAll("\n", "<br/>"),
+                                    __html: intro.txt
+                                        ? intro.txt.replaceAll("\n", "<br/>")
+                                        : "",
                                 }}
                             ></div>
                         </div>

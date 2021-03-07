@@ -7,14 +7,18 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import { countFormat, dateFormat, notify, toTop } from "../../utils";
-import { Artist, ESingerType, List } from "./type";
+import { Artist, List } from "./type";
 import req from "../../api/req";
 import LoadingImg from "../../components/LoadingImg";
 import StyledName from "../../components/detail/StyledName";
 import StyledCount from "../../components/detail/StyledCount";
 import StyledDesc from "../../components/detail/StyledDesc";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
+import { ESingerType } from "../enums";
 
 const INIT_LIMIT = 24;
 const Types = [

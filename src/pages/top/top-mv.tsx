@@ -112,6 +112,7 @@ const TopMv: React.FunctionComponent = () => {
                                             position: "relative",
                                         }}
                                     >
+                                        {/* <LoadingImg src={item.cover} /> */}
                                         <LazyLoad
                                             height={DEFAULT_MV_SMALL_WIDTH}
                                             placeholder={<LoadingImg />}

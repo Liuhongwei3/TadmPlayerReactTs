@@ -1,16 +1,3 @@
-export enum ESearchType {
-    SONG = 1,
-    ALBUM = 10,
-    SINGER = 100,
-    DETAIL = 1000,
-    USER = 1002,
-    MV = 1004,
-    LYRIC = 1006,
-    DJ_RADIO = 1009,
-    VIDEO = 1014,
-    ALL = 1018,
-}
-
 export interface Hot {
     first: string;
     second: number;

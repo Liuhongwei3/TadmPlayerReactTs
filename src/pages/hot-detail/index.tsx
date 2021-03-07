@@ -14,7 +14,10 @@ import StyledDesc from "../../components/detail/StyledDesc";
 import StyledName from "../../components/detail/StyledName";
 import LoadingImg from "../../components/LoadingImg";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_IMG_HEIGHT, DEFAULT_IMG_WIDTH } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_IMG_HEIGHT,
+    DEFAULT_IMG_WIDTH,
+} from "../../web-config/defaultConfig";
 import HotDetailCats from "./hot-detail-cats";
 
 const INIT_LIMIT = 24;
@@ -85,7 +88,10 @@ const HotDetail: React.FunctionComponent = () => {
                                             position: "relative",
                                         }}
                                     >
-                                        <LazyLoad placeholder={<LoadingImg />}>
+                                        <LazyLoad
+                                            height={DEFAULT_IMG_HEIGHT}
+                                            placeholder={<LoadingImg />}
+                                        >
                                             <img
                                                 style={{ opacity: 0.65 }}
                                                 width={DEFAULT_IMG_WIDTH}

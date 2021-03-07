@@ -10,9 +10,6 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.7.3",
     "antd": "^4.12.3",
     "axios": "^0.21.1",
     "axios-extensions": "^3.1.3",
@@ -29,6 +26,9 @@
     "web-vitals": "^1.1.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.3",
     "@types/dplayer": "^1.25.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.31",

@@ -1,10 +1,5 @@
 import api from "../index";
-import {
-    ESingerType,
-    ITopListRes,
-    ITopMvRes,
-    ITopSingerRes,
-} from "../../pages/top/type";
+import { ITopListRes, ITopMvRes, ITopSingerRes } from "../../pages/top/type";
 import { IHotDetailCats, IHotdetailRes } from "../../pages/hot-detail/type";
 import {
     IBannerRes,
@@ -29,7 +24,6 @@ import {
 import { IAlbumDetailCount, IAlbumRes } from "../../pages/album/type";
 import { ICommentsRes } from "../../pages/commType";
 import {
-    EOrderType,
     ISimiSingersRes,
     ISingerAlbumsRes,
     ISingerDesc,
@@ -39,12 +33,12 @@ import {
 } from "../../pages/singer/type";
 import { IMvDetailRes, IMvUrlRes, ISimiMvRes } from "../../pages/mv/type";
 import {
-    ESearchType,
     IHotSearchDetailRes,
     IHotSearchRes,
     ISearchs,
     ISearchSuggestRes,
 } from "../../pages/search/type";
+import { EOrderType, ESearchType, ESingerType } from "../../pages/enums";
 
 // -----------------------------------------------------
 // 首页

@@ -128,11 +128,6 @@ export interface ISongRes {
     code: number;
 }
 
-export enum EOrderType {
-    HOT = "hot",
-    TIME = "time",
-}
-
 export interface HotAlbum {
     songs: any[];
     paid: boolean;

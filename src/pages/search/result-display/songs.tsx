@@ -83,6 +83,7 @@ const Songs: React.FC<IProps> = (props: IProps) => {
                 rowKey="id"
                 bordered={false}
                 pagination={false}
+                scroll={{ x: true }}
                 columns={columns}
                 dataSource={result.songs.map((item, index) => {
                     return { ...item, index: index + 1 };

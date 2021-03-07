@@ -11,7 +11,7 @@ const baseURL =
 
 const axiosInst = axios.create({
     baseURL,
-    timeout: 10000,
+    timeout: 15000,
     withCredentials: true, // 允许携带cookie
     // do cache
     adapter: cacheAdapterEnhancer(axios.defaults.adapter!, {

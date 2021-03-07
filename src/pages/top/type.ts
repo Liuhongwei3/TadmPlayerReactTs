@@ -21,14 +21,6 @@ export interface ITopList {
     description: string;
 }
 
-// type : 地区 1: 华语 2: 欧美 3: 韩国 4: 日本
-export enum ESingerType {
-    CHINESE = 1,
-    ENGLISH,
-    KOREAN,
-    JAPANESE,
-}
-
 export interface Artist {
 	name: string;
 	id: number;

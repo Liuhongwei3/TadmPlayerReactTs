@@ -5,7 +5,8 @@ import { ColumnsType } from "antd/es/table";
 
 import req from "../../api/req";
 import { notify, timeFormat, toTop } from "../../utils";
-import { EOrderType, ISong } from "./type";
+import { ISong } from "./type";
+import { EOrderType } from "../enums";
 
 interface IProps {
     singerId: number;

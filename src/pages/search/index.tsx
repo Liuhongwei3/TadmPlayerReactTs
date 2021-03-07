@@ -10,10 +10,11 @@ import Details from "./result-display/details";
 import Singers from "./result-display/singers";
 import Songs from "./result-display/songs";
 import SearchSuggest from "./search-suggest";
-import { ESearchType, ISearchs } from "./type";
+import { ISearchs } from "./type";
 import Users from "./result-display/users";
 import Mvs from "./result-display/mvs";
 import HandleMore from "./result-display/handleMore";
+import { ESearchType } from "../enums";
 
 const SEARCH_THROTTLE_TIME = 500;
 const LIMIT = 16;
