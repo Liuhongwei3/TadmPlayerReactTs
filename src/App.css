@@ -123,6 +123,7 @@ td {
 
 .ant-svg-scale {
     transform: scale(1.4);
+    display: inline-block;
     margin-left: 5px;
 }
 
@@ -133,6 +134,14 @@ td {
 .ant-radio-button-wrapper {
     color: wheat;
     background-color: #878787;
+}
+
+.ant-anchor-wrapper {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.ant-anchor-link-title {
+    color: #fff;
 }
 
 @media screen and (max-width: 768px) {

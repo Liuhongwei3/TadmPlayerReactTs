@@ -6,7 +6,7 @@ const StyledDesc = styled.div`
     bottom: 0;
     left: 0;
     padding-left: 6px;
-    line-height: 24px;
+    line-height: 2;
     font-size: 14px;
     color:  rgba(255, 255, 255, 0.7);
     background: rgba(0, 0, 0, 0.4);

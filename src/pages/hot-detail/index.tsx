@@ -6,7 +6,7 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import req from "../../api/req";
 import { IHotDetail } from "./type";
-import { countFormat, dateFormat, notify, toTop, uniqueId } from "../../utils";
+import { countFormat, notify, toTop, uniqueId } from "../../utils";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledItem from "../../components/detail/StyledItem";
 import StyledCount from "../../components/detail/StyledCount";
@@ -109,9 +109,6 @@ const HotDetail: React.FunctionComponent = () => {
                                         </StyledCount>
                                         <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                             <div>{`By ${item.creator.nickname}`}</div>
-                                            <div>{`${dateFormat(
-                                                item.updateTime
-                                            )} 更新`}</div>
                                         </StyledDesc>
                                     </div>
 

@@ -40,6 +40,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                             <Image
                                 alt="album-cover"
                                 loading="lazy"
+                                preview={false}
                                 style={{ opacity: 0.8 }}
                                 src={data.al.picUrl}
                                 placeholder={<LoadingImg />}

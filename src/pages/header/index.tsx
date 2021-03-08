@@ -2,6 +2,23 @@ import React from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import styled, { keyframes } from "styled-components";
 
+interface IProps {
+    changeLocale: () => void;
+}
+
+const ContentHeader: React.FunctionComponent<IProps> = (props: IProps) => {
+    const { changeLocale } = props;
+
+    return (
+        <StyledHeader>
+            Tadm-Player-React ^-^
+            <StyledSettingOutlined onClick={changeLocale} />
+        </StyledHeader>
+    );
+};
+
+export default ContentHeader;
+
 const hue = keyframes`
     from {
         filter: hue-rotate(0deg);
@@ -10,10 +27,20 @@ const hue = keyframes`
         filter: hue-rotate(360deg);
     }
 `;
+
+const shine = keyframes`
+	0% {
+		background-position: 50% 0;
+	}
+	100% {
+		background-position: -190% 0;
+	}
+`;
+
 const StyledHeader = styled.header`
     color: #ff4040;
     min-height: 50px;
-    font-size: 18px;
+    font-size: 24px;
     font-family: STXingkai;
     font-weight: 700;
     display: flex;
@@ -33,6 +60,42 @@ const StyledHeader = styled.header`
         #d869d8
     );
     animation: ${hue} 10s ease-out infinite;
+
+    &::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(
+            120deg,
+            transparent 0%,
+            transparent 6rem,
+            white 11rem,
+            transparent 11.15rem,
+            transparent 15rem,
+            rgba(255, 255, 255, 0.3) 20rem,
+            transparent 25rem,
+            transparent 27rem,
+            rgba(255, 255, 255, 0.6) 32rem,
+            white 33rem,
+            rgba(255, 255, 255, 0.3) 33.15rem,
+            transparent 38rem,
+            transparent 40rem,
+            rgba(255, 255, 255, 0.3) 45rem,
+            transparent 50rem,
+            transparent 100%
+        );
+        background-clip: text;
+        background-size: 190% 100%;
+        background-repeat: no-repeat;
+        animation: ${shine} 5s infinite linear alternate;
+    }
+
+    @media screen and (max-width: 768px) {
+        font-size: 18px;
+    }
 `;
 
 const StyledSettingOutlined = styled(SettingOutlined)`
@@ -42,20 +105,3 @@ const StyledSettingOutlined = styled(SettingOutlined)`
     right: 5px;
     color: #fff;
 `;
-
-interface IProps {
-    changeLocale: () => void;
-}
-
-const ContentHeader: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { changeLocale } = props;
-
-    return (
-        <StyledHeader>
-            Tadm-Player-React ^-^
-            <StyledSettingOutlined onClick={changeLocale} />
-        </StyledHeader>
-    );
-};
-
-export default ContentHeader;

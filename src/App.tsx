@@ -41,7 +41,7 @@ const App: React.FunctionComponent = () => {
                     <div
                         style={{
                             backgroundColor: "rgba(0, 0, 0, 0.2)",
-                            width: "calc(100vw - 80px)",
+                            width: "calc(100vw - 86px)",
                             marginLeft: 80,
                         }}
                     >

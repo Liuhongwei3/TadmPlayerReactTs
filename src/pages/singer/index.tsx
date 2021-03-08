@@ -25,7 +25,10 @@ import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_RANDOM_COLORS, DEFAULT_SINGER_ID } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_RANDOM_COLORS,
+    DEFAULT_SINGER_ID,
+} from "../../web-config/defaultConfig";
 import { ISingerRes } from "./type";
 import SingerSongs from "./singer-songs";
 import SingerHotSongs from "./singer-hot-songs";
@@ -137,6 +140,7 @@ const Singer: React.FunctionComponent = () => {
                         {singerInfo.artist.accountId && (
                             <Button
                                 type="primary"
+                                style={{ marginRight: 5 }}
                                 onClick={() =>
                                     toDetail(singerInfo.artist.accountId)
                                 }

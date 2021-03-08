@@ -84,13 +84,10 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             render: (data: ISong) => (
                 <Avatar
                     src={
-                        <LazyLoad height={50} placeholder={<LoadingImg />}>
+                        <LazyLoad height={32} placeholder={<LoadingImg />}>
                             <Image
                                 alt="detail-cover"
                                 loading="lazy"
-                                preview={false}
-                                width={50}
-                                height={50}
                                 src={data.al.picUrl}
                                 placeholder={<LoadingImg />}
                             />
