@@ -3,8 +3,6 @@ import { HashRouter as Router } from "react-router-dom";
 import { ConfigProvider, BackTop, Divider, Layout } from "antd";
 import { UpSquareTwoTone } from "@ant-design/icons";
 import styled from "styled-components";
-import enUS from "antd/lib/locale/en_US";
-import zhCN from "antd/lib/locale/zh_CN";
 
 import "./App.css";
 
@@ -13,28 +11,16 @@ import ContentHeader from "./pages/header";
 import Footer from "./pages/footer";
 import Routers from "./routers";
 import { DEFAULT_BG_IMG } from "./web-config/defaultConfig";
+import { useStore } from "./hooks/useStore";
+import { observer } from "mobx-react-lite";
+import AudioControl from "./pages/audio";
 
-const StyledBg = styled.div`
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    background-image: url(${DEFAULT_BG_IMG});
-`;
-
-const StyledContent = styled(Layout.Content)`
-    background: rgba(0, 0, 0, 0.5);
-`;
-
-const App: React.FunctionComponent = () => {
-    const [locale, setLocale] = React.useState(zhCN);
-
-    const changeLocale = React.useCallback(() => {
-        setLocale(locale.locale === "zh-cn" ? enUS : zhCN);
-    }, [locale]);
+const App: React.FunctionComponent = observer(() => {
+    const store = useStore();
 
     return (
         <Router>
-            <ConfigProvider locale={locale}>
+            <ConfigProvider locale={store.locale}>
                 <div style={{ display: "flex" }}>
                     <LeftSide />
 
@@ -45,7 +31,7 @@ const App: React.FunctionComponent = () => {
                             marginLeft: 80,
                         }}
                     >
-                        <ContentHeader changeLocale={changeLocale} />
+                        <ContentHeader />
 
                         <StyledBg>
                             <StyledContent>
@@ -57,13 +43,26 @@ const App: React.FunctionComponent = () => {
                         </StyledBg>
                     </div>
 
+                    <AudioControl />
+
                     <BackTop>
-                        <UpSquareTwoTone style={{ fontSize: 28 }} />
+                        <UpSquareTwoTone style={{ fontSize: 32 }} />
                     </BackTop>
                 </div>
             </ConfigProvider>
         </Router>
     );
-};
+});
 
 export default App;
+
+const StyledBg = styled.div`
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-image: url(${DEFAULT_BG_IMG});
+`;
+
+const StyledContent = styled(Layout.Content)`
+    background: rgba(0, 0, 0, 0.5);
+`;

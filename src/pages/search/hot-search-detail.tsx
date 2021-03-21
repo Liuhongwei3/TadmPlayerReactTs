@@ -34,8 +34,8 @@ const HotSearchComp = (keyword: string) => {
                               </span>
                               {hotSearch.iconUrl && (
                                   <img
-                                      width={20}
-                                      height={20}
+                                      width={18}
+                                      height={18}
                                       alt="hot-search-icon"
                                       src={hotSearch.iconUrl}
                                   />

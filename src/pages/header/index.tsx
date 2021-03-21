@@ -1,23 +1,41 @@
 import React from "react";
-import { SettingOutlined } from "@ant-design/icons";
 import styled, { keyframes } from "styled-components";
+import { SettingOutlined } from "@ant-design/icons";
+import SettingModal from "./setting-modal";
+import TopMySelf from "./myself";
 
-interface IProps {
-    changeLocale: () => void;
-}
+const ContentHeader: React.FunctionComponent = () => {
+    const [isModalVisible, setIsModalVisible] = React.useState(false);
 
-const ContentHeader: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { changeLocale } = props;
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
 
     return (
         <StyledHeader>
-            Tadm-Player-React ^-^
-            <StyledSettingOutlined onClick={changeLocale} />
+            <StyledTitle>Tadm-Player-React ^-^</StyledTitle>
+
+            <TopMySelf />
+
+            <StyledSettingOutlined onClick={showModal} />
+            <SettingModal
+                isModalVisible={isModalVisible}
+                setIsModalVisible={setIsModalVisible}
+            />
         </StyledHeader>
     );
 };
 
 export default ContentHeader;
+
+const StyledSettingOutlined = styled(SettingOutlined)`
+    position: absolute;
+    z-index: 999;
+    top: 12px;
+    right: 5px;
+    color: #fff;
+    font-size: 22px;
+`;
 
 const hue = keyframes`
     from {
@@ -37,12 +55,15 @@ const shine = keyframes`
 	}
 `;
 
+const StyledTitle = styled.span`
+    font-family: STXingkai;
+    font-size: 24px;
+    font-weight: 700;
+`;
+
 const StyledHeader = styled.header`
     color: #ff4040;
     min-height: 50px;
-    font-size: 24px;
-    font-family: STXingkai;
-    font-weight: 700;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -96,12 +117,4 @@ const StyledHeader = styled.header`
     @media screen and (max-width: 768px) {
         font-size: 18px;
     }
-`;
-
-const StyledSettingOutlined = styled(SettingOutlined)`
-    position: absolute;
-    z-index: 999;
-    top: 15px;
-    right: 5px;
-    color: #fff;
 `;

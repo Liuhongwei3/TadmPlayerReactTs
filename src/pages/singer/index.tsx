@@ -10,6 +10,7 @@ import {
     Tabs,
     Tooltip,
     Button,
+    Typography,
 } from "antd";
 import {
     CustomerServiceOutlined,
@@ -194,7 +195,14 @@ const Singer: React.FunctionComponent = () => {
                         style={{ backgroundColor: "#a2a0a0d1", width: "75vw" }}
                     >
                         <Collapse.Panel header="歌手简介" key="description">
-                            <p>{singerInfo?.artist.briefDesc}</p>
+                            <Typography.Paragraph
+                                ellipsis={{
+                                    rows: 2,
+                                    expandable: true,
+                                }}
+                            >
+                                {singerInfo?.artist.briefDesc}
+                            </Typography.Paragraph>
                         </Collapse.Panel>
                     </Collapse>
 

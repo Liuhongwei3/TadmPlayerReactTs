@@ -1,11 +1,11 @@
 import React from "react";
 import { Layout, Typography } from "antd";
-import { HeartTwoTone } from "@ant-design/icons";
+import { GithubOutlined, HeartTwoTone } from "@ant-design/icons";
 import styled, { keyframes } from "styled-components";
 
 const Footer: React.FunctionComponent = () => {
     return (
-        <Layout.Footer style={{ textAlign: "center" }}>
+        <Layout.Footer style={{ textAlign: "center", marginBottom: 20 }}>
             <code>Welcome to Tadm-Player-React~</code>
             <div>本站不存储任何资源，相关版权均归所属版权方所有！</div>
             <div>
@@ -15,6 +15,7 @@ const Footer: React.FunctionComponent = () => {
                     href="https://github.com/Liuhongwei3"
                     target="_blank"
                 >
+                    <GithubOutlined />
                     Tadm(jingke)
                 </Typography.Link>
             </div>

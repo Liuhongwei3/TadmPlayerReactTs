@@ -1,7 +1,8 @@
 import api from "../index";
 
 const userLoginByPhone = (phone: string, password: string) => {
-    return api.get(`/login/cellphone?phone=${phone}&password=${password}`);
+    // ?phone=${phone}&password=${password}
+    return api.post(`/login/cellphone`, { phone, password });
 };
 
 const getUserRecomm = () => {

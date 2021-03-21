@@ -29,7 +29,10 @@ import { IUserDetail, MainAuthType } from "./type";
 import StyledDivider from "../../components/StyledDivider";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
-import { DEFAULT_RANDOM_COLORS, DEFAULT_USER_ID } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_RANDOM_COLORS,
+    DEFAULT_USER_ID,
+} from "../../web-config/defaultConfig";
 import UserPlaylist from "./user-playlist";
 import UserFollow from "./user-follow";
 import UserSex from "./user-sex";
@@ -168,7 +171,7 @@ const User: React.FunctionComponent = () => {
                         <Avatar
                             src={
                                 <LazyLoad
-                                    height={50}
+                                    height={32}
                                     placeholder={<LoadingImg />}
                                 >
                                     <Image src={userInfo.profile.avatarUrl} />
@@ -254,7 +257,14 @@ const User: React.FunctionComponent = () => {
                         style={{ backgroundColor: "#a2a0a0d1", width: "50vw" }}
                     >
                         <Collapse.Panel header="个人介绍" key="description">
-                            <p>{userInfo?.profile.signature}</p>
+                            <Typography.Paragraph
+                                ellipsis={{
+                                    rows: 2,
+                                    expandable: true,
+                                }}
+                            >
+                                {userInfo?.profile.signature}
+                            </Typography.Paragraph>
                         </Collapse.Panel>
                     </Collapse>
 

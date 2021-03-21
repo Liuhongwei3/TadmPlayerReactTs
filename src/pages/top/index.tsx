@@ -15,9 +15,10 @@ const Top: React.FunctionComponent = () => {
 
     return (
         <Tabs
-            style={{ padding: 6 }}
-            activeKey={activeKey}
+            size="large"
+            centered={true}
             defaultActiveKey="1"
+            activeKey={activeKey}
             onChange={(activeKey) => onTabChange(activeKey)}
         >
             <Tabs.TabPane tab={`歌单排行榜`} key="1">

@@ -133,6 +133,13 @@ const HotDetailCats: React.FunctionComponent<IProps> = (props: IProps) => {
                 <Popover
                     placement="bottomLeft"
                     trigger="click"
+                    color="#777"
+                    overlayStyle={{
+                        width: "66vw",
+                        height: "66vh",
+                        color: "white",
+                        overflowY: "scroll",
+                    }}
                     visible={visible}
                     title={
                         hotDetailCats ? (
@@ -169,3 +176,8 @@ const HotDetailCats: React.FunctionComponent<IProps> = (props: IProps) => {
 };
 
 export default HotDetailCats;
+
+// .ant-popover-arrow {
+//     border-top-color: rgb(145, 144, 144) !important;
+//     border-left-color: rgb(145, 144, 144) !important;
+// }
