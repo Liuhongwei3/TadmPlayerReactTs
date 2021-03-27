@@ -2,7 +2,17 @@ import React from "react";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { Avatar, Button, Form, Image, Input, Modal, Popconfirm } from "antd";
+import {
+    Avatar,
+    Button,
+    Form,
+    Image,
+    Input,
+    InputNumber,
+    Modal,
+    Popconfirm,
+    Typography,
+} from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useStore } from "../../hooks/useStore";
 import reqs from "../../api/req";
@@ -13,24 +23,43 @@ interface IForm {
     password: string;
 }
 
+interface IFormCode {
+    phone: number;
+    code: number;
+}
+
 const TopMySelf: React.FC = observer(() => {
     const store = useStore();
     const history = useHistory();
     const [form] = Form.useForm();
+    const [form1] = Form.useForm();
 
     const [loginModal, setLoginModal] = React.useState<boolean>(false);
+    const [qrModal, setQrModal] = React.useState<boolean>(false);
+    const [codeModal, setCodeModal] = React.useState<boolean>(false);
+    const [qrImg, setQrImg] = React.useState<string>("");
+    const [qrStatus, setQrStatus] = React.useState<string>("请扫码");
+
+    React.useEffect(() => {
+        const userId = window.sessionStorage.getItem("userId");
+        const nickname = window.sessionStorage.getItem("nickname");
+        const avatarUrl = window.sessionStorage.getItem("avatarUrl");
+
+        if (userId && nickname && avatarUrl) {
+            store.updateUserInfo(+userId, nickname, avatarUrl);
+        }
+    }, [store]);
 
     const onFinish = (values: IForm) => {
         reqs.neteaseLogined
             .userLoginByPhone(values.phone, values.password)
             .then((res) => {
                 if (res.code === 200) {
-                    store.updateUserInfo(
+                    logSuccess(
                         res.profile.userId,
                         res.profile.nickname,
                         res.profile.avatarUrl
                     );
-                    notify("success", "登录成功！");
                 } else {
                     throw res;
                 }
@@ -46,11 +75,102 @@ const TopMySelf: React.FC = observer(() => {
             });
     };
 
+    const onFinish1 = (values: IFormCode) => {
+        reqs.neteaseLogined
+            .checkCodeByPhone(values.phone, values.code)
+            .then((res) => {
+                if (res.code === 200) {
+                    notify("success", "登录成功！");
+                } else {
+                    throw res;
+                }
+            })
+            .catch((e) => {
+                notify("error", e || e.message || "验证码错误！");
+            })
+            .finally(() => {
+                setCodeModal(false);
+            });
+    };
+
     const onReset = () => {
         form.resetFields();
     };
 
+    const sendCode = React.useCallback(() => {
+        const phone = form1.getFieldValue("phone");
+        if (phone) {
+            reqs.neteaseLogined.sendCodeByPhone(phone);
+        } else {
+            notify("warning", "请先输入正确的手机号");
+        }
+    }, [form1]);
+
+    const getQrImg = React.useCallback(async () => {
+        let key = "";
+        try {
+            const keyRes = await reqs.neteaseLogined.getLoginQRKey();
+            key = keyRes.data.unikey;
+            const imgRes = await reqs.neteaseLogined.getLoginQR(key);
+
+            setQrImg(imgRes.data.qrimg);
+            return key;
+        } catch (e) {
+            notify("error", e.message || "获取二维码 Key失败");
+        }
+    }, []);
+
+    const logSuccess = React.useCallback(
+        (userId: number, nickname: string, avatarUrl: string) => {
+            store.updateUserInfo(userId, nickname, avatarUrl);
+            window.sessionStorage.setItem("userId", String(userId));
+            window.sessionStorage.setItem("nickname", nickname);
+            window.sessionStorage.setItem("avatarUrl", avatarUrl);
+            notify("success", "登录成功！");
+        },
+        [store]
+    );
+
+    React.useEffect(() => {
+        let timer: NodeJS.Timeout;
+
+        if (qrModal) {
+            getQrImg().then((qrKey) => {
+                timer = setInterval(() => {
+                    console.log(qrModal);
+                    reqs.neteaseLogined.checkQRStatus(qrKey!).then((res) => {
+                        const { code, message } = res;
+
+                        setQrStatus(message);
+                        // code -- 801 -- 等待扫码
+                        if (code === 800) {
+                            clearInterval(timer);
+                            notify("warning", "二维码已过期,请重新获取");
+                        }
+                        if (code === 803) {
+                            clearInterval(timer);
+                            reqs.neteaseLogined.loginStatus().then((res) => {
+                                logSuccess(
+                                    res.data.profile.userId,
+                                    res.data.profile.nickname,
+                                    res.data.profile.avatarUrl
+                                );
+                            });
+                            setQrModal(false);
+                        }
+                    });
+                }, 3000);
+            });
+        }
+
+        // cleanup
+        return () => {
+            clearInterval(timer);
+        };
+    }, [getQrImg, logSuccess, qrModal, store]);
+
     const logOut = React.useCallback(() => {
+        window.sessionStorage.clear();
         store.updateUserInfo(0, "", "");
     }, [store]);
 
@@ -91,8 +211,24 @@ const TopMySelf: React.FC = observer(() => {
                 </StyledContent>
             )}
 
-            <Modal title="登录" visible={loginModal} footer={null}>
-                <Form preserve={false} form={form} onFinish={onFinish}>
+            <Modal
+                title="手机号密码登录"
+                visible={loginModal}
+                onCancel={() => setLoginModal(false)}
+                onOk={() => {
+                    form.validateFields()
+                        .then((values) => {
+                            form.resetFields();
+                            setLoginModal(false);
+                            onFinish(values);
+                        })
+                        .catch((info) => {
+                            console.warn("Validate Failed:", info);
+                            notify("warning", "请输入正确格式的内容");
+                        });
+                }}
+            >
+                <Form preserve={false} form={form}>
                     <Form.Item
                         label="手机号"
                         name="phone"
@@ -125,22 +261,125 @@ const TopMySelf: React.FC = observer(() => {
                                 style={{ marginRight: 25 }}
                                 htmlType="button"
                                 type="link"
-                                onClick={onReset}
+                                onClick={() => {
+                                    setLoginModal(false);
+                                    setCodeModal(false);
+                                    setQrModal(true);
+                                }}
                             >
-                                重置
+                                二维码登录
                             </Button>
                             <Button
                                 style={{ marginRight: 25 }}
                                 htmlType="button"
-                                onClick={() => setLoginModal(false)}
+                                type="link"
+                                onClick={() => {
+                                    setLoginModal(false);
+                                    setQrModal(false);
+                                    setCodeModal(true);
+                                }}
                             >
-                                取消
+                                手机验证码登录
                             </Button>
-                            <Button type="primary" htmlType="submit">
-                                登录
+                            <Button
+                                style={{ marginRight: 25 }}
+                                htmlType="button"
+                                type="link"
+                                onClick={onReset}
+                            >
+                                重置
                             </Button>
                         </StyledContent>
                     </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal
+                title="二维码登录"
+                width={360}
+                visible={qrModal}
+                onCancel={() => setQrModal(false)}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                    }}
+                >
+                    <div>
+                        当前状态：
+                        <span style={{ color: "#de87ab" }}>{qrStatus}</span>
+                    </div>
+                    <Image src={qrImg} preview={false} />
+                    <div>请使用 网易云音乐APP 扫码登录</div>
+                    <Button
+                        style={{ marginRight: 25 }}
+                        htmlType="button"
+                        type="link"
+                        onClick={() => {
+                            setQrModal(false);
+                            setLoginModal(true);
+                        }}
+                    >
+                        手机号登录
+                    </Button>
+                </div>
+            </Modal>
+
+            <Modal
+                title="手机验证码登录"
+                width={400}
+                visible={codeModal}
+                onCancel={() => setCodeModal(false)}
+                onOk={() => {
+                    form1
+                        .validateFields()
+                        .then((values) => {
+                            form1.resetFields();
+                            setCodeModal(false);
+                            onFinish1(values);
+                        })
+                        .catch((info) => {
+                            console.warn("Validate Failed:", info);
+                            notify("warning", "请输入正确格式的内容");
+                        });
+                }}
+            >
+                <Form preserve={false} form={form1}>
+                    <Form.Item
+                        label="手机号"
+                        name="phone"
+                        rules={[
+                            {
+                                required: true,
+                                message: "请输入您的手机号!",
+                            },
+                        ]}
+                    >
+                        <InputNumber style={{ width: 200 }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="验证码"
+                        name="code"
+                        rules={[
+                            {
+                                required: true,
+                                message: "请输入验证码!",
+                            },
+                        ]}
+                    >
+                        <InputNumber style={{ width: 120 }} />
+                    </Form.Item>
+                    <Button type="primary" onClick={sendCode}>
+                        发送验证码
+                    </Button>
+
+                    <Typography.Title level={5}>
+                        Tips: 暂时未实现验证码登录，敬请期待！
+                    </Typography.Title>
                 </Form>
             </Modal>
         </StyledTopMy>
@@ -151,7 +390,7 @@ export default TopMySelf;
 
 const StyledContent = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 `;
 
 const StyledTopMy = styled.div`

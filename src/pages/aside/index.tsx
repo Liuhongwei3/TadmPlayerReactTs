@@ -12,14 +12,7 @@ import {
     UserSwitchOutlined,
     SearchOutlined,
 } from "@ant-design/icons";
-import {
-    DEFAULT_ALBUM_ID,
-    DEFAULT_AVATAR,
-    DEFAULT_DETAIL_ID,
-    DEFAULT_MV_ID,
-    DEFAULT_SINGER_ID,
-    DEFAULT_USER_ID,
-} from "../../web-config/defaultConfig";
+import { DEFAULT_AVATAR } from "../../web-config/defaultConfig";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../hooks/useStore";
 
@@ -63,19 +56,19 @@ const LeftSide: React.FunctionComponent = observer(() => {
                     <Link to="/hotDetail">热门歌单</Link>
                 </Menu.Item>
                 <Menu.Item key="detail" icon={<BarsOutlined />}>
-                    <Link to={`/detail/${DEFAULT_DETAIL_ID}`}>歌单详情</Link>
+                    <Link to={`/detail/${store.curDetailId}`}>歌单详情</Link>
                 </Menu.Item>
                 <Menu.Item key="album" icon={<AppstoreOutlined />}>
-                    <Link to={`/album/${DEFAULT_ALBUM_ID}`}>专辑</Link>
+                    <Link to={`/album/${store.curAlbumId}`}>专辑</Link>
                 </Menu.Item>
                 <Menu.Item key="singer" icon={<UserOutlined />}>
-                    <Link to={`/singer/${DEFAULT_SINGER_ID}`}>歌手</Link>
+                    <Link to={`/singer/${store.curSingerId}`}>歌手</Link>
                 </Menu.Item>
                 <Menu.Item key="user" icon={<UserSwitchOutlined />}>
-                    <Link to={`/user/${DEFAULT_USER_ID}`}>用户</Link>
+                    <Link to={`/user/${store.curUserId}`}>用户</Link>
                 </Menu.Item>
                 <Menu.Item key="mv" icon={<VideoCameraOutlined />}>
-                    <Link to={`/mv/${DEFAULT_MV_ID}`}>MV</Link>
+                    <Link to={`/mv/${store.curMvId}`}>MV</Link>
                 </Menu.Item>
             </Menu>
             <Button

@@ -17,22 +17,24 @@ import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_DETAIL_ID, DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
+import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
 import DetailSongs from "./detail-songs";
 import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
 import DetailSimilar from "./detail-similar";
+import { useStore } from "../../hooks/useStore";
 
 interface IRouteParams {
     detailId: string;
 }
 
 const Detail: React.FunctionComponent = () => {
+    const store = useStore();
     let { detailId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
-    detailId = detailId || String(DEFAULT_DETAIL_ID);
+    detailId = detailId || String(store.curDetailId);
 
     const getDetails = React.useCallback(() => {
         setLoading(true);
@@ -61,9 +63,10 @@ const Detail: React.FunctionComponent = () => {
     }, [getDetails]);
 
     React.useEffect(() => {
+        store.updateCurDetailId(+detailId);
         setActiveKey("1");
         toTop();
-    }, [detailId]);
+    }, [detailId, store]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);

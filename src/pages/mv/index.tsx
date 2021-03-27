@@ -15,7 +15,6 @@ import DPlayer from "dplayer";
 import StyledDivider from "../../components/StyledDivider";
 import { countFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
-import { DEFAULT_MV_ID } from "../../web-config/defaultConfig";
 import reqs from "../../api/req";
 import { IMvDetailRes, IMvUrl } from "./type";
 import StyledTag from "../../components/StyledTag";
@@ -24,6 +23,7 @@ import MvComments from "./mv-comments";
 import MvDesc from "./mv-desc";
 import MvSimilar from "./mv-similar";
 import styled from "styled-components";
+import { useStore } from "../../hooks/useStore";
 
 const StyledDPlayer = styled.div`
     width: 75%;
@@ -49,12 +49,13 @@ interface IRouteParams {
 }
 
 const Mv: React.FunctionComponent = () => {
+    const store = useStore();
     let { mvId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("2");
     const [mvInfo, setMvInfo] = React.useState<IMvDetailRes>();
     const [mvUrl, setMvUrl] = React.useState<IMvUrl>();
-    mvId = mvId || String(DEFAULT_MV_ID);
+    mvId = mvId || String(store.curMvId);
 
     const getAlbumDetail = React.useCallback(() => {
         setLoading(true);
@@ -118,9 +119,10 @@ const Mv: React.FunctionComponent = () => {
     }, [mvUrl]);
 
     React.useEffect(() => {
+        store.updateCurMvId(+mvId);
         setActiveKey("2");
         toTop();
-    }, [mvId]);
+    }, [mvId, store]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);

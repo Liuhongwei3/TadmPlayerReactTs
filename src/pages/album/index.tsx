@@ -20,19 +20,20 @@ import StyledWrapper from "../../components/detail/StyledWrapper";
 import StyledDivider from "../../components/StyledDivider";
 import AlbumSongs from "./album-songs";
 import AlbumComments from "./album-comments";
-import { DEFAULT_ALBUM_ID } from "../../web-config/defaultConfig";
+import { useStore } from "../../hooks/useStore";
 
 interface IRouteParams {
     albumId: string;
 }
 
 const Album: React.FunctionComponent = () => {
+    const store = useStore();
     let { albumId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [albumInfo, setAlbumInfo] = React.useState<IAlbumRes>();
     const [albumCount, setAlbumCount] = React.useState<IAlbumDetailCount>();
-    albumId = albumId || String(DEFAULT_ALBUM_ID);
+    albumId = albumId || String(store.curAlbumId);
 
     const getAlbumDetail = React.useCallback(() => {
         setLoading(true);
@@ -61,9 +62,10 @@ const Album: React.FunctionComponent = () => {
     }, [getAlbumDetail]);
 
     React.useEffect(() => {
+        store.updateCurAlbumId(+albumId);
         setActiveKey("1");
         toTop();
-    }, [albumId]);
+    }, [albumId, store]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);

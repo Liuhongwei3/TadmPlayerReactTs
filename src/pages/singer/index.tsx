@@ -26,10 +26,7 @@ import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import {
-    DEFAULT_RANDOM_COLORS,
-    DEFAULT_SINGER_ID,
-} from "../../web-config/defaultConfig";
+import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
 import { ISingerRes } from "./type";
 import SingerSongs from "./singer-songs";
 import SingerHotSongs from "./singer-hot-songs";
@@ -37,18 +34,20 @@ import SingerAlbums from "./singer-albums";
 import SingerSimilar from "./singer-similar";
 import SingerMvs from "./singer-mvs";
 import SingerDesc from "./singer-desc";
+import { useStore } from "../../hooks/useStore";
 
 interface IRouteParams {
     singerId: string;
 }
 
 const Singer: React.FunctionComponent = () => {
+    const store = useStore();
     const history = useHistory();
     let { singerId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [singerInfo, setSingerInfo] = React.useState<ISingerRes>();
-    singerId = singerId || String(DEFAULT_SINGER_ID);
+    singerId = singerId || String(store.curSingerId);
 
     const getDetails = React.useCallback(() => {
         setLoading(true);
@@ -77,9 +76,10 @@ const Singer: React.FunctionComponent = () => {
     }, [getDetails]);
 
     React.useEffect(() => {
+        store.updateCurSingerId(+singerId);
         setActiveKey("1");
         toTop();
-    }, [singerId]);
+    }, [singerId, store]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);

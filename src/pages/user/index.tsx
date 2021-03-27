@@ -29,28 +29,27 @@ import { IUserDetail, MainAuthType } from "./type";
 import StyledDivider from "../../components/StyledDivider";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
-import {
-    DEFAULT_RANDOM_COLORS,
-    DEFAULT_USER_ID,
-} from "../../web-config/defaultConfig";
+import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
 import UserPlaylist from "./user-playlist";
 import UserFollow from "./user-follow";
 import UserSex from "./user-sex";
 import UserFollowed from "./user-followed";
 import UserEvent from "./user-event";
 import { createTime, userType } from "./content-util";
+import { useStore } from "../../hooks/useStore";
 
 interface IRouteParams {
     userId: string;
 }
 
 const User: React.FunctionComponent = () => {
+    const store = useStore();
     const history = useHistory();
     let { userId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [userInfo, setUserInfo] = React.useState<IUserDetail>();
-    userId = userId || String(DEFAULT_USER_ID);
+    userId = userId || String(store.curUserId);
 
     const getUserInfo = React.useCallback(() => {
         setLoading(true);
@@ -79,8 +78,9 @@ const User: React.FunctionComponent = () => {
     }, [getUserInfo]);
 
     React.useEffect(() => {
+        store.updateCurUserId(+userId);
         setActiveKey("1");
-    }, [userId]);
+    }, [store, userId]);
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
