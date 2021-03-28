@@ -3,31 +3,10 @@ import { useHistory } from "react-router-dom";
 import { Image, Tag } from "antd";
 import styled from "styled-components";
 
-import { Artist, IJson, Pic } from "../type";
-import { getEventType, notify } from "../../../utils";
-import { DEFAULT_RANDOM_COLORS } from "../../../web-config/defaultConfig";
-import LoadingImg from "../../../components/LoadingImg";
-
-const StyledDetailDiv = styled.div`
-    width: 100%;
-    display: inline-flex;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: rgba(101, 100, 100, 0.5);
-    color: white;
-    margin-top: 10px;
-
-    &:hover {
-        cursor: pointer;
-    }
-`;
-
-const StyledNameArtDiv = styled.div`
-    margin-left: 10px;
-    font-size: 16px;
-    justify-content: center;
-    align-items: center;
-`;
+import { Artist, IJson, Pic } from "../user/type";
+import { getEventType, notify } from "../../utils";
+import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
+import LoadingImg from "../../components/LoadingImg";
 
 interface IProps {
     type: number;
@@ -145,8 +124,33 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
             </>
         );
     } else {
-        return <span>{json}</span>;
+        return <StyledJson>{json}</StyledJson>;
     }
 };
 
 export default ShareDetail;
+
+const StyledDetailDiv = styled.div`
+    width: 100%;
+    display: inline-flex;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(101, 100, 100, 0.5);
+    color: white;
+    margin-top: 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
+const StyledNameArtDiv = styled.div`
+    margin-left: 10px;
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
+`;
+
+const StyledJson = styled.div`
+    width: 85vw;
+`;

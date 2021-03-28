@@ -37,6 +37,7 @@ import UserFollowed from "./user-followed";
 import UserEvent from "./user-event";
 import { createTime, userType } from "./content-util";
 import { useStore } from "../../hooks/useStore";
+import { ELikeOpr } from "../../api/netease/types/like-type";
 
 interface IRouteParams {
     userId: string;
@@ -49,6 +50,7 @@ const User: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [userInfo, setUserInfo] = React.useState<IUserDetail>();
+    const [followed, setFollowed] = React.useState<boolean>(false);
     userId = userId || String(store.curUserId);
 
     const getUserInfo = React.useCallback(() => {
@@ -57,6 +59,7 @@ const User: React.FunctionComponent = () => {
             .userDetail(+userId)
             .then((res) => {
                 setUserInfo(res);
+                setFollowed(res.profile.followed);
             })
             .catch((err) => {
                 notify(
@@ -91,6 +94,17 @@ const User: React.FunctionComponent = () => {
             history.push(`/singer/${id}`);
         },
         [history]
+    );
+
+    const followUser = React.useCallback(
+        (type: ELikeOpr) => {
+            req.neteaseLogined.followUser(type, +userId).then((res) => {
+                if (res.code === 200) {
+                    setFollowed(type === ELikeOpr.LIKE);
+                }
+            });
+        },
+        [userId]
     );
 
     const Binds = React.useCallback(() => {
@@ -226,16 +240,20 @@ const User: React.FunctionComponent = () => {
                             </StyledTag>
                         </Tooltip>
 
-                        {userInfo.profile.followed ? (
+                        {followed ? (
                             <Tooltip title="取消关注">
                                 <StarFilled
                                     className="ant-svg-scale"
                                     style={{ color: "#ff5a5a" }}
+                                    onClick={() => followUser(ELikeOpr.DISLIKE)}
                                 />
                             </Tooltip>
                         ) : (
                             <Tooltip title="关注该用户">
-                                <StarOutlined className="ant-svg-scale" />
+                                <StarOutlined
+                                    className="ant-svg-scale"
+                                    onClick={() => followUser(ELikeOpr.LIKE)}
+                                />
                             </Tooltip>
                         )}
                     </div>

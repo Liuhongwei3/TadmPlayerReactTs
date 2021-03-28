@@ -7,8 +7,10 @@ import {
     CommentOutlined,
 } from "@ant-design/icons";
 
-import { Event } from "../type";
-import { countFormat } from "../../../utils";
+import { Event } from "../user/type";
+import { countFormat } from "../../utils";
+import { ELikeOpr, ESourceType } from "../../api/netease/types/like-type";
+import reqs from "../../api/req";
 
 interface IProps {
     event: Event;
@@ -20,8 +22,9 @@ interface IProps {
     };
 }
 
-const UserEventActions: React.FunctionComponent<IProps> = (props: IProps) => {
+const EventActions: React.FunctionComponent<IProps> = (props: IProps) => {
     const { event, comm } = props;
+    const [liked, setLiked] = React.useState(event.info.liked);
 
     const updateCurInfo = React.useCallback(() => {
         // if (comm.curEventId !== event.info.threadId) {
@@ -38,17 +41,37 @@ const UserEventActions: React.FunctionComponent<IProps> = (props: IProps) => {
         }
     }, [comm, event.info.threadId]);
 
+    const likeAction = React.useCallback(
+        (type: ELikeOpr) => {
+            reqs.neteaseLogined
+                .likeSth(type, ESourceType.EVENT, event.info.threadId)
+                .then((res) => {
+                    if (res.code === 200) {
+                        setLiked(type === ELikeOpr.LIKE);
+                    }
+                });
+        },
+        [event.info.threadId]
+    );
+
     return (
         <>
-            <Tooltip title="Like">
+            <Tooltip title={liked ? "dislike" : "Like"}>
                 <span>
-                    {event.info.liked ? <LikeFilled /> : <LikeOutlined />}
+                    {liked ? (
+                        <LikeFilled
+                            onClick={() => likeAction(ELikeOpr.DISLIKE)}
+                        />
+                    ) : (
+                        <LikeOutlined
+                            onClick={() => likeAction(ELikeOpr.LIKE)}
+                        />
+                    )}
                     <span className="comment-action">
                         {countFormat(event.info.likedCount)}
                     </span>
                 </span>
             </Tooltip>
-            ,
             <Tooltip title="Share">
                 <span>
                     <ShareAltOutlined />
@@ -57,8 +80,7 @@ const UserEventActions: React.FunctionComponent<IProps> = (props: IProps) => {
                     </span>
                 </span>
             </Tooltip>
-            ,
-            <Tooltip title="Comment">
+            <Tooltip title="点击展开关闭评论">
                 <span onClick={updateCurInfo}>
                     <CommentOutlined />
                     <span className="comment-action">
@@ -66,9 +88,9 @@ const UserEventActions: React.FunctionComponent<IProps> = (props: IProps) => {
                     </span>
                 </span>
             </Tooltip>
-            ,<span>Reply to</span>,
+            <span>Reply to</span>,
         </>
     );
 };
 
-export default UserEventActions;
+export default EventActions;

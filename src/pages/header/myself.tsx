@@ -16,7 +16,7 @@ import {
 import { UserOutlined } from "@ant-design/icons";
 import { useStore } from "../../hooks/useStore";
 import reqs from "../../api/req";
-import { notify } from "../../utils";
+import { notify, setOutDateCookie } from "../../utils";
 
 interface IForm {
     phone: string;
@@ -127,6 +127,7 @@ const TopMySelf: React.FC = observer(() => {
             window.sessionStorage.setItem("nickname", nickname);
             window.sessionStorage.setItem("avatarUrl", avatarUrl);
             notify("success", "登录成功！");
+            window.location.reload();
         },
         [store]
     );
@@ -137,7 +138,6 @@ const TopMySelf: React.FC = observer(() => {
         if (qrModal) {
             getQrImg().then((qrKey) => {
                 timer = setInterval(() => {
-                    console.log(qrModal);
                     reqs.neteaseLogined.checkQRStatus(qrKey!).then((res) => {
                         const { code, message } = res;
 
@@ -172,6 +172,7 @@ const TopMySelf: React.FC = observer(() => {
     const logOut = React.useCallback(() => {
         window.sessionStorage.clear();
         store.updateUserInfo(0, "", "");
+        setOutDateCookie();
     }, [store]);
 
     const toUser = React.useCallback(() => {

@@ -11,13 +11,16 @@ import {
 } from "@ant-design/icons";
 
 import req from "../../api/req";
-import { IDetailRes } from "./type";
+import { IDetailRes, ISong } from "./type";
 import StyledWrapper from "../../components/detail/StyledWrapper";
 import { countFormat, dateFormat, notify, toTop } from "../../utils";
 import LoadingImg from "../../components/LoadingImg";
 import StyledTag from "../../components/StyledTag";
 import StyledDivider from "../../components/StyledDivider";
-import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
+import {
+    DEFAULT_RANDOM_COLORS,
+    RECOMMEND_DAY_ID,
+} from "../../web-config/defaultConfig";
 import DetailSongs from "./detail-songs";
 import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
@@ -34,10 +37,28 @@ const Detail: React.FunctionComponent = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
+    const [dailySongs, setDailySongs] = React.useState<ISong[]>([]);
     detailId = detailId || String(store.curDetailId);
 
     const getDetails = React.useCallback(() => {
         setLoading(true);
+        if (+detailId === RECOMMEND_DAY_ID) {
+            req.neteaseLogined
+                .getRecommendSongs()
+                .then((res) => {
+                    setDailySongs(res.data.dailySongs);
+                })
+                .catch((err) => {
+                    notify(
+                        "error",
+                        (err.response && err.response.statusText) ||
+                            err.message ||
+                            "加载每日推荐歌曲数据失败"
+                    );
+                })
+                .finally(() => setLoading(false));
+            return;
+        }
         req.netease
             .playlistdetail(+detailId)
             .then((res) => {
@@ -74,7 +95,14 @@ const Detail: React.FunctionComponent = () => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {detailInfo?.playlist ? (
+            {+detailId === RECOMMEND_DAY_ID && (
+                <DetailSongs
+                    dailySongs={dailySongs}
+                    trackIds={[]}
+                    songCount={dailySongs.length}
+                />
+            )}
+            {+detailId !== RECOMMEND_DAY_ID && detailInfo?.playlist ? (
                 <StyledWrapper>
                     <div>
                         <Avatar
@@ -237,7 +265,7 @@ const Detail: React.FunctionComponent = () => {
                     </Tabs>
                 </StyledWrapper>
             ) : (
-                <Empty />
+                +detailId !== RECOMMEND_DAY_ID && <Empty />
             )}
         </Spin>
     );

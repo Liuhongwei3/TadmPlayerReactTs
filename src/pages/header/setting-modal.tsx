@@ -1,8 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Modal, Switch } from "antd";
+import { Modal, Switch, Typography } from "antd";
 import { TranslationOutlined } from "@ant-design/icons";
 import { useStore } from "../../hooks/useStore";
+import StyledDivider from "../../components/StyledDivider";
 
 interface IProps {
     isModalVisible: boolean;
@@ -28,6 +29,10 @@ const SettingModal: React.FC<IProps> = observer((props: IProps) => {
             onOk={handleOk}
             onCancel={handleCancel}
         >
+            <Typography.Title level={5}>
+                本站所有数据均来源于网易云官方服务器，请注意操作！
+            </Typography.Title>
+            <StyledDivider />
             <div>
                 <TranslationOutlined />
                 <span>语言切换：</span>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Table, Image } from "antd";
+import { Avatar, Table, Image, Typography } from "antd";
 import { ISong, ITrackId } from "./type";
 import req from "../../api/req";
 import { dateFormat, notify, timeFormat, toTop, unique } from "../../utils";
@@ -7,14 +7,16 @@ import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
+import StyledDivider from "../../components/StyledDivider";
 
 interface IProps {
     trackIds: ITrackId[];
     songCount: number;
+    dailySongs?: ISong[];
 }
 
 const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { trackIds, songCount } = props;
+    const { trackIds, songCount, dailySongs } = props;
     const [loading, setLoading] = React.useState<boolean>(false);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
@@ -61,8 +63,16 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             });
     }, [trackIds, page, pageSize]);
     React.useEffect(() => {
-        getSongsDetail();
-    }, [getSongsDetail]);
+        if (dailySongs) {
+            setSongs(
+                dailySongs.map((item, index) => {
+                    return { ...item, index: index + 1 };
+                })
+            );
+        } else {
+            getSongsDetail();
+        }
+    }, [getSongsDetail, dailySongs]);
 
     const pageChange = React.useCallback((page1, pageSize1) => {
         setPage(page1);
@@ -152,32 +162,46 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
     ];
 
     return (
-        <Table<ISong>
-            rowKey="id"
-            bordered={false}
-            scroll={{ x: true }}
-            columns={columns}
-            loading={loading}
-            dataSource={songs}
-            pagination={{
-                showQuickJumper: true,
-                total: songCount,
-                current: page,
-                pageSize,
-                onChange: (page, pageSize) => pageChange(page, pageSize),
-                showTotal: (total) => `共 ${total} 条`,
-            }}
-            onRow={(record) => {
-                return {
-                    onDoubleClick: (event) => {
-                        console.log(record);
-                    },
-                    onContextMenu: (event) => {},
-                    onMouseEnter: (event) => {}, // 鼠标移入行
-                    onMouseLeave: (event) => {},
-                };
-            }}
-        />
+        <React.Fragment>
+            {dailySongs && (
+                <>
+                    <Typography.Title
+                        level={4}
+                        style={{ color: "#dcdcdc", paddingTop: 10 }}
+                    >
+                        《今日推荐歌曲》
+                    </Typography.Title>
+                    <StyledDivider />
+                </>
+            )}
+
+            <Table<ISong>
+                rowKey="id"
+                bordered={false}
+                scroll={{ x: true }}
+                columns={columns}
+                loading={loading}
+                dataSource={songs}
+                pagination={{
+                    showQuickJumper: true,
+                    total: songCount,
+                    current: page,
+                    pageSize,
+                    onChange: (page, pageSize) => pageChange(page, pageSize),
+                    showTotal: (total) => `共 ${total} 条`,
+                }}
+                onRow={(record) => {
+                    return {
+                        onDoubleClick: (event) => {
+                            console.log(record);
+                        },
+                        onContextMenu: (event) => {},
+                        onMouseEnter: (event) => {}, // 鼠标移入行
+                        onMouseLeave: (event) => {},
+                    };
+                }}
+            />
+        </React.Fragment>
     );
 };
 

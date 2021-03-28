@@ -12,6 +12,38 @@ export const updateCurMenu = () => {
     return curUrl && curUrl[1] ? [curUrl[1]] : ["home"];
 };
 
+export const setOutDateCookie = () => {
+    if (document.cookie) {
+        // const cookies = document.cookie.split(";");
+
+        // cookies.forEach((cookie) => {
+        //     const name = cookie.split("=")[0];
+        //     const value = cookie.split("=")[1];
+        //     document.cookie = `${name}=${value};expires=${new Date(
+        //         0
+        //     ).toISOString()}`;
+        // });
+
+        const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+        if (keys) {
+            keys.forEach((key) => {
+                document.cookie =
+                    key + "=0;expires=" + new Date(0).toUTCString();
+            });
+        }
+
+        window.location.reload();
+    } else {
+        alert("不支持操作cookie，请手动清除");
+    }
+};
+
+export const getCurDay = () => {
+    const time = Date.now();
+
+    return new Date(time).getDate().toString().padStart(2, "0");
+};
+
 export function dateFormat(dateIn = 0, type = "less") {
     // const time = new Date(dateIn);
     // let y = time.getFullYear();

@@ -7,19 +7,45 @@ import { LikeFilled, LikeOutlined } from "@ant-design/icons";
 import { countFormat, dateFormat } from "../utils";
 import LoadingImg from "./LoadingImg";
 import { IComment, IHotComment } from "../pages/commType";
+import { ELikeOpr, ESourceType } from "../api/netease/types/like-type";
+import reqs from "../api/req";
 
 interface IProps {
+    type: ESourceType;
+    id: number | string;
     comm: IHotComment | IComment;
 }
 
 const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { comm } = props;
+    const { type: sourceType, id: sourceId, comm } = props;
+    const [liked, setLiked] = React.useState(comm.liked);
+
+    const likeAction = React.useCallback(
+        (type: ELikeOpr) => {
+            reqs.neteaseLogined
+                .likeComment(type, sourceType, sourceId, comm.commentId)
+                .then((res) => {
+                    if (res.code === 200) {
+                        setLiked(type === ELikeOpr.LIKE);
+                    }
+                });
+        },
+        [comm.commentId, sourceId, sourceType]
+    );
 
     const actions = React.useCallback((comm: IHotComment | IComment) => {
         return [
             <Tooltip title="Like">
                 <span>
-                    {comm.liked ? <LikeFilled /> : <LikeOutlined />}
+                    {liked ? (
+                        <LikeFilled
+                            onClick={() => likeAction(ELikeOpr.DISLIKE)}
+                        />
+                    ) : (
+                        <LikeOutlined
+                            onClick={() => likeAction(ELikeOpr.LIKE)}
+                        />
+                    )}
                     <span className="comment-action">
                         {countFormat(comm.likedCount)}
                     </span>
@@ -27,7 +53,7 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
             </Tooltip>,
             <span>Reply to</span>,
         ];
-    }, []);
+    }, [likeAction, liked]);
 
     const avatar = React.useCallback((comm: IHotComment | IComment) => {
         return (

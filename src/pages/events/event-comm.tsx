@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { Empty, Pagination, Spin, Tabs } from "antd";
 
-import { Event } from "../type";
-import req from "../../../api/req";
-import { IComment, IHotComment } from "../../commType";
-import StyledComment from "../../../components/StyledComment";
-import { notify } from "../../../utils";
+import { Event } from "../user/type";
+import req from "../../api/req";
+import { IComment, IHotComment } from "../commType";
+import StyledComment from "../../components/StyledComment";
+import { notify } from "../../utils";
+import { ESourceType } from "../../api/netease/types/like-type";
 
 const StyledCommBg = styled.div`
     margin-left: 54px;
@@ -20,7 +21,7 @@ interface IProps {
     event: Event;
 }
 
-const UserEventComm: React.FunctionComponent<IProps> = (props: IProps) => {
+const EventComm: React.FunctionComponent<IProps> = (props: IProps) => {
     const { showComm, event } = props;
     const commCount = event.info.commentCount;
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -78,6 +79,8 @@ const UserEventComm: React.FunctionComponent<IProps> = (props: IProps) => {
                             hotComms.map((hotComm) => (
                                 <StyledComment
                                     key={hotComm.commentId}
+                                    type={ESourceType.EVENT}
+                                    id={event.info.threadId}
                                     comm={hotComm}
                                 />
                             ))
@@ -91,6 +94,8 @@ const UserEventComm: React.FunctionComponent<IProps> = (props: IProps) => {
                                 {comms.map((comm) => (
                                     <StyledComment
                                         key={comm.commentId}
+                                        type={ESourceType.EVENT}
+                                        id={event.info.threadId}
                                         comm={comm}
                                     />
                                 ))}
@@ -116,4 +121,4 @@ const UserEventComm: React.FunctionComponent<IProps> = (props: IProps) => {
     ) : null;
 };
 
-export default UserEventComm;
+export default EventComm;

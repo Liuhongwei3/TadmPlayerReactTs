@@ -4,6 +4,7 @@ import req from "../../api/req";
 import { notify, toTop } from "../../utils";
 import { IComment, ICommentsRes, IHotComment } from "../commType";
 import StyledComment from "../../components/StyledComment";
+import { ESourceType } from "../../api/netease/types/like-type";
 
 interface IProps {
     mvId: number;
@@ -32,12 +33,14 @@ const MvComments: React.FunctionComponent<IProps> = (props: IProps) => {
                 res.hotComments && setHotComms(res.hotComments);
                 setcomms(res.comments);
             })
-            .catch((e) => notify(
-                "error",
-                (e.response && e.response.statusText) ||
-                    e.message ||
-                    "加载MV 评论数据失败"
-            ))
+            .catch((e) =>
+                notify(
+                    "error",
+                    (e.response && e.response.statusText) ||
+                        e.message ||
+                        "加载MV 评论数据失败"
+                )
+            )
             .finally(() => setLoading(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mvId, page, pageSize]);
@@ -60,6 +63,8 @@ const MvComments: React.FunctionComponent<IProps> = (props: IProps) => {
                         hotComms.map((hotComm) => (
                             <StyledComment
                                 key={hotComm.commentId}
+                                type={ESourceType.MV}
+                                id={mvId}
                                 comm={hotComm}
                             />
                         ))
@@ -73,6 +78,8 @@ const MvComments: React.FunctionComponent<IProps> = (props: IProps) => {
                             {comms.map((comm) => (
                                 <StyledComment
                                     key={comm.commentId}
+                                    type={ESourceType.MV}
+                                    id={mvId}
                                     comm={comm}
                                 />
                             ))}

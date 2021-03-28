@@ -4,6 +4,7 @@ import req from "../../api/req";
 import { notify, toTop } from "../../utils";
 import { IComment, ICommentsRes, IHotComment } from "../commType";
 import StyledComment from "../../components/StyledComment";
+import { ESourceType } from "../../api/netease/types/like-type";
 
 interface IProps {
     detailId: number;
@@ -62,6 +63,8 @@ const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
                         hotComms.map((hotComm) => (
                             <StyledComment
                                 key={hotComm.commentId}
+                                type={ESourceType.DETAIL}
+                                id={detailId}
                                 comm={hotComm}
                             />
                         ))
@@ -75,6 +78,8 @@ const DetailComments: React.FunctionComponent<IProps> = (props: IProps) => {
                             {comms.map((comm) => (
                                 <StyledComment
                                     key={comm.commentId}
+                                    type={ESourceType.DETAIL}
+                                    id={detailId}
                                     comm={comm}
                                 />
                             ))}

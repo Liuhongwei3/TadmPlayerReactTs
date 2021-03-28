@@ -296,7 +296,7 @@ export interface Event {
     info: Info;
 }
 
-export interface IEventsRes {
+export interface IUserEventsRes {
     lasttime: number;
     more: boolean;
     size: number;

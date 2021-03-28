@@ -1,5 +1,8 @@
 import axios from "axios";
-import { DEFAULT_DEV_BASE_URL, DEFAULT_PROD_BASE_URL } from "../web-config/defaultConfig";
+import {
+    DEFAULT_DEV_BASE_URL,
+    DEFAULT_PROD_BASE_URL,
+} from "../web-config/defaultConfig";
 import { notify } from "../utils";
 import { parseResponseData } from "./tools";
 import { cacheAdapterEnhancer } from "axios-extensions";
@@ -56,16 +59,31 @@ axiosInst.interceptors.response.use(
     },
     (error) => {
         console.error(error, error.response);
-        // 当 401 重定向到登录页
-        if (error && error.response && error.response.status === 401) {
+        // 当 401,301 重定向到登录页
+        if (
+            (error && error.response && error.response.status === 401) ||
+            error.response.status === 301
+        ) {
             // window.location.href = getSsoRedirectUrl();
-            notify("warning", error.response.statusText || "需要登录~");
+            notify(
+                "warning",
+                error.response.data.msg ||
+                    error.response.statusText ||
+                    "需要登录~"
+            );
         } else if (error && error.response && error.response.status >= 500) {
-            notify("error", error.response.statusText || "服务器异常！");
+            notify(
+                "error",
+                error.response.data.msg ||
+                    error.response.statusText ||
+                    "服务器异常！"
+            );
         } else {
             notify(
                 "error",
                 (error.response && error.response.statusText) ||
+                    error.response.data.msg ||
+                    error.response.statusText ||
                     error.message ||
                     "加载数据失败"
             );

@@ -4,6 +4,7 @@ import req from "../../api/req";
 import { notify, toTop } from "../../utils";
 import StyledComment from "../../components/StyledComment";
 import { IComment, ICommentsRes, IHotComment } from "../commType";
+import { ESourceType } from "../../api/netease/types/like-type";
 
 interface IProps {
     albumId: number;
@@ -62,6 +63,8 @@ const AlbumComments: React.FunctionComponent<IProps> = (props: IProps) => {
                         hotComms.map((hotComm) => (
                             <StyledComment
                                 key={hotComm.commentId}
+                                type={ESourceType.ALBUM}
+                                id={albumId}
                                 comm={hotComm}
                             />
                         ))
@@ -75,6 +78,8 @@ const AlbumComments: React.FunctionComponent<IProps> = (props: IProps) => {
                             {comms.map((comm) => (
                                 <StyledComment
                                     key={comm.commentId}
+                                    type={ESourceType.ALBUM}
+                                    id={albumId}
                                     comm={comm}
                                 />
                             ))}

@@ -12,6 +12,8 @@ export const DEFAULT_AVATAR =
 export const DEFAULT_LOADING_IMG =
     "https://img.imgdb.cn/item/603cf1185f4313ce25774bf3.gif";
 
+export const RECOMMEND_DAY_ID = 999;
+
 export const DEFAULT_ALBUM_ID = 21506;
 export const DEFAULT_DETAIL_ID = 3778678;
 export const DEFAULT_SINGER_ID = 160947; // 华晨宇: 861777

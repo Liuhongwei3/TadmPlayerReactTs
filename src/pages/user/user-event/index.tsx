@@ -4,12 +4,12 @@ import { Empty, Spin, Comment, Avatar, Image, Button } from "antd";
 
 import req from "../../../api/req";
 import { dateFormat, notify } from "../../../utils";
-import { Event, IEventsRes } from "../type";
+import { Event, IUserEventsRes } from "../type";
 import LoadingImg from "../../../components/LoadingImg";
-import ShareDetail from "./share-detail";
-import UserEventActions from "./user-event-actions";
+import ShareDetail from "../../events/share-detail";
+import EventActions from "../../events/event-actions";
 import { handleJson } from "../content-util";
-import UserEventComm from "./user-event-comm";
+import EventComm from "../../events/event-comm";
 import StyledDivider from "../../../components/StyledDivider";
 
 interface IProps {
@@ -24,7 +24,7 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
     // const [lasttime, setLasttime] = React.useState<number>(0);
-    const [eventsRes, setEventsRes] = React.useState<IEventsRes>();
+    const [eventsRes, setEventsRes] = React.useState<IUserEventsRes>();
     const [showComm, setShowComm] = React.useState<boolean>(false);
     const [curEventId, setCurEventId] = React.useState<string>("");
 
@@ -77,7 +77,7 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
                         <div key={`event-${event.id}`}>
                             <Comment
                                 actions={[
-                                    <UserEventActions
+                                    <EventActions
                                         event={event}
                                         comm={{
                                             showComm,
@@ -99,7 +99,7 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
                                 datetime={dateFormat(event.eventTime, "more")}
                             />
                             {event.info.threadId === curEventId && (
-                                <UserEventComm
+                                <EventComm
                                     key={`event-comm-${event.id}`}
                                     showComm={showComm}
                                     event={event}

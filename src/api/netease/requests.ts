@@ -9,7 +9,7 @@ import {
     IRecommendMvRes,
 } from "../../pages/home/type";
 import {
-    IEventsRes,
+    IUserEventsRes,
     IFollowedRes,
     IFollowRes,
     IUserDetail,
@@ -165,7 +165,7 @@ const userEvent = (uid: number, limit?: number, lasttime?: number) => {
     const optional1 = limit ? `&limit=${limit}` : "";
     const optional2 = lasttime ? `&lasttime=${lasttime}` : "";
 
-    return api.get<IEventsRes>(
+    return api.get<IUserEventsRes>(
         `/user/event?uid=${uid}${optional1}${optional2}`
     );
 };

@@ -10,6 +10,7 @@ import {
     VideoCameraOutlined,
     TrophyOutlined,
     UserSwitchOutlined,
+    TeamOutlined,
     SearchOutlined,
 } from "@ant-design/icons";
 import { DEFAULT_AVATAR } from "../../web-config/defaultConfig";
@@ -66,6 +67,9 @@ const LeftSide: React.FunctionComponent = observer(() => {
                 </Menu.Item>
                 <Menu.Item key="user" icon={<UserSwitchOutlined />}>
                     <Link to={`/user/${store.curUserId}`}>用户</Link>
+                </Menu.Item>
+                <Menu.Item key="events" icon={<TeamOutlined />}>
+                    <Link to={`/events`}>动态</Link>
                 </Menu.Item>
                 <Menu.Item key="mv" icon={<VideoCameraOutlined />}>
                     <Link to={`/mv/${store.curMvId}`}>MV</Link>

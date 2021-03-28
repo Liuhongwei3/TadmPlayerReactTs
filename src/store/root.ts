@@ -34,23 +34,23 @@ class Root {
     }
 
     updateCurAlbumId(id: number) {
-        this.curAlbumId = id;
+        this.curAlbumId = id || DEFAULT_ALBUM_ID;
     }
 
     updateCurDetailId(id: number) {
-        this.curDetailId = id;
+        this.curDetailId = id || DEFAULT_DETAIL_ID;
     }
 
     updateCurSingerId(id: number) {
-        this.curSingerId = id;
+        this.curSingerId = id || DEFAULT_SINGER_ID;
     }
 
     updateCurUserId(id: number) {
-        this.curUserId = id;
+        this.curUserId = id || DEFAULT_USER_ID;
     }
 
     updateCurMvId(id: number) {
-        this.curMvId = id;
+        this.curMvId = id || DEFAULT_MV_ID;
     }
 
     changeLocale() {
