@@ -11,6 +11,7 @@ import {
     Image,
     Space,
 } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import reqs from "../../api/req";
 import StyledDivider from "../../components/StyledDivider";
 import { dateFormat, notify, toTop } from "../../utils";
@@ -75,6 +76,7 @@ const Events: React.FunctionComponent = () => {
                         朋友动态
                     </Typography.Title>
                     <Button type="primary" onClick={publishEvent}>
+                        <EditOutlined />
                         发布动态
                     </Button>
                 </Space>

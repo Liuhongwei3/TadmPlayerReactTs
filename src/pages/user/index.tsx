@@ -271,22 +271,31 @@ const User: React.FunctionComponent = () => {
                             userInfo.profile.mainAuthType!
                         )}
 
-                    <Collapse
-                        style={{ backgroundColor: "#a2a0a0d1", width: "50vw" }}
-                    >
-                        <Collapse.Panel header="个人介绍" key="description">
-                            <Typography.Paragraph
-                                ellipsis={{
-                                    rows: 2,
-                                    expandable: true,
+                    {!!userInfo?.profile.signature && (
+                        <>
+                            <Collapse
+                                style={{
+                                    backgroundColor: "#a2a0a0d1",
+                                    width: "50vw",
                                 }}
                             >
-                                {userInfo?.profile.signature}
-                            </Typography.Paragraph>
-                        </Collapse.Panel>
-                    </Collapse>
-
-                    <StyledDivider />
+                                <Collapse.Panel
+                                    header="个人介绍"
+                                    key="description"
+                                >
+                                    <Typography.Paragraph
+                                        ellipsis={{
+                                            rows: 2,
+                                            expandable: true,
+                                        }}
+                                    >
+                                        {userInfo?.profile.signature}
+                                    </Typography.Paragraph>
+                                </Collapse.Panel>
+                            </Collapse>
+                            <StyledDivider />
+                        </>
+                    )}
 
                     <Tabs
                         style={{ width: "100%" }}

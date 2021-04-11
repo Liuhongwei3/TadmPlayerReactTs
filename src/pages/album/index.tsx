@@ -21,6 +21,7 @@ import StyledDivider from "../../components/StyledDivider";
 import AlbumSongs from "./album-songs";
 import AlbumComments from "./album-comments";
 import { useStore } from "../../hooks/useStore";
+import { ELikeOpr } from "../../api/netease/types/like-type";
 
 interface IRouteParams {
     albumId: string;
@@ -29,6 +30,7 @@ interface IRouteParams {
 const Album: React.FunctionComponent = () => {
     const store = useStore();
     let { albumId } = useParams<IRouteParams>();
+    const [subscribed, setSubscribed] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [albumInfo, setAlbumInfo] = React.useState<IAlbumRes>();
@@ -45,6 +47,7 @@ const Album: React.FunctionComponent = () => {
             .then((res) => {
                 setAlbumInfo(res[0]);
                 setAlbumCount(res[1]);
+                setSubscribed(res[1].isSub);
             })
             .catch((err) => {
                 notify(
@@ -66,6 +69,17 @@ const Album: React.FunctionComponent = () => {
         setActiveKey("1");
         toTop();
     }, [albumId, store]);
+
+    const subscribeAlbum = React.useCallback(
+        (type: ELikeOpr) => {
+            reqs.neteaseLogined.subscribeAlbum(type, +albumId).then((res) => {
+                if (res.code === 200) {
+                    setSubscribed(type === ELikeOpr.LIKE);
+                }
+            });
+        },
+        [albumId]
+    );
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
@@ -129,16 +143,20 @@ const Album: React.FunctionComponent = () => {
                         </StyledTag>
                     </Tooltip>
 
-                    {albumCount?.isSub ? (
+                    {subscribed ? (
                         <Tooltip title="取消收藏">
                             <StarFilled
                                 className="ant-svg-scale"
                                 style={{ color: "#ff5a5a" }}
+                                onClick={() => subscribeAlbum(ELikeOpr.DISLIKE)}
                             />
                         </Tooltip>
                     ) : (
                         <Tooltip title="收藏该专辑">
-                            <StarOutlined className="ant-svg-scale" />
+                            <StarOutlined
+                                className="ant-svg-scale"
+                                onClick={() => subscribeAlbum(ELikeOpr.LIKE)}
+                            />
                         </Tooltip>
                     )}
                 </div>

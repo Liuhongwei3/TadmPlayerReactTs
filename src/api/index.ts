@@ -55,38 +55,55 @@ axiosInst.interceptors.response.use(
         if (res.data.reason) {
             notify("warning", res.data.reason || "需要登录~");
         }
+        if (res.data.code === 400 && res.data.msg) {
+            notify("warning", res.data.msg || "请求参数错误~");
+        }
         return res.data;
     },
     (error) => {
         console.error(error, error.response);
-        // 当 401,301 重定向到登录页
-        if (
-            (error && error.response && error.response.status === 401) ||
-            error.response.status === 301
-        ) {
-            // window.location.href = getSsoRedirectUrl();
-            notify(
-                "warning",
-                error.response.data.msg ||
-                    error.response.statusText ||
-                    "需要登录~"
-            );
-        } else if (error && error.response && error.response.status >= 500) {
-            notify(
-                "error",
-                error.response.data.msg ||
-                    error.response.statusText ||
-                    "服务器异常！"
-            );
-        } else {
-            notify(
-                "error",
-                (error.response && error.response.statusText) ||
-                    error.response.data.msg ||
-                    error.response.statusText ||
-                    error.message ||
-                    "加载数据失败"
-            );
+        if (error && error.response && error.response.status) {
+            const status = error.response.status;
+
+            switch (status) {
+                // 当 401,301 重定向到登录页
+                case 301:
+                case 401:
+                    // window.location.href = getSsoRedirectUrl();
+                    notify(
+                        "warning",
+                        error.response.data.msg ||
+                            error.response.statusText ||
+                            "需要登录~"
+                    );
+                    break;
+                case 400:
+                    notify(
+                        "warning",
+                        error.response.data.msg ||
+                            error.response.statusText ||
+                            "请求参数错误~"
+                    );
+                    break;
+                case 500:
+                    notify(
+                        "error",
+                        error.response.data.msg ||
+                            error.response.statusText ||
+                            "服务器异常！"
+                    );
+                    break;
+                default:
+                    notify(
+                        "error",
+                        (error.response && error.response.statusText) ||
+                            error.response.data.msg ||
+                            error.response.statusText ||
+                            error.message ||
+                            "加载数据失败"
+                    );
+                    break;
+            }
         }
 
         return Promise.reject(error);

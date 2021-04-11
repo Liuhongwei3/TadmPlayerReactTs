@@ -58,6 +58,10 @@ svg {
     bottom: 100px;
 }
 
+.ant-empty-normal {
+    color: #ccc;
+}
+
 .ant-collapse-content-active {
     overflow: auto;
     background: rgba(255, 255, 255, 0.7);

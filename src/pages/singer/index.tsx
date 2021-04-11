@@ -35,6 +35,7 @@ import SingerSimilar from "./singer-similar";
 import SingerMvs from "./singer-mvs";
 import SingerDesc from "./singer-desc";
 import { useStore } from "../../hooks/useStore";
+import { ELikeOpr } from "../../api/netease/types/like-type";
 
 interface IRouteParams {
     singerId: string;
@@ -44,6 +45,7 @@ const Singer: React.FunctionComponent = () => {
     const store = useStore();
     const history = useHistory();
     let { singerId } = useParams<IRouteParams>();
+    const [subscribed, setSubscribed] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [singerInfo, setSingerInfo] = React.useState<ISingerRes>();
@@ -55,6 +57,7 @@ const Singer: React.FunctionComponent = () => {
             .singerDetail(+singerId)
             .then((res) => {
                 setSingerInfo(res);
+                setSubscribed(res.artist.followed);
             })
             .catch((err) => {
                 notify(
@@ -80,6 +83,17 @@ const Singer: React.FunctionComponent = () => {
         setActiveKey("1");
         toTop();
     }, [singerId, store]);
+
+    const subscribeSinger = React.useCallback(
+        (type: ELikeOpr) => {
+            req.neteaseLogined.subscribeSinger(type, +singerId).then((res) => {
+                if (res.code === 200) {
+                    setSubscribed(type === ELikeOpr.LIKE);
+                }
+            });
+        },
+        [singerId]
+    );
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
@@ -150,16 +164,24 @@ const Singer: React.FunctionComponent = () => {
                             </Button>
                         )}
 
-                        {singerInfo.artist.followed ? (
+                        {subscribed ? (
                             <Tooltip title="取消关注">
                                 <StarFilled
                                     className="ant-svg-scale"
                                     style={{ color: "#ff5a5a" }}
+                                    onClick={() =>
+                                        subscribeSinger(ELikeOpr.DISLIKE)
+                                    }
                                 />
                             </Tooltip>
                         ) : (
                             <Tooltip title="关注该歌手">
-                                <StarOutlined className="ant-svg-scale" />
+                                <StarOutlined
+                                    className="ant-svg-scale"
+                                    onClick={() =>
+                                        subscribeSinger(ELikeOpr.LIKE)
+                                    }
+                                />
                             </Tooltip>
                         )}
                     </div>

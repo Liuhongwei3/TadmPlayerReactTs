@@ -24,6 +24,7 @@ import MvDesc from "./mv-desc";
 import MvSimilar from "./mv-similar";
 import styled from "styled-components";
 import { useStore } from "../../hooks/useStore";
+import { ELikeOpr } from "../../api/netease/types/like-type";
 
 const StyledDPlayer = styled.div`
     width: 75%;
@@ -55,6 +56,7 @@ const Mv: React.FunctionComponent = () => {
     const [activeKey, setActiveKey] = React.useState<string>("2");
     const [mvInfo, setMvInfo] = React.useState<IMvDetailRes>();
     const [mvUrl, setMvUrl] = React.useState<IMvUrl>();
+    const [subscribed, setSubscribed] = React.useState(false);
     mvId = mvId || String(store.curMvId);
 
     const getAlbumDetail = React.useCallback(() => {
@@ -63,6 +65,7 @@ const Mv: React.FunctionComponent = () => {
         Promise.all([reqs.netease.mvDetail(+mvId), reqs.netease.mvUrl(+mvId)])
             .then((res) => {
                 setMvInfo(res[0]);
+                setSubscribed(res[0].subed);
                 if (res[1].code === 200) {
                     setMvUrl(res[1].data);
                 }
@@ -128,6 +131,17 @@ const Mv: React.FunctionComponent = () => {
         setActiveKey(activeKey);
     }, []);
 
+    const subscribeMv = React.useCallback(
+        (type: ELikeOpr) => {
+            reqs.neteaseLogined.subscribeMv(type, +mvId).then((res) => {
+                if (res.code === 200) {
+                    setSubscribed(type === ELikeOpr.LIKE);
+                }
+            });
+        },
+        [mvId]
+    );
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             <StyledWrapper>
@@ -184,16 +198,24 @@ const Mv: React.FunctionComponent = () => {
                                     {mvInfo?.data.publishTime}
                                 </StyledTag>
                             </Tooltip>
-                            {mvInfo?.subed ? (
+                            {subscribed ? (
                                 <Tooltip title="取消收藏">
                                     <StarFilled
                                         className="ant-svg-scale"
                                         style={{ color: "#ff5a5a" }}
+                                        onClick={() =>
+                                            subscribeMv(ELikeOpr.DISLIKE)
+                                        }
                                     />
                                 </Tooltip>
                             ) : (
                                 <Tooltip title="收藏该 MV">
-                                    <StarOutlined className="ant-svg-scale" />
+                                    <StarOutlined
+                                        className="ant-svg-scale"
+                                        onClick={() =>
+                                            subscribeMv(ELikeOpr.LIKE)
+                                        }
+                                    />
                                 </Tooltip>
                             )}
                         </div>

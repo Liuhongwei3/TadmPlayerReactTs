@@ -26,6 +26,7 @@ import DetailComments from "./detail-comments";
 import DetailSubscribedUsers from "./detail-subscribed-users";
 import DetailSimilar from "./detail-similar";
 import { useStore } from "../../hooks/useStore";
+import { ESubscribeDetail } from "../../api/netease/types/like-type";
 
 interface IRouteParams {
     detailId: string;
@@ -35,6 +36,7 @@ const Detail: React.FunctionComponent = () => {
     const store = useStore();
     let { detailId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [subscribed, setSubscribed] = React.useState(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
     const [dailySongs, setDailySongs] = React.useState<ISong[]>([]);
@@ -63,6 +65,7 @@ const Detail: React.FunctionComponent = () => {
             .playlistdetail(+detailId)
             .then((res) => {
                 setDetailInfo(res);
+                setSubscribed(res.playlist.subscribed);
             })
             .catch((err) => {
                 notify(
@@ -88,6 +91,17 @@ const Detail: React.FunctionComponent = () => {
         setActiveKey("1");
         toTop();
     }, [detailId, store]);
+
+    const subscribeDetail = React.useCallback(
+        (type: ESubscribeDetail) => {
+            req.neteaseLogined.subscribeDetail(type, +detailId).then((res) => {
+                if (res.code === 200) {
+                    setSubscribed(type === ESubscribeDetail.SUBSCRIBE);
+                }
+            });
+        },
+        [detailId]
+    );
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
@@ -169,16 +183,28 @@ const Detail: React.FunctionComponent = () => {
                             </Tooltip>
                         ) : null}
 
-                        {detailInfo.playlist.subscribed ? (
+                        {subscribed ? (
                             <Tooltip title="取消收藏">
                                 <StarFilled
                                     className="ant-svg-scale"
                                     style={{ color: "#ff5a5a" }}
+                                    onClick={() =>
+                                        subscribeDetail(
+                                            ESubscribeDetail.DISSUBSCRIBE
+                                        )
+                                    }
                                 />
                             </Tooltip>
                         ) : (
                             <Tooltip title="收藏该歌单">
-                                <StarOutlined className="ant-svg-scale" />
+                                <StarOutlined
+                                    className="ant-svg-scale"
+                                    onClick={() =>
+                                        subscribeDetail(
+                                            ESubscribeDetail.SUBSCRIBE
+                                        )
+                                    }
+                                />
                             </Tooltip>
                         )}
                     </div>

@@ -8,6 +8,7 @@ import Events from "./pages/events";
 import Home from "./pages/home";
 import HotDetail from "./pages/hot-detail";
 import Mv from "./pages/mv";
+import MyStars from "./pages/my-stars";
 import Search from "./pages/search";
 import Singer from "./pages/singer";
 import Top from "./pages/top";
@@ -51,6 +52,9 @@ const Routers: React.FunctionComponent = () => {
             </Route>
             <Route exact path="/events">
                 <Events />
+            </Route>
+            <Route exact path="/my/stars">
+                <MyStars />
             </Route>
             <Route exact path="/mv/:mvId">
                 <Mv />

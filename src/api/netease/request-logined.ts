@@ -1,7 +1,8 @@
+import api from "../index";
 import { ISong } from "../../pages/detail/type";
 import { IEventsRes } from "../../pages/events/type";
-import api from "../index";
-import { ELikeOpr, ESourceType } from "./types/like-type";
+import { IAlbumsRes, IMvsRes, ISingersRes } from "../../pages/my-stars/type";
+import { ELikeOpr, ESourceType, ESubscribeDetail } from "./types/like-type";
 import { ILoginedUser, IQRImg, IQRKey, IQRStatus } from "./types/login-type";
 
 const userLoginByPhone = (phone: string, password: string) => {
@@ -39,6 +40,10 @@ const loginStatus = () => {
     );
 };
 
+const logOut = () => {
+    return api.get(`/logout`);
+}
+
 const getUserRecomm = () => {
     return api.get(`/recommend/resource`);
 };
@@ -50,6 +55,22 @@ const getRecommendSongs = () => {
 
 const followUser = (type: ELikeOpr, id: number) => {
     return api.get(`/follow?id=${id}&t=${type}`);
+};
+
+const subscribeDetail = (type: ESubscribeDetail, id: number) => {
+    return api.get(`/playlist/subscribe?t=${type}&id=${id}`);
+};
+
+const subscribeAlbum = (type: ELikeOpr, id: number) => {
+    return api.get(`/album/sub?t=${type}&id=${id}`);
+};
+
+const subscribeSinger = (type: ELikeOpr, id: number) => {
+    return api.get(`/artist/sub?t=${type}&id=${id}`);
+};
+
+const subscribeMv = (type: ELikeOpr, mvid: number) => {
+    return api.get(`/mv/sub?t=${type}&mvid=${mvid}`);
 };
 
 // ---------------------------------------------------------------------
@@ -85,6 +106,25 @@ const likeComment = (
     return api.get(`/comment/like?t=${opr}&type=${type}&id=${id}&cid=${cid}`);
 };
 
+const userComments = (uid: number, limit = 10, time = 0) => {
+    return api.get(
+        `/user/comment/history?uid=${uid}&limit=${limit}&time=${time}`
+    );
+};
+
+// 用户的收藏
+const starSingers = (limit: number, offset?: number) => {
+    return api.get<ISingersRes>(`/artist/sublist?limit=${limit}`);
+}
+
+const starMvs = (limit: number, offset?: number) => {
+    return api.get<IMvsRes>(`/mv/sublist?limit=${limit}`);
+}
+
+const starAlbums = (limit: number, offset?: number) => {
+    return api.get<IAlbumsRes>(`/album/sublist?limit=${limit}`);
+}
+
 const reqLoginedFuncs = {
     userLoginByPhone,
     sendCodeByPhone,
@@ -93,12 +133,21 @@ const reqLoginedFuncs = {
     getLoginQR,
     checkQRStatus,
     loginStatus,
+    logOut,
     getUserRecomm,
     followUser,
+    subscribeDetail,
+    subscribeAlbum,
+    subscribeSinger,
+    subscribeMv,
     getRecommendSongs,
     getEvents,
     likeSth,
     likeComment,
+    userComments,
+    starSingers,
+    starMvs,
+    starAlbums,
 };
 
 export default reqLoginedFuncs;

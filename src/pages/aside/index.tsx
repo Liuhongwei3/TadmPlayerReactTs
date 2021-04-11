@@ -12,6 +12,7 @@ import {
     UserSwitchOutlined,
     TeamOutlined,
     SearchOutlined,
+    StarOutlined,
 } from "@ant-design/icons";
 import { DEFAULT_AVATAR } from "../../web-config/defaultConfig";
 import { observer } from "mobx-react-lite";
@@ -67,6 +68,9 @@ const LeftSide: React.FunctionComponent = observer(() => {
                 </Menu.Item>
                 <Menu.Item key="user" icon={<UserSwitchOutlined />}>
                     <Link to={`/user/${store.curUserId}`}>用户</Link>
+                </Menu.Item>
+                <Menu.Item key="myStars" icon={<StarOutlined />}>
+                    <Link to={`/my/stars`}>我的收藏</Link>
                 </Menu.Item>
                 <Menu.Item key="events" icon={<TeamOutlined />}>
                     <Link to={`/events`}>动态</Link>

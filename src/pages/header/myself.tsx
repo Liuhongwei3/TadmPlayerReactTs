@@ -173,6 +173,14 @@ const TopMySelf: React.FC = observer(() => {
         window.sessionStorage.clear();
         store.updateUserInfo(0, "", "");
         setOutDateCookie();
+        reqs.neteaseLogined
+            .logOut()
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((e) => {
+                notify("error", e.message);
+            });
     }, [store]);
 
     const toUser = React.useCallback(() => {

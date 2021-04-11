@@ -3,6 +3,11 @@ export enum ELikeOpr {
     LIKE
 }
 
+export enum ESubscribeDetail {
+    SUBSCRIBE = 1,
+    DISSUBSCRIBE = 2
+}
+
 export enum ESourceType {
     SONG = 0,
     MV = 1,
