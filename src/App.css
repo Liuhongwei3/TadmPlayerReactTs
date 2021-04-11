@@ -118,9 +118,9 @@ td {
 }
 
 .ant-svg-scale {
-    transform: scale(1.4);
+    transform: scale(1.5);
     display: inline-block;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
 .ant-svg-scale:hover {
@@ -138,6 +138,10 @@ td {
 
 .ant-anchor-link-title {
     color: #fff;
+}
+
+.ant-image-preview-img {
+    border-radius: 0;
 }
 
 @media screen and (max-width: 768px) {

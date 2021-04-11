@@ -1,7 +1,8 @@
 import { shuffle } from "../utils";
 
 export const DEFAULT_DEV_BASE_URL = "http://localhost:3000/";
-export const DEFAULT_PROD_BASE_URL = "https://netease-music-api-jingke.vercel.app/";
+export const DEFAULT_PROD_BASE_URL =
+    "https://netease-music-api-jingke.vercel.app/";
 
 export const DEFAULT_BG_IMG =
     "http://p2.music.126.net/ek5FsopWHRxf9tQSLaRnAA==/109951165643377225.jpg";
@@ -21,34 +22,39 @@ export const DEFAULT_USER_ID = 328199093; //  ME: 537069044 栗先达: 264256080
 export const DEFAULT_MV_ID = 393006; // IU: 14239660
 
 export const clientWidth = window.document.body.clientWidth;
+export const isPc = clientWidth >= 768;
 
 export const DEFAULT_IMG_PC_WIDTH = 150;
 export const DEFAULT_IMG_PC_HEIGHT = 150;
 export const DEFAULT_IMG_PH_WIDTH = 120;
 export const DEFAULT_IMG_PH_HEIGHT = 120;
 
-export const DEFAULT_IMG_WIDTH =
-    clientWidth >= 768 ? DEFAULT_IMG_PC_WIDTH : DEFAULT_IMG_PH_WIDTH;
-export const DEFAULT_IMG_HEIGHT =
-    clientWidth >= 768 ? DEFAULT_IMG_PC_HEIGHT : DEFAULT_IMG_PH_HEIGHT;
+export const DEFAULT_IMG_WIDTH = isPc
+    ? DEFAULT_IMG_PC_WIDTH
+    : DEFAULT_IMG_PH_WIDTH;
+export const DEFAULT_IMG_HEIGHT = isPc
+    ? DEFAULT_IMG_PC_HEIGHT
+    : DEFAULT_IMG_PH_HEIGHT;
 
 export const DEFAULT_MV_PC_WIDTH = 320;
 export const DEFAULT_MV_PC_HEIGHT = 200;
 
-export const DEFAULT_MV_WIDTH =
-    clientWidth >= 768 ? DEFAULT_MV_PC_WIDTH : DEFAULT_MV_PC_WIDTH * 0.8;
-export const DEFAULT_MV_HEIGHT =
-    clientWidth >= 768 ? DEFAULT_MV_PC_HEIGHT : DEFAULT_MV_PC_HEIGHT * 0.8;
+export const DEFAULT_MV_WIDTH = isPc
+    ? DEFAULT_MV_PC_WIDTH
+    : DEFAULT_MV_PC_WIDTH * 0.8;
+export const DEFAULT_MV_HEIGHT = isPc
+    ? DEFAULT_MV_PC_HEIGHT
+    : DEFAULT_MV_PC_HEIGHT * 0.8;
 
 export const DEFAULT_MV_PC_SMALL_WIDTH = 210;
 export const DEFAULT_MV_PC_SMALL_HEIGHT = 150;
 
-export const DEFAULT_MV_SMALL_WIDTH =
-    clientWidth >= 768 ? DEFAULT_MV_PC_SMALL_WIDTH : DEFAULT_MV_PC_SMALL_WIDTH;
-export const DEFAULT_MV_SMALL_HEIGHT =
-    clientWidth >= 768
-        ? DEFAULT_MV_PC_SMALL_HEIGHT
-        : DEFAULT_MV_PC_SMALL_HEIGHT * 0.8;
+export const DEFAULT_MV_SMALL_WIDTH = isPc
+    ? DEFAULT_MV_PC_SMALL_WIDTH
+    : DEFAULT_MV_PC_SMALL_WIDTH;
+export const DEFAULT_MV_SMALL_HEIGHT = isPc
+    ? DEFAULT_MV_PC_SMALL_HEIGHT
+    : DEFAULT_MV_PC_SMALL_HEIGHT * 0.8;
 
 export const DEFAULT_COLORS = [
     "magenta",

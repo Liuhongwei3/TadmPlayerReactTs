@@ -42,7 +42,7 @@ const loginStatus = () => {
 
 const logOut = () => {
     return api.get(`/logout`);
-}
+};
 
 const getUserRecomm = () => {
     return api.get(`/recommend/resource`);
@@ -115,15 +115,40 @@ const userComments = (uid: number, limit = 10, time = 0) => {
 // 用户的收藏
 const starSingers = (limit: number, offset?: number) => {
     return api.get<ISingersRes>(`/artist/sublist?limit=${limit}`);
-}
+};
 
 const starMvs = (limit: number, offset?: number) => {
     return api.get<IMvsRes>(`/mv/sublist?limit=${limit}`);
-}
+};
 
 const starAlbums = (limit: number, offset?: number) => {
     return api.get<IAlbumsRes>(`/album/sublist?limit=${limit}`);
-}
+};
+
+// 歌单操作
+// 10 为隐私歌单
+// 'VIDEO'则为视频歌单
+const createDetail = (name: string, privacy = 0, type = "NORMAL") => {
+    return api.get(
+        `/playlist/create?name=${name}&privacy=${privacy}&type=${type}`
+    );
+};
+
+const editDetail = (id: number, name: string, desc: string, tags: string[]) => {
+    return api.get(
+        `/playlist/update?id=${id}&name=${name}&desc=${desc}&tags=${tags.join(
+            ";"
+        )}`
+    );
+};
+
+const deleteDetail = (id: number | number[]) => {
+    return api.get(
+        typeof id === "object"
+            ? `/playlist/delete?id=${id.join(",")}`
+            : `/playlist/delete?id=${id}`
+    );
+};
 
 const reqLoginedFuncs = {
     userLoginByPhone,
@@ -148,6 +173,9 @@ const reqLoginedFuncs = {
     starSingers,
     starMvs,
     starAlbums,
+    createDetail,
+    editDetail,
+    deleteDetail,
 };
 
 export default reqLoginedFuncs;

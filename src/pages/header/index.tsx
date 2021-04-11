@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { SettingOutlined } from "@ant-design/icons";
 import SettingModal from "./setting-modal";
 import TopMySelf from "./myself";
+import { isPc } from "../../web-config/defaultConfig";
 
 const ContentHeader: React.FunctionComponent = () => {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -13,7 +14,7 @@ const ContentHeader: React.FunctionComponent = () => {
 
     return (
         <StyledHeader>
-            <StyledTitle>Tadm-Player-React ^-^</StyledTitle>
+            {isPc && <StyledTitle>Tadm-Player-React ^-^</StyledTitle>}
 
             <TopMySelf />
 

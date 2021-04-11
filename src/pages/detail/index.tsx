@@ -1,13 +1,25 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { Link, useParams } from "react-router-dom";
-import { Avatar, Empty, Spin, Image, Collapse, Tabs, Tooltip } from "antd";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import {
+    Avatar,
+    Empty,
+    Spin,
+    Image,
+    Collapse,
+    Tabs,
+    Tooltip,
+    Popconfirm,
+} from "antd";
 import {
     ShareAltOutlined,
     CustomerServiceOutlined,
     StarFilled,
     StarOutlined,
     FieldTimeOutlined,
+    EditOutlined,
+    DeleteTwoTone,
 } from "@ant-design/icons";
 
 import req from "../../api/req";
@@ -27,13 +39,15 @@ import DetailSubscribedUsers from "./detail-subscribed-users";
 import DetailSimilar from "./detail-similar";
 import { useStore } from "../../hooks/useStore";
 import { ESubscribeDetail } from "../../api/netease/types/like-type";
+import openEditDetailDialog from "./edit-detail-dialog";
 
 interface IRouteParams {
     detailId: string;
 }
 
-const Detail: React.FunctionComponent = () => {
+const Detail: React.FunctionComponent = observer(() => {
     const store = useStore();
+    const history = useHistory();
     let { detailId } = useParams<IRouteParams>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [subscribed, setSubscribed] = React.useState(false);
@@ -106,6 +120,18 @@ const Detail: React.FunctionComponent = () => {
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
     }, []);
+
+    const deleteDetail = React.useCallback(() => {
+        req.neteaseLogined
+            .deleteDetail(+detailId)
+            .then(() => {
+                notify("success", "删除歌单成功");
+                history.push(`/user/${store.curUserId}`);
+            })
+            .catch((e) => {
+                notify("error", e.message || "删除歌单失败");
+            });
+    }, [detailId, history, store.curUserId]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -207,6 +233,33 @@ const Detail: React.FunctionComponent = () => {
                                 />
                             </Tooltip>
                         )}
+
+                        {detailInfo.playlist.creator.userId ===
+                            store.userInfo.userId && (
+                            <>
+                                <Tooltip title="更新该歌单">
+                                    <EditOutlined
+                                        className="ant-svg-scale"
+                                        onClick={() =>
+                                            openEditDetailDialog(
+                                                detailInfo.playlist
+                                            )
+                                        }
+                                    />
+                                </Tooltip>
+                                <Tooltip title="删除该歌单">
+                                    <Popconfirm
+                                        title="确定要删除该歌单吗?"
+                                        onConfirm={deleteDetail}
+                                    >
+                                        <DeleteTwoTone
+                                            className="ant-svg-scale"
+                                            twoToneColor="#ff2626c7"
+                                        />
+                                    </Popconfirm>
+                                </Tooltip>
+                            </>
+                        )}
                     </div>
 
                     {detailInfo.playlist.tags.length ? (
@@ -295,6 +348,6 @@ const Detail: React.FunctionComponent = () => {
             )}
         </Spin>
     );
-};
+});
 
 export default Detail;

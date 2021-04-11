@@ -112,9 +112,13 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
                         <Image
                             alt="event-cover"
                             loading="lazy"
-                            height={250}
-                            style={{ padding: 10 }}
-                            width={+(pic.width / pic.height).toFixed(2) * 250}
+                            style={{
+                                padding: 10,
+                                height: 250,
+                                width:
+                                    +(pic.width / pic.height).toFixed(2) * 250,
+                                maxWidth: "100%",
+                            }}
                             placeholder={<LoadingImg />}
                             key={pic.originUrl}
                             src={pic.originUrl}

@@ -314,7 +314,12 @@ const User: React.FunctionComponent = () => {
                                 eventCount={userInfo.profile.eventCount}
                             />
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab={`歌单`} key="1">
+                        <Tabs.TabPane
+                            tab={`歌单(${countFormat(
+                                userInfo.profile.playlistCount
+                            )})`}
+                            key="1"
+                        >
                             <UserPlaylist userId={+userId} />
                         </Tabs.TabPane>
                         <Tabs.TabPane
