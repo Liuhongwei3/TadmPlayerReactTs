@@ -1,5 +1,5 @@
 import React from "react";
-import { makeAutoObservable } from "mobx";
+import { autorun, makeAutoObservable } from "mobx";
 import enUS from "antd/lib/locale/en_US";
 import zhCN from "antd/lib/locale/zh_CN";
 import {
@@ -9,6 +9,10 @@ import {
     DEFAULT_SINGER_ID,
     DEFAULT_USER_ID,
 } from "../web-config/defaultConfig";
+import { IUserPlaylist } from "../pages/user/type";
+import req from "../api/req";
+
+const LIMIT = 999;
 
 class Root {
     locale = zhCN;
@@ -24,6 +28,7 @@ class Root {
         userName: "",
         userCover: "",
     };
+    userPlaylists: IUserPlaylist[] = [];
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true });
@@ -60,6 +65,19 @@ class Root {
     updateUserInfo(userId: number, userName: string, userCover: string) {
         this.userInfo = { userId, userName, userCover };
     }
+
+    updateUserPlaylists(playlists: IUserPlaylist[]) {
+        this.userPlaylists = playlists;
+    }
 }
 
-export const RootStore = React.createContext(new Root());
+const root = new Root();
+export const RootStore = React.createContext(root);
+
+autorun(() => {
+    const uid = root.userInfo.userId;
+    if (!uid) return;
+    req.netease.userPlaylist(uid, LIMIT).then((res) => {
+        root.updateUserPlaylists(res.playlist);
+    });
+});

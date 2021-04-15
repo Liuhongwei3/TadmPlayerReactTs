@@ -53,7 +53,7 @@ const Routers: React.FunctionComponent = () => {
             <Route exact path="/events">
                 <Events />
             </Route>
-            <Route exact path="/my/stars">
+            <Route exact path="/myStars">
                 <MyStars />
             </Route>
             <Route exact path="/mv/:mvId">

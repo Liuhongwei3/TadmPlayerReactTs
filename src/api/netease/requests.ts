@@ -185,8 +185,11 @@ const userEventComm = (
 // ----------------------------------------------------------------------
 // 歌单详情
 
-const playlistdetail = (id: number) => {
-    return api.get<IDetailRes>(`/playlist/detail?id=${id}`);
+const playlistdetail = (id: number, force = false) => {
+    const url = force
+        ? `/playlist/detail?id=${id}&timestamp=${Date.now()}`
+        : `/playlist/detail?id=${id}`;
+    return api.get<IDetailRes>(url);
 };
 
 const detailComment = (

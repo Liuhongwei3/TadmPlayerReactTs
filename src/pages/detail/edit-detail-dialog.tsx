@@ -186,6 +186,7 @@ const EditDetailDialog: React.FC<IProps> = (props: IProps) => {
                         {
                             type: "array",
                             max: 3,
+                            message: "最多只能添加三个标签",
                         },
                     ]}
                 >

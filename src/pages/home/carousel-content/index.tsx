@@ -52,7 +52,6 @@ const CarouselContent: React.FunctionComponent = () => {
                     window.open(item.url);
                     break;
                 default:
-                    console.log(item.targetType);
                     notify("warning", "该功能暂未开放");
                     break;
             }

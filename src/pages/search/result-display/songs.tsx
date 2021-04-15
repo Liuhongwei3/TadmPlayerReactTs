@@ -1,10 +1,12 @@
 import React from "react";
-import { Empty, Table } from "antd";
+import { Empty, Table, Typography } from "antd";
 
 import { dateFormat, timeFormat } from "../../../utils";
 import { ISearchs, Song } from "../type";
 import { Link } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
+import { EDetailSongOprType } from "../../enums";
+import openAddSongToDetailDialog from "../../detail/add-song-to-detail-dialog";
 
 interface IProps {
     result: ISearchs | undefined;
@@ -12,6 +14,13 @@ interface IProps {
 
 const Songs: React.FC<IProps> = (props: IProps) => {
     const { result } = props;
+
+    const handleAddSongFromDetail = React.useCallback(
+        (op: EDetailSongOprType, track: number) => {
+            openAddSongToDetailDialog(op, track);
+        },
+        []
+    );
 
     const columns: ColumnsType<Song> = [
         {
@@ -24,7 +33,7 @@ const Songs: React.FC<IProps> = (props: IProps) => {
             title: "音乐标题",
             dataIndex: "name",
             key: "name",
-            width: "25%",
+            width: "15%",
         },
         {
             title: "歌手",
@@ -63,7 +72,7 @@ const Songs: React.FC<IProps> = (props: IProps) => {
         {
             title: "MV",
             key: "mv",
-            width: "14%",
+            width: "10%",
             render: (data: Song) =>
                 data.mvid ? <Link to={`/mv/${data.mvid}`}>去欣赏</Link> : null,
         },
@@ -73,6 +82,20 @@ const Songs: React.FC<IProps> = (props: IProps) => {
             width: "15%",
             render: (data: Song) => (
                 <div>{dateFormat(data.album.publishTime)}</div>
+            ),
+        },
+        {
+            title: "操作",
+            key: "operation",
+            width: "10%",
+            render: (data: Song) => (
+                <Typography.Link
+                    onClick={() =>
+                        handleAddSongFromDetail(EDetailSongOprType.ADD, data.id)
+                    }
+                >
+                    收藏
+                </Typography.Link>
             ),
         },
     ];

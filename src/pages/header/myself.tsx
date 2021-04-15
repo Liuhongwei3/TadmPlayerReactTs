@@ -120,6 +120,13 @@ const TopMySelf: React.FC = observer(() => {
         }
     }, []);
 
+    const toUser = React.useCallback(() => {
+        if (store.userInfo.userId) {
+            const path = `/user/${store.userInfo.userId}`;
+            history.location.pathname !== path && history.push(path);
+        }
+    }, [history, store.userInfo.userId]);
+
     const logSuccess = React.useCallback(
         (userId: number, nickname: string, avatarUrl: string) => {
             store.updateUserInfo(userId, nickname, avatarUrl);
@@ -127,9 +134,9 @@ const TopMySelf: React.FC = observer(() => {
             window.sessionStorage.setItem("nickname", nickname);
             window.sessionStorage.setItem("avatarUrl", avatarUrl);
             notify("success", "登录成功！");
-            window.location.reload();
+            toUser();
         },
-        [store]
+        [store, toUser]
     );
 
     React.useEffect(() => {
@@ -172,23 +179,17 @@ const TopMySelf: React.FC = observer(() => {
     const logOut = React.useCallback(() => {
         window.sessionStorage.clear();
         store.updateUserInfo(0, "", "");
+        store.updateUserPlaylists([]);
         setOutDateCookie();
         reqs.neteaseLogined
             .logOut()
             .then((res) => {
-                console.log(res);
+                history.push("/");
             })
             .catch((e) => {
                 notify("error", e.message);
             });
-    }, [store]);
-
-    const toUser = React.useCallback(() => {
-        if (store.userInfo.userId) {
-            const path = `/user/${store.userInfo.userId}`;
-            history.location.pathname !== path && history.push(path);
-        }
-    }, [history, store.userInfo.userId]);
+    }, [history, store]);
 
     return (
         <StyledTopMy>

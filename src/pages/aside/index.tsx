@@ -70,7 +70,7 @@ const LeftSide: React.FunctionComponent = observer(() => {
                     <Link to={`/user/${store.curUserId}`}>用户</Link>
                 </Menu.Item>
                 <Menu.Item key="myStars" icon={<StarOutlined />}>
-                    <Link to={`/my/stars`}>我的收藏</Link>
+                    <Link to={`/myStars`}>我的收藏</Link>
                 </Menu.Item>
                 <Menu.Item key="events" icon={<TeamOutlined />}>
                     <Link to={`/events`}>动态</Link>

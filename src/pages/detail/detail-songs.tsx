@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Table, Image, Typography } from "antd";
+import { Avatar, Table, Image, Typography, Popconfirm } from "antd";
 import { ISong, ITrackId } from "./type";
 import req from "../../api/req";
 import { dateFormat, notify, timeFormat, toTop, unique } from "../../utils";
@@ -8,15 +8,27 @@ import { Link } from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 import StyledDivider from "../../components/StyledDivider";
+import { EDetailSongOprType } from "../enums";
+import openAddSongToDetailDialog from "./add-song-to-detail-dialog";
 
 interface IProps {
+    isOwnDetail: boolean;
+    detailId: number;
     trackIds: ITrackId[];
     songCount: number;
+    getDetails: (force: boolean) => void;
     dailySongs?: ISong[];
 }
 
 const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
-    const { trackIds, songCount, dailySongs } = props;
+    const {
+        isOwnDetail,
+        detailId,
+        trackIds,
+        songCount,
+        dailySongs,
+        getDetails,
+    } = props;
     const [loading, setLoading] = React.useState<boolean>(false);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
@@ -62,6 +74,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 setLoading(false);
             });
     }, [trackIds, page, pageSize]);
+
     React.useEffect(() => {
         if (dailySongs) {
             setSongs(
@@ -79,6 +92,28 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         setPageSize(pageSize1);
         toTop();
     }, []);
+
+    const handleDeleteSongFromDetail = React.useCallback(
+        (op: EDetailSongOprType, track: number) => {
+            req.neteaseLogined
+                .addDeleteSongFromDetail(op, detailId, [track])
+                .then((res) => {
+                    notify("success", "删除歌曲成功");
+                    getDetails(true);
+                })
+                .catch((e) => {
+                    notify("error", e.message || "删除歌曲失败");
+                });
+        },
+        [detailId, getDetails]
+    );
+
+    const handleAddSongFromDetail = React.useCallback(
+        (op: EDetailSongOprType, track: number) => {
+            openAddSongToDetailDialog(op, track);
+        },
+        []
+    );
 
     const columns: ColumnsType<ISong> = [
         {
@@ -118,12 +153,15 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             width: "20%",
             render: (data: ISong) => {
                 return data.ar.length === 1 ? (
-                    <Link to={`/singer/${data.ar[0].id}`}>
+                    <Link key={data.ar[0].id} to={`/singer/${data.ar[0].id}`}>
                         {data.ar[0].name}
                     </Link>
                 ) : (
                     data.ar.map((ar) => (
-                        <Link key={ar.id} to={`/singer/${ar.id}`}>
+                        <Link
+                            key={`${ar.id}${ar.name}`}
+                            to={`/singer/${ar.id}`}
+                        >
                             {ar.name} /
                         </Link>
                     ))
@@ -133,7 +171,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         {
             title: "专辑",
             key: "album",
-            width: "15%",
+            width: "10%",
             render: (data: ISong) => (
                 <Link to={`/album/${data.al.id}`}>{data.al.name}</Link>
             ),
@@ -141,7 +179,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         {
             title: "时长",
             key: "dt",
-            width: "10%",
+            width: "8%",
             render: (data: ISong) => (
                 <div>{timeFormat(Math.floor(data.dt / 1000))}</div>
             ),
@@ -158,6 +196,39 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             key: "publishTime",
             width: "15%",
             render: (data: ISong) => <div>{dateFormat(data.publishTime)}</div>,
+        },
+        {
+            title: "操作",
+            key: "operation",
+            width: "10%",
+            render: (data: ISong) =>
+                isOwnDetail ? (
+                    <Popconfirm
+                        title="确定要从该歌单删除该歌曲吗？"
+                        okText="是的"
+                        cancelText="否"
+                        placement="topRight"
+                        onConfirm={() =>
+                            handleDeleteSongFromDetail(
+                                EDetailSongOprType.DELETE,
+                                data.id
+                            )
+                        }
+                    >
+                        <Typography.Link>删除</Typography.Link>
+                    </Popconfirm>
+                ) : (
+                    <Typography.Link
+                        onClick={() =>
+                            handleAddSongFromDetail(
+                                EDetailSongOprType.ADD,
+                                data.id
+                            )
+                        }
+                    >
+                        收藏
+                    </Typography.Link>
+                ),
         },
     ];
 
@@ -196,13 +267,10 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                             console.log(record);
                         },
                         onContextMenu: (event) => {},
-                        onMouseEnter: (event) => {}, // 鼠标移入行
-                        onMouseLeave: (event) => {},
                     };
                 }}
             />
         </React.Fragment>
     );
 };
-
 export default DetailSongs;

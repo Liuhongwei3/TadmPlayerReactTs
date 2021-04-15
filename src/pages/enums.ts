@@ -1,3 +1,8 @@
+export enum EDetailSongOprType {
+    ADD = 'add',
+    DELETE = 'del'
+}
+
 export enum ETartgetType {
     SONG = 1,
     ALBUM = 10,

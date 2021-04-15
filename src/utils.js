@@ -32,7 +32,7 @@ export const setOutDateCookie = () => {
             });
         }
 
-        window.location.reload();
+        // window.location.reload();
     } else {
         alert("不支持操作cookie，请手动清除");
     }

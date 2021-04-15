@@ -49,6 +49,7 @@ const Detail: React.FunctionComponent = observer(() => {
     const store = useStore();
     const history = useHistory();
     let { detailId } = useParams<IRouteParams>();
+    const [isOwnDetail, setIsOwnDetail] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [subscribed, setSubscribed] = React.useState(false);
     const [activeKey, setActiveKey] = React.useState<string>("1");
@@ -56,7 +57,7 @@ const Detail: React.FunctionComponent = observer(() => {
     const [dailySongs, setDailySongs] = React.useState<ISong[]>([]);
     detailId = detailId || String(store.curDetailId);
 
-    const getDetails = React.useCallback(() => {
+    const getDetails = React.useCallback((force = false) => {
         setLoading(true);
         if (+detailId === RECOMMEND_DAY_ID) {
             req.neteaseLogined
@@ -76,9 +77,12 @@ const Detail: React.FunctionComponent = observer(() => {
             return;
         }
         req.netease
-            .playlistdetail(+detailId)
+            .playlistdetail(+detailId, force)
             .then((res) => {
                 setDetailInfo(res);
+                setIsOwnDetail(
+                    res.playlist.creator.userId === store.userInfo.userId
+                );
                 setSubscribed(res.playlist.subscribed);
             })
             .catch((err) => {
@@ -90,7 +94,7 @@ const Detail: React.FunctionComponent = observer(() => {
                 );
             })
             .finally(() => setLoading(false));
-    }, [detailId]);
+    }, [detailId, store.userInfo.userId]);
 
     React.useEffect(() => {
         toTop();
@@ -137,9 +141,12 @@ const Detail: React.FunctionComponent = observer(() => {
         <Spin tip="Loading..." spinning={loading}>
             {+detailId === RECOMMEND_DAY_ID && (
                 <DetailSongs
+                    isOwnDetail={false}
+                    detailId={+detailId}
                     dailySongs={dailySongs}
                     trackIds={[]}
                     songCount={dailySongs.length}
+                    getDetails={getDetails}
                 />
             )}
             {+detailId !== RECOMMEND_DAY_ID && detailInfo?.playlist ? (
@@ -209,33 +216,36 @@ const Detail: React.FunctionComponent = observer(() => {
                             </Tooltip>
                         ) : null}
 
-                        {subscribed ? (
-                            <Tooltip title="取消收藏">
-                                <StarFilled
-                                    className="ant-svg-scale"
-                                    style={{ color: "#ff5a5a" }}
-                                    onClick={() =>
-                                        subscribeDetail(
-                                            ESubscribeDetail.DISSUBSCRIBE
-                                        )
-                                    }
-                                />
-                            </Tooltip>
-                        ) : (
-                            <Tooltip title="收藏该歌单">
-                                <StarOutlined
-                                    className="ant-svg-scale"
-                                    onClick={() =>
-                                        subscribeDetail(
-                                            ESubscribeDetail.SUBSCRIBE
-                                        )
-                                    }
-                                />
-                            </Tooltip>
+                        {!isOwnDetail && (
+                            <>
+                                {subscribed ? (
+                                    <Tooltip title="取消收藏">
+                                        <StarFilled
+                                            className="ant-svg-scale"
+                                            style={{ color: "#ff5a5a" }}
+                                            onClick={() =>
+                                                subscribeDetail(
+                                                    ESubscribeDetail.DISSUBSCRIBE
+                                                )
+                                            }
+                                        />
+                                    </Tooltip>
+                                ) : (
+                                    <Tooltip title="收藏该歌单">
+                                        <StarOutlined
+                                            className="ant-svg-scale"
+                                            onClick={() =>
+                                                subscribeDetail(
+                                                    ESubscribeDetail.SUBSCRIBE
+                                                )
+                                            }
+                                        />
+                                    </Tooltip>
+                                )}
+                            </>
                         )}
 
-                        {detailInfo.playlist.creator.userId ===
-                            store.userInfo.userId && (
+                        {isOwnDetail && (
                             <>
                                 <Tooltip title="更新该歌单">
                                     <EditOutlined
@@ -310,8 +320,11 @@ const Detail: React.FunctionComponent = observer(() => {
                             key="1"
                         >
                             <DetailSongs
+                                isOwnDetail={isOwnDetail}
+                                detailId={+detailId}
                                 trackIds={detailInfo.playlist.trackIds}
                                 songCount={detailInfo.playlist.trackCount}
+                                getDetails={getDetails}
                             />
                         </Tabs.TabPane>
                         <Tabs.TabPane

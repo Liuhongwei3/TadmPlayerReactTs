@@ -4,6 +4,7 @@ import { IEventsRes } from "../../pages/events/type";
 import { IAlbumsRes, IMvsRes, ISingersRes } from "../../pages/my-stars/type";
 import { ELikeOpr, ESourceType, ESubscribeDetail } from "./types/like-type";
 import { ILoginedUser, IQRImg, IQRKey, IQRStatus } from "./types/login-type";
+import { EDetailSongOprType } from "../../pages/enums";
 
 const userLoginByPhone = (phone: string, password: string) => {
     // ?phone=${phone}&password=${password}
@@ -150,6 +151,16 @@ const deleteDetail = (id: number | number[]) => {
     );
 };
 
+const addDeleteSongFromDetail = (
+    op: EDetailSongOprType,
+    pid: number,
+    tracks: number[]
+) => {
+    return api.get(
+        `/playlist/tracks?op=${op}&pid=${pid}&tracks=${tracks.join(",")}`
+    );
+};
+
 const reqLoginedFuncs = {
     userLoginByPhone,
     sendCodeByPhone,
@@ -176,6 +187,7 @@ const reqLoginedFuncs = {
     createDetail,
     editDetail,
     deleteDetail,
+    addDeleteSongFromDetail,
 };
 
 export default reqLoginedFuncs;

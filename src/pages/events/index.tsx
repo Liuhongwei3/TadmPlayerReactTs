@@ -83,7 +83,7 @@ const Events: React.FunctionComponent = () => {
 
                 <React.Fragment>
                     {eventsRes.event.map((event) => (
-                        <div key={`events-${event.id}`}>
+                        <div key={`events${event.id}${event.eventTime}`}>
                             <Comment
                                 actions={[
                                     <EventActions
