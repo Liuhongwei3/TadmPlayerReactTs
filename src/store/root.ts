@@ -11,17 +11,22 @@ import {
 } from "../web-config/defaultConfig";
 import { IUserPlaylist } from "../pages/user/type";
 import req from "../api/req";
+import { ISong } from "../pages/detail/type";
 
 const LIMIT = 999;
 
 class Root {
     locale = zhCN;
     curRoute = ["home"];
+
     curAlbumId = DEFAULT_ALBUM_ID;
     curDetailId = DEFAULT_DETAIL_ID;
     curSingerId = DEFAULT_SINGER_ID;
     curUserId = DEFAULT_USER_ID;
     curMvId = DEFAULT_MV_ID;
+
+    curSongId: number = 1364247901;
+    curSong: ISong | undefined;
 
     userInfo = {
         userId: 0,
@@ -69,6 +74,14 @@ class Root {
     updateUserPlaylists(playlists: IUserPlaylist[]) {
         this.userPlaylists = playlists;
     }
+
+    updateCurSongId(sid: number) {
+        this.curSongId = sid;
+    }
+
+    updateCurSong(song: ISong) {
+        this.curSong = song;
+    }
 }
 
 const root = new Root();
@@ -79,5 +92,15 @@ autorun(() => {
     if (!uid) return;
     req.netease.userPlaylist(uid, LIMIT).then((res) => {
         root.updateUserPlaylists(res.playlist);
+    });
+});
+
+autorun(() => {
+    const sid = root.curSongId;
+    if (!sid) return;
+    req.netease.getMusicDetail(sid).then((res) => {
+        if (res.songs.length) {
+            root.updateCurSong(res.songs[0]);
+        }
     });
 });

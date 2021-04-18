@@ -14,8 +14,10 @@ import {
     DEFAULT_IMG_HEIGHT,
     DEFAULT_IMG_WIDTH,
 } from "../../../web-config/defaultConfig";
+import { useStore } from "../../../hooks/useStore";
 
-const NewSongs: React.FunctionComponent = () => {
+const NewSongs: React.FC = () => {
+    const store = useStore();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [newSongs, setNewSongs] = React.useState<Array<INewSongs>>([]);
 
@@ -41,6 +43,13 @@ const NewSongs: React.FunctionComponent = () => {
         getNewSongs();
     }, [getNewSongs]);
 
+    const toDetail = React.useCallback(
+        (id: number) => {
+            store.updateCurSongId(id);
+        },
+        [store]
+    );
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《最新音乐》</h2>
@@ -48,7 +57,10 @@ const NewSongs: React.FunctionComponent = () => {
                 <StyledWrapper>
                     {newSongs.map((item: INewSongs) => {
                         return (
-                            <StyledItem key={item.id}>
+                            <StyledItem
+                                key={item.id}
+                                onClick={() => toDetail(item.id)}
+                            >
                                 <div
                                     style={{
                                         width: DEFAULT_IMG_WIDTH,

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { DEFAULT_LOADING_IMG } from "../web-config/defaultConfig";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface IProps {
     src?: string;
 }
@@ -48,6 +49,7 @@ const LoadingImg: React.FC = () => {
 
 export default LoadingImg;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledLoader = styled.div`
     width: 40px;
     height: 200px;

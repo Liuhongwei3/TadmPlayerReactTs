@@ -6,7 +6,7 @@ import TopMv from "./top-mv";
 import TopSinger from "./top-singer";
 
 const Top: React.FunctionComponent = () => {
-    const [activeKey, setActiveKey] = React.useState<string>("1");
+    const [activeKey, setActiveKey] = React.useState<string>("top-detail");
 
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
@@ -21,13 +21,13 @@ const Top: React.FunctionComponent = () => {
             activeKey={activeKey}
             onChange={(activeKey) => onTabChange(activeKey)}
         >
-            <Tabs.TabPane tab={`歌单排行榜`} key="1">
+            <Tabs.TabPane tab={`歌单排行榜`} key="top-detail">
                 <TopDetail />
             </Tabs.TabPane>
-            <Tabs.TabPane tab={`歌手排行榜`} key="2">
+            <Tabs.TabPane tab={`歌手排行榜`} key="top-singer">
                 <TopSinger />
             </Tabs.TabPane>
-            <Tabs.TabPane tab={`MV 排行榜`} key="3">
+            <Tabs.TabPane tab={`MV 排行榜`} key="top-mv">
                 <TopMv />
             </Tabs.TabPane>
         </Tabs>

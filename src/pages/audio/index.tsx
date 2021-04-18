@@ -1,58 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import {
-    StepBackwardOutlined,
-    StepForwardOutlined,
-    PlayCircleOutlined,
-    PauseCircleOutlined,
-    SoundOutlined,
-    BarsOutlined,
-} from "@ant-design/icons";
-import { Slider } from "antd";
+import CurSongInfo from "./cur-song-info";
+import PlayControl from "./play-control";
+import RightControl from "./right-control";
 
 const AudioControl: React.FC = () => {
+    const [volume, setVolume] = React.useState<number>(1);
+
+    const handleVolumeChange = React.useCallback((num: number) => {
+        setVolume(num);
+    }, []);
+
     return (
-        <>
-            <audio id="audio" src="urls" muted={true} crossOrigin="anonymous" />
+        <StyledControlPanel>
+            <CurSongInfo />
 
-            <StyledControlPanel>
-                <StyledSongInfo>hello</StyledSongInfo>
+            <PlayControl volume={volume} />
 
-                <StyledControl>
-                    <div>
-                        <BarsOutlined />
-                        <StepBackwardOutlined />
-                        <PlayCircleOutlined />
-                        <PauseCircleOutlined />
-                        <StepForwardOutlined />
-                    </div>
-
-                    <Slider defaultValue={0} max={100} />
-                </StyledControl>
-
-                <StyledRight>
-                    <SoundOutlined />
-
-                    <Slider defaultValue={70} max={100} />
-                </StyledRight>
-            </StyledControlPanel>
-        </>
+            <RightControl handleVolumeChange={handleVolumeChange} />
+        </StyledControlPanel>
     );
 };
 
 export default AudioControl;
-
-const StyledRight = styled.div`
-    width: 20%;
-`;
-
-const StyledControl = styled.div`
-    width: 45%;
-`;
-
-const StyledSongInfo = styled.div`
-    width: 30%;
-`;
 
 const StyledControlPanel = styled.div`
     background-color: rgb(105 105 105);
@@ -64,7 +34,7 @@ const StyledControlPanel = styled.div`
     width: calc(100vw - 84px);
     height: 75px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 
     svg {

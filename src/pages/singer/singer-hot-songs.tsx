@@ -6,12 +6,14 @@ import { HotSong, ISong } from "./type";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 import { Link } from "react-router-dom";
+import { useStore } from "../../hooks/useStore";
 
 interface IProps {
     hotSongs: HotSong[];
 }
 
 const SingerHotSongs: React.FunctionComponent<IProps> = (props: IProps) => {
+    const store = useStore();
     const { hotSongs } = props;
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
@@ -119,7 +121,7 @@ const SingerHotSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             onRow={(record) => {
                 return {
                     onDoubleClick: () => {
-                        console.log(record);
+                        store.updateCurSongId(record.id);
                     },
                     onContextMenu: () => {},
                     onMouseEnter: () => {}, // 鼠标移入行

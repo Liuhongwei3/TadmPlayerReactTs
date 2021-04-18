@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { EDetailSongOprType } from "../../enums";
 import openAddSongToDetailDialog from "../../detail/add-song-to-detail-dialog";
+import { useStore } from "../../../hooks/useStore";
 
 interface IProps {
     result: ISearchs | undefined;
 }
 
 const Songs: React.FC<IProps> = (props: IProps) => {
+    const store = useStore();
     const { result } = props;
 
     const handleAddSongFromDetail = React.useCallback(
@@ -114,7 +116,7 @@ const Songs: React.FC<IProps> = (props: IProps) => {
                 onRow={(record) => {
                     return {
                         onDoubleClick: () => {
-                            console.log(record);
+                            store.updateCurSongId(record.id);
                         },
                         onContextMenu: () => {},
                         onMouseEnter: () => {}, // 鼠标移入行

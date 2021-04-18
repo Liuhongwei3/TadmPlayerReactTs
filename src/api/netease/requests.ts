@@ -39,6 +39,7 @@ import {
     ISearchSuggestRes,
 } from "../../pages/search/type";
 import { EOrderType, ESearchType, ESingerType } from "../../pages/enums";
+import { ISongUrlRes } from "./types/song-type";
 
 // -----------------------------------------------------
 // 首页
@@ -284,8 +285,16 @@ const simiSingers = (sid: number) => {
 // ----------------------------------------------------------------------
 // 歌曲详情
 
-const getMusicDetail = (ids: string) => {
-    return api.get<ISongsRes>(`/song/detail?ids=${ids}`);
+const getMusicDetail = (ids: number | number[]) => {
+    return api.get<ISongsRes>(
+        `/song/detail?ids=${typeof ids === "object" ? ids.join(",") : ids}`
+    );
+};
+
+const getMusicUrl = (ids: number | number[]) => {
+    return api.get<ISongUrlRes>(
+        `/song/url?id=${typeof ids === "object" ? ids.join(",") : ids}`
+    );
 };
 
 // ----------------------------------------------------------------------
@@ -374,6 +383,7 @@ const reqFuncs = {
     detailSubscribe,
     getSimiDetails,
     getMusicDetail,
+    getMusicUrl,
     albumDetail,
     albumDetailCount,
     AlbumComments,

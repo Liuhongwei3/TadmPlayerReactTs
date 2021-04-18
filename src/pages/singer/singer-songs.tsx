@@ -7,6 +7,7 @@ import req from "../../api/req";
 import { notify, timeFormat, toTop } from "../../utils";
 import { ISong } from "./type";
 import { EOrderType } from "../enums";
+import { useStore } from "../../hooks/useStore";
 
 interface IProps {
     singerId: number;
@@ -14,6 +15,7 @@ interface IProps {
 
 const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
     const { singerId } = props;
+    const store = useStore();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
@@ -135,7 +137,7 @@ const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             onRow={(record) => {
                 return {
                     onDoubleClick: () => {
-                        console.log(record);
+                        store.updateCurSongId(record.id);
                     },
                     onContextMenu: () => {},
                     onMouseEnter: () => {}, // 鼠标移入行

@@ -6,12 +6,14 @@ import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
+import { useStore } from "../../hooks/useStore";
 
 interface IProps {
     songs: Song[] | undefined;
 }
 
-const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
+const AlbumSongs: React.FC<IProps> = (props: IProps) => {
+    const store = useStore();
     const { songs } = props;
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number>(10);
@@ -121,7 +123,7 @@ const AlbumSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             onRow={(record) => {
                 return {
                     onDoubleClick: (event) => {
-                        console.log(record);
+                        store.updateCurSongId(record.id);
                     },
                     onContextMenu: (event) => {},
                     onMouseEnter: (event) => {}, // 鼠标移入行

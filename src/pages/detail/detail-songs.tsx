@@ -10,6 +10,7 @@ import LoadingImg from "../../components/LoadingImg";
 import StyledDivider from "../../components/StyledDivider";
 import { EDetailSongOprType } from "../enums";
 import openAddSongToDetailDialog from "./add-song-to-detail-dialog";
+import { useStore } from "../../hooks/useStore";
 
 interface IProps {
     isOwnDetail: boolean;
@@ -21,6 +22,7 @@ interface IProps {
 }
 
 const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
+    const store = useStore();
     const {
         isOwnDetail,
         detailId,
@@ -48,9 +50,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                         page === 1 ? 0 : (page - 1) * pageSize,
                         page * pageSize
                     )
-                )
-                    .map((trackId) => trackId.id)
-                    .join(",")
+                ).map((trackId) => trackId.id)
             )
             .then((res) => {
                 setSongs(
@@ -264,7 +264,8 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 onRow={(record) => {
                     return {
                         onDoubleClick: (event) => {
-                            console.log(record);
+                            store.updateCurSongId(record.id);
+                            store.updateCurSong(record);
                         },
                         onContextMenu: (event) => {},
                     };

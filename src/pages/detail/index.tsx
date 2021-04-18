@@ -52,7 +52,7 @@ const Detail: React.FunctionComponent = observer(() => {
     const [isOwnDetail, setIsOwnDetail] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
     const [subscribed, setSubscribed] = React.useState(false);
-    const [activeKey, setActiveKey] = React.useState<string>("1");
+    const [activeKey, setActiveKey] = React.useState<string>("detail-song");
     const [detailInfo, setDetailInfo] = React.useState<IDetailRes>();
     const [dailySongs, setDailySongs] = React.useState<ISong[]>([]);
     detailId = detailId || String(store.curDetailId);
@@ -106,7 +106,7 @@ const Detail: React.FunctionComponent = observer(() => {
 
     React.useEffect(() => {
         store.updateCurDetailId(+detailId);
-        setActiveKey("1");
+        setActiveKey("detail-song");
         toTop();
     }, [detailId, store]);
 
@@ -309,7 +309,7 @@ const Detail: React.FunctionComponent = observer(() => {
 
                     <Tabs
                         style={{ width: "99%" }}
-                        defaultActiveKey="1"
+                        defaultActiveKey="detail-song"
                         activeKey={activeKey}
                         onChange={(activeKey) => onTabChange(activeKey)}
                     >
@@ -317,7 +317,7 @@ const Detail: React.FunctionComponent = observer(() => {
                             tab={`歌曲(${countFormat(
                                 detailInfo.playlist.trackCount
                             )})`}
-                            key="1"
+                            key="detail-song"
                         >
                             <DetailSongs
                                 isOwnDetail={isOwnDetail}
@@ -331,7 +331,7 @@ const Detail: React.FunctionComponent = observer(() => {
                             tab={`评论(${countFormat(
                                 detailInfo.playlist.commentCount
                             )})`}
-                            key="2"
+                            key="detail-comment"
                         >
                             <DetailComments
                                 detailId={+detailId}
@@ -342,7 +342,7 @@ const Detail: React.FunctionComponent = observer(() => {
                             tab={`收藏(${countFormat(
                                 detailInfo.playlist.subscribedCount
                             )})`}
-                            key="3"
+                            key="detail-subscibe"
                         >
                             <DetailSubscribedUsers
                                 detailId={+detailId}
@@ -351,7 +351,7 @@ const Detail: React.FunctionComponent = observer(() => {
                                 }
                             />
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="推荐" key="4">
+                        <Tabs.TabPane tab="推荐" key="detail-similar">
                             <DetailSimilar detailId={+detailId} />
                         </Tabs.TabPane>
                     </Tabs>

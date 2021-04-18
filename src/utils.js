@@ -24,6 +24,7 @@ export const setOutDateCookie = () => {
         //     ).toISOString()}`;
         // });
 
+        // eslint-disable-next-line no-useless-escape
         const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
         if (keys) {
             keys.forEach((key) => {

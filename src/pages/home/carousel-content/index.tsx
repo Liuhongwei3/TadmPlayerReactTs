@@ -10,8 +10,10 @@ import { CarouselRef } from "antd/lib/carousel";
 import { notify } from "../../../utils";
 import { ETartgetType } from "../../enums";
 import LoadingImg from "../../../components/LoadingImg";
+import { useStore } from "../../../hooks/useStore";
 
-const CarouselContent: React.FunctionComponent = () => {
+const CarouselContent: React.FC = () => {
+    const store = useStore();
     const history = useHistory();
     const [currentSlide, setCurrentSlide] = React.useState<number>(0);
     const [banners, setBanners] = React.useState<Array<IBanner>>([]);
@@ -43,7 +45,8 @@ const CarouselContent: React.FunctionComponent = () => {
 
             switch (item.targetType) {
                 case ETartgetType.SONG:
-                    notify("warning", "该功能暂未开放");
+                    store.updateCurSongId(item.targetId);
+                    notify("info", "开始播放该歌曲");
                     break;
                 case ETartgetType.ALBUM:
                     history.push(`/album/${item.targetId}`);
@@ -56,7 +59,7 @@ const CarouselContent: React.FunctionComponent = () => {
                     break;
             }
         },
-        [history]
+        [history, store]
     );
 
     return banners && banners.length ? (
