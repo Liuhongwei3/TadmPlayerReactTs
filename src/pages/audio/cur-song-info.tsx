@@ -1,12 +1,41 @@
 import React from "react";
 import styled from "styled-components";
 import { Avatar, Tooltip } from "antd";
+import { HeartTwoTone, HeartOutlined } from "@ant-design/icons";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
+import reqs from "../../api/req";
+import { notify } from "../../utils";
 
 const CurSongInfo: React.FC = observer(() => {
     const store = useStore();
+    const isLiked = store.userLikeSongIds.find((id) => id === store.curSongId);
+
+    const handleSongLike = React.useCallback(
+        (like: boolean) => {
+            reqs.neteaseLogined
+                .likeSong(store.curSongId, like)
+                .then((res) => {
+                    if (like) {
+                        store.updateUserLikeSongIds([
+                            ...store.userLikeSongIds,
+                            store.curSongId,
+                        ]);
+                    } else {
+                        store.updateUserLikeSongIds(
+                            store.userLikeSongIds.filter(
+                                (id) => id !== store.curSongId
+                            )
+                        );
+                    }
+                })
+                .catch((e) => {
+                    notify("error", e.message);
+                });
+        },
+        [store]
+    );
 
     return (
         <StyledSongInfo>
@@ -18,9 +47,28 @@ const CurSongInfo: React.FC = observer(() => {
                         src={store.curSong.al.picUrl}
                     />
                     <StyledTitle>
-                        <Tooltip title={store.curSong.name}>
-                            <div>{store.curSong.name}</div>
-                        </Tooltip>
+                        <div>
+                            <Tooltip title={store.curSong.name}>
+                                <span>{store.curSong.name}</span>
+                            </Tooltip>
+                            {isLiked ? (
+                                <HeartTwoTone
+                                    style={{
+                                        transform: "scale(0.8)",
+                                    }}
+                                    twoToneColor="#fc7878"
+                                    onClick={() => handleSongLike(false)}
+                                />
+                            ) : (
+                                <HeartOutlined
+                                    style={{
+                                        transform: "scale(0.8)",
+                                    }}
+                                    onClick={() => handleSongLike(true)}
+                                />
+                            )}
+                        </div>
+
                         <div
                             style={{
                                 fontSize: 15,
@@ -55,10 +103,13 @@ export default CurSongInfo;
 
 const StyledSongInfo = styled.div`
     width: 25%;
-    height: 100%;
     display: flex;
     jutify-content: center;
     align-items: center;
+
+    @media screen and (max-width: 768px) {
+        width: 85%;
+    }
 `;
 
 const StyledTitle = styled.div`

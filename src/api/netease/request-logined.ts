@@ -83,6 +83,10 @@ const getEvents = (limit: number) => {
 };
 
 // 点赞资源
+const likeSong = (id: number, like = true) => {
+    return api.get(`/like?id=${id}&like=${like}`);
+};
+
 const likeSth = (opr: ELikeOpr, type: ESourceType, id: string | number) => {
     // 点赞动态
     if (typeof id === "string") {
@@ -178,6 +182,7 @@ const reqLoginedFuncs = {
     subscribeMv,
     getRecommendSongs,
     getEvents,
+    likeSong,
     likeSth,
     likeComment,
     userComments,

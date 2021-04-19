@@ -1,4 +1,4 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 body {
     margin: 0;
@@ -53,6 +53,10 @@ img {
 
 svg {
     margin-right: 5px;
+}
+
+a:hover {
+    color: #10e468;
 }
 
 .ant-back-top {

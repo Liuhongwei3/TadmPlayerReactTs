@@ -34,6 +34,7 @@ class Root {
         userCover: "",
     };
     userPlaylists: IUserPlaylist[] = [];
+    userLikeSongIds: number[] = [];
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true });
@@ -82,6 +83,10 @@ class Root {
     updateCurSong(song: ISong) {
         this.curSong = song;
     }
+
+    updateUserLikeSongIds(ids: number[]) {
+        this.userLikeSongIds = ids;
+    }
 }
 
 const root = new Root();
@@ -90,8 +95,12 @@ export const RootStore = React.createContext(root);
 autorun(() => {
     const uid = root.userInfo.userId;
     if (!uid) return;
-    req.netease.userPlaylist(uid, LIMIT).then((res) => {
-        root.updateUserPlaylists(res.playlist);
+    Promise.all([
+        req.netease.userPlaylist(uid, LIMIT),
+        req.netease.userLikeSongIds(uid),
+    ]).then((res) => {
+        root.updateUserPlaylists(res[0].playlist);
+        root.updateUserLikeSongIds(res[1].ids);
     });
 });
 

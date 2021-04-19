@@ -144,6 +144,10 @@ const userPlaylist = (uid: number, limit?: number, offset?: number) => {
     );
 };
 
+const userLikeSongIds = (uid: number) => {
+    return api.get<{ code: number; ids: number[] }>(`/likelist?uid=${uid}`);
+};
+
 const userFollow = (uid: number, limit?: number, offset?: number) => {
     const optional1 = limit ? `&limit=${limit}` : "";
     const optional2 = offset ? `&offset=${offset}` : "";
@@ -374,6 +378,7 @@ const reqFuncs = {
     hotDetails,
     userDetail,
     userPlaylist,
+    userLikeSongIds,
     userFollow,
     userFollowed,
     userEvent,

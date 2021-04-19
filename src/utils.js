@@ -220,3 +220,82 @@ export function getEventType(str = 0) {
     }
     return str;
 }
+
+export function copyData(text, options = undefined) {
+    var range,
+        selection,
+        mark,
+        success = false;
+    if (!options) {
+        options = {};
+    }
+    try {
+        range = document.createRange();
+        selection = document.getSelection();
+
+        mark = document.createElement("span");
+        mark.textContent = text;
+        // reset user styles for span element
+        mark.style.all = "unset";
+        // prevents scrolling to the end of the page
+        mark.style.position = "fixed";
+        mark.style.top = 0;
+        mark.style.clip = "rect(0, 0, 0, 0)";
+        // used to preserve spaces and line breaks
+        mark.style.whiteSpace = "pre";
+        // do not inherit user-select (it may be `none`)
+        mark.style.webkitUserSelect = "text";
+        mark.style.MozUserSelect = "text";
+        mark.style.msUserSelect = "text";
+        mark.style.userSelect = "text";
+        mark.addEventListener("copy", function (e) {
+            e.stopPropagation();
+            if (options.format) {
+                e.preventDefault();
+
+                // all other browsers
+                e.clipboardData.clearData();
+                e.clipboardData.setData(options.format, text);
+            }
+            if (options.onCopy) {
+                e.preventDefault();
+                options.onCopy(e.clipboardData);
+            }
+        });
+
+        document.body.appendChild(mark);
+
+        range.selectNodeContents(mark);
+        selection.addRange(range);
+
+        var successful = document.execCommand("copy");
+        if (!successful) {
+            throw new Error("copy command was unsuccessful");
+        }
+        success = true;
+    } catch (err) {
+        console.error("unable to copy using execCommand: ", err);
+        try {
+            window.clipboardData.setData(options.format || "text", text);
+            options.onCopy && options.onCopy(window.clipboardData);
+            success = true;
+        } catch (err) {
+            console.error("unable to copy using clipboardData: ", err);
+            console.error("falling back to prompt", options);
+        }
+    } finally {
+        if (selection) {
+            if (typeof selection.removeRange == "function") {
+                selection.removeRange(range);
+            } else {
+                selection.removeAllRanges();
+            }
+        }
+
+        if (mark) {
+            document.body.removeChild(mark);
+        }
+    }
+
+    return success;
+}

@@ -6,9 +6,10 @@ import {
     PlayCircleOutlined,
     PauseCircleOutlined,
     BarsOutlined,
+    ShareAltOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Slider } from "antd";
-import { notify, timeFormat } from "../../utils";
+import { copyData, notify, timeFormat } from "../../utils";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 import reqs from "../../api/req";
@@ -87,6 +88,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
         [url]
     );
 
+    // todos: set volume to 0 or 1 gradually
     const play = React.useCallback(() => {
         if (audioRef && audioRef.current && url) {
             audioRef.current.play();
@@ -115,6 +117,15 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
         }
     }, [volume]);
 
+    const handleShareCopy = React.useCallback(() => {
+        const copied = copyData(
+            `http://music.163.com/song?id=${store.curSongId}`
+        );
+        if (copied) {
+            notify("success", "复制链接成功，请使用浏览器打开链接 ~");
+        }
+    }, [store.curSongId]);
+
     return (
         <>
             <audio
@@ -140,12 +151,13 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                         <PlayCircleOutlined onClick={play} />
                     )}
                     <StepForwardOutlined />
+                    <ShareAltOutlined onClick={handleShareCopy} />
                 </StyledController>
 
                 <Row justify="space-between">
-                    <Col span={3} push={1}>
+                    <StyledTime span={3} push={1}>
                         <div>{timeFormat(curTime)}</div>
-                    </Col>
+                    </StyledTime>
                     <Col span={16}>
                         <Slider
                             defaultValue={0}
@@ -157,9 +169,9 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                             onAfterChange={handleAfterTimeChange}
                         />
                     </Col>
-                    <Col span={3}>
+                    <StyledTime span={3}>
                         <div>{timeFormat(duration)}</div>
-                    </Col>
+                    </StyledTime>
                 </Row>
             </StyledControl>
         </>
@@ -168,6 +180,11 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
 
 export default PlayControl;
 
+const StyledTime = styled(Col)`
+    display: flex;
+    align-items: center;
+`;
+
 const StyledController = styled.div`
     display: flex;
     justify-content: center;
@@ -175,4 +192,9 @@ const StyledController = styled.div`
 
 const StyledControl = styled.div`
     width: 36%;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        margin-top: 10px;
+    }
 `;

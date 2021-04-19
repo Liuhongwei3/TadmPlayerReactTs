@@ -32,8 +32,9 @@ const StyledControlPanel = styled.div`
     bottom: 0;
     left: 80px;
     width: calc(100vw - 84px);
-    height: 75px;
+    padding: 6px 0;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
 

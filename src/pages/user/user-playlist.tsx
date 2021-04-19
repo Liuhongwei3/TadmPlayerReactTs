@@ -129,26 +129,27 @@ const UserPlaylist: React.FunctionComponent<IProps> = observer(
                                 );
                             })}
 
-                            {!!store.userInfo.userId && (
-                                <StyledItem
-                                    style={{
-                                        width: DEFAULT_IMG_WIDTH,
-                                        height: DEFAULT_IMG_HEIGHT,
-                                        position: "relative",
-                                        fontSize: 100,
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        flexDirection: "column",
-                                    }}
-                                    onClick={openAddDetailDialog}
-                                >
-                                    <FolderAddOutlined />
-                                    <StyledName width={DEFAULT_IMG_WIDTH}>
-                                        创建歌单
-                                    </StyledName>
-                                </StyledItem>
-                            )}
+                            {!!store.userInfo.userId &&
+                                userId === store.userInfo.userId && (
+                                    <StyledItem
+                                        style={{
+                                            width: DEFAULT_IMG_WIDTH,
+                                            height: DEFAULT_IMG_HEIGHT,
+                                            position: "relative",
+                                            fontSize: 100,
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            flexDirection: "column",
+                                        }}
+                                        onClick={openAddDetailDialog}
+                                    >
+                                        <FolderAddOutlined />
+                                        <StyledName width={DEFAULT_IMG_WIDTH}>
+                                            创建歌单
+                                        </StyledName>
+                                    </StyledItem>
+                                )}
 
                             <StyledDivider />
                             <Button
