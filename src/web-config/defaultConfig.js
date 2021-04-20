@@ -15,11 +15,12 @@ export const DEFAULT_LOADING_IMG =
 
 export const RECOMMEND_DAY_ID = 999;
 
+export const DEFAULT_SONG_ID = 1364247901;
 export const DEFAULT_ALBUM_ID = 21506;
 export const DEFAULT_DETAIL_ID = 3778678;
 export const DEFAULT_SINGER_ID = 160947; // 华晨宇: 861777
 export const DEFAULT_USER_ID = 328199093; //  ME: 537069044 栗先达: 264256080 王贰浪: 328199093
-export const DEFAULT_MV_ID = 393006; // IU: 14239660
+export const DEFAULT_MV_ID = 14257559; // IU: 14239660  See-you-again: 393006
 
 export const clientWidth = window.document.body.clientWidth;
 export const isPc = clientWidth >= 768;

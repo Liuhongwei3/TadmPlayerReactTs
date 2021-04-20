@@ -6,6 +6,7 @@ import {
     PlayCircleOutlined,
     PauseCircleOutlined,
     BarsOutlined,
+    DownloadOutlined,
     ShareAltOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Slider } from "antd";
@@ -13,6 +14,7 @@ import { copyData, notify, timeFormat } from "../../utils";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 import reqs from "../../api/req";
+import { createDownload } from "../../features";
 
 interface IProps {
     volume: number;
@@ -26,37 +28,22 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     const [duration, setDuration] = React.useState<number>(0);
     const [playing, setPlaying] = React.useState<boolean>(false);
     const [isDragging, setIsDragging] = React.useState<boolean>(false);
-    const [url, setUrl] = React.useState<string>("");
+    const [url, setUrl] = React.useState<string | null>(null);
 
     React.useEffect(() => {
-        const sid = store.curSongId;
-        if (sid) {
-            reqs.netease
-                .getMusicUrl(sid)
-                .then((res) => {
-                    setUrl(res.data.filter((d) => !!d.url)[0].url);
-                })
-                .catch((e) => {
-                    notify("error", e.message);
-                });
-        }
-    }, [store.curSongId]);
-
-    React.useEffect(() => {
-        const song = store.curSong;
-        if (song) {
-            setDuration(Math.round(song.dt / 1000));
-        }
-    }, [store.curSong]);
+        store.toggleAudioPlaying(playing);
+    }, [playing, store]);
 
     const handleAudioPlay = React.useCallback((e) => {
-        if (audioRef && audioRef.current) {
-            setPlaying(true);
-        }
+        setPlaying(true);
     }, []);
 
     const handleAudioPause = React.useCallback((e) => {
         setPlaying(false);
+    }, []);
+
+    const handleAudioDurationChange = React.useCallback((e) => {
+        setDuration((e.target as HTMLAudioElement).duration || 0);
     }, []);
 
     const handleAudioTimeUpdate = React.useCallback(
@@ -102,6 +89,37 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     }, []);
 
     React.useEffect(() => {
+        if (store.audioPlaying && store.videoPlaying) {
+            store.toggleAudioPlaying(false);
+            pause();
+        }
+    }, [pause, store.videoPlaying, store.audioPlaying, store]);
+
+    React.useEffect(() => {
+        const sid = store.curSongId;
+        pause();
+        setCurTime(0);
+        setUrl(null);
+        if (sid) {
+            reqs.netease
+                .getMusicUrl(sid)
+                .then((res) => {
+                    const urls = res.data.filter((d) => !!d.url);
+                    if (urls.length) {
+                        setUrl(urls[0].url);
+                    } else {
+                        notify("error", "暂无该歌曲音频播放资源！");
+                        setCurTime(0);
+                        setDuration(0);
+                    }
+                })
+                .catch((e) => {
+                    notify("error", e.message);
+                });
+        }
+    }, [pause, store.curSongId]);
+
+    React.useEffect(() => {
         pause();
         if (audioRef && audioRef.current && url) {
             setCurTime(0);
@@ -126,6 +144,24 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
         }
     }, [store.curSongId]);
 
+    const handleDownloadMusic = React.useCallback(() => {
+        const song = store.curSong;
+        if (!song || !url) return;
+        reqs.netease
+            .downloadMusic(url)
+            .then((res) => {
+                createDownload(
+                    song.name || "song",
+                    song.ar.join(",") || "player",
+                    res.data
+                );
+                notify("success", "歌曲下载完成！");
+            })
+            .catch((e) => {
+                notify("error", e.message);
+            });
+    }, [store.curSong, url]);
+
     return (
         <>
             <audio
@@ -134,11 +170,15 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                 preload="metadata"
                 loop={false}
                 ref={audioRef}
-                src={url}
+                src={url || undefined}
+                onDurationChange={handleAudioDurationChange}
                 onPlay={handleAudioPlay}
                 onPause={handleAudioPause}
                 onTimeUpdate={handleAudioTimeUpdate}
                 onEnded={handleAudioEnded}
+                onPlayCapture={() => setPlaying(false)}
+                onPlaying={() => setPlaying(true)}
+                onWaiting={() => setPlaying(false)}
             />
 
             <StyledControl>
@@ -151,6 +191,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                         <PlayCircleOutlined onClick={play} />
                     )}
                     <StepForwardOutlined />
+                    <DownloadOutlined onClick={handleDownloadMusic} />
                     <ShareAltOutlined onClick={handleShareCopy} />
                 </StyledController>
 
@@ -192,6 +233,11 @@ const StyledController = styled.div`
 
 const StyledControl = styled.div`
     width: 36%;
+
+    svg {
+        font-size: 25px;
+        margin: 0 10px;
+    }
 
     @media screen and (max-width: 768px) {
         width: 100%;

@@ -24,13 +24,7 @@ const App: React.FunctionComponent = observer(() => {
                 <div style={{ display: "flex" }}>
                     <LeftSide />
 
-                    <div
-                        style={{
-                            backgroundColor: "rgba(0, 0, 0, 0.2)",
-                            width: "calc(100vw - 86px)",
-                            marginLeft: 80,
-                        }}
-                    >
+                    <StyledRight>
                         <ContentHeader />
 
                         <StyledBg>
@@ -41,7 +35,7 @@ const App: React.FunctionComponent = observer(() => {
                             <Divider />
                             <Footer />
                         </StyledBg>
-                    </div>
+                    </StyledRight>
 
                     <AudioControl />
 
@@ -55,6 +49,12 @@ const App: React.FunctionComponent = observer(() => {
 });
 
 export default App;
+
+const StyledRight = styled.div`
+    background-color: rgba(0, 0, 0, 0.2);
+    width: calc(100vw - 86px);
+    margin-left: 80px;
+`;
 
 const StyledBg = styled.div`
     width: 100%;

@@ -1757,7 +1757,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/dplayer@^1.25.1":
+"@types/dplayer@^1.25.0", "@types/dplayer@^1.25.1":
   version "1.25.1"
   resolved "https://registry.npm.taobao.org/@types/dplayer/download/@types/dplayer-1.25.1.tgz#649162a3dce31afd8027577bb6a5f728a16acad3"
   integrity sha1-ZJFio9zjGv2AJ1d7tqX3KKFqytM=
@@ -3537,6 +3537,11 @@ cliui@^6.0.0:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^6.2.0"
+
+clsx@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/clsx/download/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
+  integrity sha1-mLMTT5q73yOyZjSRrOE8XAOnMYg=
 
 co@^4.6.0:
   version "4.6.0"
@@ -8018,6 +8023,11 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.npm.taobao.org/obuf/download/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha1-Cb6jND1BhZ69RGKS0RydTbYZCE4=
 
+omit.js@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npm.taobao.org/omit.js/download/omit.js-2.0.2.tgz#dd9b8436fab947a5f3ff214cb2538631e313ec2f"
+  integrity sha1-3ZuENvq5R6Xz/yFMslOGMeMT7C8=
+
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.npm.taobao.org/on-finished/download/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"
@@ -9752,6 +9762,16 @@ react-dom@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-dplayer@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.nlark.com/react-dplayer/download/react-dplayer-0.4.2.tgz#f612f8a1a894a856d213b6921f58988dd1310819"
+  integrity sha1-9hL4oaiUqFbSE7aSH1iYjdExCBk=
+  dependencies:
+    "@types/dplayer" "^1.25.0"
+    clsx "^1.1.0"
+    dplayer "^1.26.0"
+    omit.js "^2.0.2"
 
 react-error-overlay@^6.0.9:
   version "6.0.9"

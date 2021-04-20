@@ -1,16 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import { Avatar, Tooltip } from "antd";
-import { HeartTwoTone, HeartOutlined } from "@ant-design/icons";
+import { Avatar, Tag, Tooltip } from "antd";
+import {
+    HeartTwoTone,
+    HeartOutlined,
+    UpOutlined,
+    DownOutlined,
+} from "@ant-design/icons";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
 
 const CurSongInfo: React.FC = observer(() => {
     const store = useStore();
+    const history = useHistory();
     const isLiked = store.userLikeSongIds.find((id) => id === store.curSongId);
+    const songMvId = store.curSong?.mv;
 
     const handleSongLike = React.useCallback(
         (like: boolean) => {
@@ -37,24 +44,49 @@ const CurSongInfo: React.FC = observer(() => {
         [store]
     );
 
+    const toDetail = React.useCallback(
+        (id: number) => {
+            history.push(`/mv/${id}`);
+        },
+        [history]
+    );
+
     return (
         <StyledSongInfo>
             {store.curSong ? (
                 <>
-                    <Avatar
-                        shape="square"
-                        size="large"
-                        src={store.curSong.al.picUrl}
-                    />
+                    <StyledAvatar onClick={() => store.toggleShowLyrics()}>
+                        <Avatar
+                            shape="square"
+                            size="large"
+                            src={store.curSong.al.picUrl}
+                        />
+                        {store.showLyrics ? (
+                            <StyledDownOutlined />
+                        ) : (
+                            <StyledUpOutlined />
+                        )}
+                    </StyledAvatar>
+
                     <StyledTitle>
-                        <div>
+                        <div style={{ display: "flex", alignItems: "center" }}>
                             <Tooltip title={store.curSong.name}>
-                                <span>{store.curSong.name}</span>
+                                <StyledSongName>
+                                    {store.curSong.name}
+                                </StyledSongName>
                             </Tooltip>
+                            {!!songMvId && (
+                                <StyledMvTag
+                                    color="magenta"
+                                    onClick={() => toDetail(songMvId)}
+                                >
+                                    MV
+                                </StyledMvTag>
+                            )}
                             {isLiked ? (
                                 <HeartTwoTone
                                     style={{
-                                        transform: "scale(0.8)",
+                                        marginLeft: 6,
                                     }}
                                     twoToneColor="#fc7878"
                                     onClick={() => handleSongLike(false)}
@@ -62,7 +94,7 @@ const CurSongInfo: React.FC = observer(() => {
                             ) : (
                                 <HeartOutlined
                                     style={{
-                                        transform: "scale(0.8)",
+                                        marginLeft: 5,
                                     }}
                                     onClick={() => handleSongLike(true)}
                                 />
@@ -101,8 +133,65 @@ const CurSongInfo: React.FC = observer(() => {
 
 export default CurSongInfo;
 
+const StyledMvTag = styled(Tag)`
+    margin-left: 6px;
+    margin-right: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
+const StyledUpOutlined = styled(UpOutlined)`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.3s;
+`;
+
+const StyledDownOutlined = styled(DownOutlined)`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.3s;
+`;
+
+const StyledAvatar = styled.div`
+    display: inline-block;
+    position: relative;
+
+    &:hover > span {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    svg {
+        margin: 0;
+    }
+`;
+
+const StyledSongName = styled.span`
+    max-width: 70%;
+`;
+
 const StyledSongInfo = styled.div`
-    width: 25%;
+    width: 30%;
     display: flex;
     jutify-content: center;
     align-items: center;
@@ -116,7 +205,8 @@ const StyledTitle = styled.div`
     margin-left: 6px;
     overflow: hidden;
 
-    > div {
+    > div,
+    span {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

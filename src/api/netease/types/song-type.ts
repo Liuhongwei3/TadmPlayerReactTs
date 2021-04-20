@@ -12,7 +12,7 @@ export interface FreeTimeTrialPrivilege {
 
 export interface ISongUrl {
 	id: number;
-	url: string;
+	url: string | null;
 	br: number;
 	size: number;
 	md5: string;

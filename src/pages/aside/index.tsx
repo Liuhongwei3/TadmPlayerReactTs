@@ -17,22 +17,13 @@ import {
 import { DEFAULT_AVATAR } from "../../web-config/defaultConfig";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../hooks/useStore";
+import styled from "styled-components";
 
 const LeftSide: React.FunctionComponent = observer(() => {
     const store = useStore();
 
     return (
-        <div
-            style={{
-                width: 80,
-                height: "100vh",
-                position: "fixed",
-                overflow: "hidden",
-                left: 0,
-                top: 0,
-                transition: "all 0.3s",
-            }}
-        >
+        <StyledLeftSide onClick={() => store.toggleShowLyrics(false)}>
             <Image width={80} height={80} src={DEFAULT_AVATAR} />
             <Menu
                 style={{
@@ -89,8 +80,18 @@ const LeftSide: React.FunctionComponent = observer(() => {
                 )} */}
                 hello
             </Button>
-        </div>
+        </StyledLeftSide>
     );
 });
 
 export default LeftSide;
+
+const StyledLeftSide = styled.div`
+    width: 80px;
+    height: 100vh;
+    position: fixed;
+    overflow: hidden;
+    left: 0;
+    top: 0;
+    transition: all 0.3s;
+`;

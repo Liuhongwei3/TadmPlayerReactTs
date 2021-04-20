@@ -7,6 +7,7 @@ import {
     DEFAULT_DETAIL_ID,
     DEFAULT_MV_ID,
     DEFAULT_SINGER_ID,
+    DEFAULT_SONG_ID,
     DEFAULT_USER_ID,
 } from "../web-config/defaultConfig";
 import { IUserPlaylist } from "../pages/user/type";
@@ -24,9 +25,12 @@ class Root {
     curSingerId = DEFAULT_SINGER_ID;
     curUserId = DEFAULT_USER_ID;
     curMvId = DEFAULT_MV_ID;
-
-    curSongId: number = 1364247901;
+    curSongId = DEFAULT_SONG_ID;
     curSong: ISong | undefined;
+
+    showLyrics: boolean = false;
+    audioPlaying: boolean = false;
+    videoPlaying: boolean = false;
 
     userInfo = {
         userId: 0,
@@ -66,6 +70,18 @@ class Root {
 
     changeLocale() {
         this.locale = this.locale.locale === "zh-cn" ? enUS : zhCN;
+    }
+
+    toggleShowLyrics(show?: boolean) {
+        this.showLyrics = typeof show === "undefined" ? !this.showLyrics : show;
+    }
+
+    toggleAudioPlaying(play: boolean) {
+        this.audioPlaying = play;
+    }
+
+    toggleVideoPlaying(play: boolean) {
+        this.videoPlaying = play;
     }
 
     updateUserInfo(userId: number, userName: string, userCover: string) {

@@ -1,5 +1,4 @@
 import React from "react";
-import LazyLoad from "react-lazyload";
 import { Link } from "react-router-dom";
 import { Comment, Tooltip, Avatar, Image } from "antd";
 import { LikeFilled, LikeOutlined } from "@ant-design/icons";
@@ -33,42 +32,43 @@ const StyledComment: React.FunctionComponent<IProps> = (props: IProps) => {
         [comm.commentId, sourceId, sourceType]
     );
 
-    const actions = React.useCallback((comm: IHotComment | IComment) => {
-        return [
-            <Tooltip title="Like">
-                <span>
-                    {liked ? (
-                        <LikeFilled
-                            onClick={() => likeAction(ELikeOpr.DISLIKE)}
-                        />
-                    ) : (
-                        <LikeOutlined
-                            onClick={() => likeAction(ELikeOpr.LIKE)}
-                        />
-                    )}
-                    <span className="comment-action">
-                        {countFormat(comm.likedCount)}
+    const actions = React.useCallback(
+        (comm: IHotComment | IComment) => {
+            return [
+                <Tooltip title="Like">
+                    <span>
+                        {liked ? (
+                            <LikeFilled
+                                onClick={() => likeAction(ELikeOpr.DISLIKE)}
+                            />
+                        ) : (
+                            <LikeOutlined
+                                onClick={() => likeAction(ELikeOpr.LIKE)}
+                            />
+                        )}
+                        <span className="comment-action">
+                            {countFormat(comm.likedCount)}
+                        </span>
                     </span>
-                </span>
-            </Tooltip>,
-            <span>Reply to</span>,
-        ];
-    }, [likeAction, liked]);
+                </Tooltip>,
+                <span>Reply to</span>,
+            ];
+        },
+        [likeAction, liked]
+    );
 
     const avatar = React.useCallback((comm: IHotComment | IComment) => {
         return (
             <Avatar
                 alt={comm.user.nickname}
                 src={
-                    <LazyLoad height={32} placeholder={<LoadingImg />}>
-                        <Image
-                            alt="detail-cover"
-                            loading="lazy"
-                            style={{ opacity: 0.8 }}
-                            src={comm.user.avatarUrl}
-                            placeholder={<LoadingImg />}
-                        />
-                    </LazyLoad>
+                    <Image
+                        alt="comment-cover"
+                        loading="lazy"
+                        style={{ opacity: 0.8 }}
+                        src={comm.user.avatarUrl}
+                        placeholder={<LoadingImg />}
+                    />
                 }
             />
         );

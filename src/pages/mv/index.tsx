@@ -10,7 +10,7 @@ import {
     ShareAltOutlined,
     CommentOutlined,
 } from "@ant-design/icons";
-import DPlayer from "dplayer";
+import DPlayer from "react-dplayer";
 
 import StyledDivider from "../../components/StyledDivider";
 import { countFormat, notify, toTop } from "../../utils";
@@ -25,25 +25,6 @@ import MvSimilar from "./mv-similar";
 import styled from "styled-components";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
-
-const StyledDPlayer = styled.div`
-    width: 75%;
-    max-height: 520px;
-    border-radius: 10px;
-    margin: 0 auto;
-
-    @media screen and (max-width: 768px) {
-        width: 100%;
-        height: 240px;
-
-        .dplayer-controller .dplayer-icons .dplayer-icon {
-            width: 30px;
-        }
-        .dplayer-time {
-            font-size: 10px !important;
-        }
-    }
-`;
 
 interface IRouteParams {
     mvId: string;
@@ -86,42 +67,6 @@ const Mv: React.FunctionComponent = () => {
     }, [getAlbumDetail]);
 
     React.useEffect(() => {
-        if (mvUrl) {
-            const dp = new DPlayer({
-                container: document.getElementById("dplayer"),
-                screenshot: true,
-                volume: 1,
-                theme: "#faa3a3",
-                // theme: "#FADFA3",
-                // logo:
-                //     "https://user-gold-cdn.xitu.io/2020/3/22/171012d7cd64fae9?imageView2/1/w/180/h/180/q/85/format/webp/interlace/1",
-                video: {
-                    // quality: [
-                    //     {
-                    //         name: '蓝光',
-                    //         url: res[1].data.url,
-                    //         type: 'mp4',
-                    //     },
-                    // ],
-                    // defaultQuality: 0,
-                    url: mvUrl.url,
-                },
-                contextmenu: [
-                    {
-                        text: "Tadm",
-                        link:
-                            "https://github.com/Liuhongwei3/TadmPlayerReactTs",
-                    },
-                ],
-            });
-
-            return () => {
-                dp.destroy();
-            };
-        }
-    }, [mvUrl]);
-
-    React.useEffect(() => {
         store.updateCurMvId(+mvId);
         setActiveKey("2");
         toTop();
@@ -141,6 +86,18 @@ const Mv: React.FunctionComponent = () => {
         },
         [mvId]
     );
+
+    const handleDPlayerPlay = React.useCallback(() => {
+        store.toggleVideoPlaying(true);
+    }, [store]);
+
+    const handleDPlayerPause = React.useCallback(() => {
+        store.toggleVideoPlaying(false);
+    }, [store]);
+
+    const handleDPlayerEnded = React.useCallback(() => {
+        store.toggleVideoPlaying(false);
+    }, [store]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -247,7 +204,35 @@ const Mv: React.FunctionComponent = () => {
                                     controls={true}
                                     src={mvUrl.url}
                                 /> */}
-                                <StyledDPlayer id="dplayer"></StyledDPlayer>
+                                <StyledDPlayer
+                                    options={{
+                                        screenshot: true,
+                                        volume: 1,
+                                        theme: "#faa3a3",
+                                        video: {
+                                            // quality: [
+                                            //     {
+                                            //         name: "蓝光",
+                                            //         url: mvUrl.url,
+                                            //         type: "mp4",
+                                            //     },
+                                            // ],
+                                            // defaultQuality: 0,
+                                            url: mvUrl.url,
+                                        },
+                                        contextmenu: [
+                                            {
+                                                text: "Tadm",
+                                                link:
+                                                    "https://github.com/Liuhongwei3/TadmPlayerReactTs",
+                                            },
+                                        ],
+                                    }}
+                                    onPlay={handleDPlayerPlay}
+                                    onPause={handleDPlayerPause}
+                                    onEnded={handleDPlayerEnded}
+                                    onError={() => console.log("err")}
+                                />
                             </>
                         )}
 
@@ -290,3 +275,22 @@ const Mv: React.FunctionComponent = () => {
 };
 
 export default Mv;
+
+const StyledDPlayer = styled(DPlayer)`
+    width: 75%;
+    max-height: 520px;
+    border-radius: 10px;
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: 240px;
+
+        .dplayer-controller .dplayer-icons .dplayer-icon {
+            width: 30px;
+        }
+        .dplayer-time {
+            font-size: 10px !important;
+        }
+    }
+`;

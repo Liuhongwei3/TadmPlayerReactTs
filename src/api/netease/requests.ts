@@ -295,10 +295,27 @@ const getMusicDetail = (ids: number | number[]) => {
     );
 };
 
+const getMusicComment = (
+    id: number,
+    limit = 30,
+    offset?: number,
+    before?: number
+) => {
+    const base = `/comment/music?id=${id}&limit=${limit}`;
+    const optional1 = offset ? `&offset=${offset}` : "";
+    const optional2 = offset && before ? `&before=${before}` : "";
+
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+};
+
 const getMusicUrl = (ids: number | number[]) => {
     return api.get<ISongUrlRes>(
         `/song/url?id=${typeof ids === "object" ? ids.join(",") : ids}`
     );
+};
+
+const downloadMusic = (url: string) => {
+    return api.get(url, { responseType: "arraybuffer" });
 };
 
 // ----------------------------------------------------------------------
@@ -388,7 +405,9 @@ const reqFuncs = {
     detailSubscribe,
     getSimiDetails,
     getMusicDetail,
+    getMusicComment,
     getMusicUrl,
+    downloadMusic,
     albumDetail,
     albumDetailCount,
     AlbumComments,
