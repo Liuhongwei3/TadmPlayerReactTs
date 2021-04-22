@@ -117,6 +117,10 @@ td {
     cursor: pointer;
 }
 
+.ant-comment-content-author-time {
+    color: #868686;
+}
+
 .ant-comment-actions > li > span,
 .ant-comment-actions > li > span:hover {
     color: #ff9999;

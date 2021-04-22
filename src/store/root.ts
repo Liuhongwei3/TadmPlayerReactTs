@@ -27,6 +27,8 @@ class Root {
     curMvId = DEFAULT_MV_ID;
     curSongId = DEFAULT_SONG_ID;
     curSong: ISong | undefined;
+    curTime: number = 0;
+    curLyric: string = "暂无歌词";
 
     showLyrics: boolean = false;
     audioPlaying: boolean = false;
@@ -68,6 +70,14 @@ class Root {
         this.curMvId = id || DEFAULT_MV_ID;
     }
 
+    updateCurTime(time: number) {
+        this.curTime = time;
+    }
+
+    updateCurLyric(lyric: string) {
+        this.curLyric = lyric;
+    }
+
     changeLocale() {
         this.locale = this.locale.locale === "zh-cn" ? enUS : zhCN;
     }
@@ -97,6 +107,7 @@ class Root {
     }
 
     updateCurSong(song: ISong) {
+        this.updateCurSongId(song.id);
         this.curSong = song;
     }
 
@@ -110,7 +121,9 @@ export const RootStore = React.createContext(root);
 
 autorun(() => {
     const uid = root.userInfo.userId;
+
     if (!uid) return;
+    
     Promise.all([
         req.netease.userPlaylist(uid, LIMIT),
         req.netease.userLikeSongIds(uid),
@@ -122,7 +135,9 @@ autorun(() => {
 
 autorun(() => {
     const sid = root.curSongId;
-    if (!sid) return;
+
+    if (!sid || (sid && root.curSong && sid === root.curSong.id)) return;
+
     req.netease.getMusicDetail(sid).then((res) => {
         if (res.songs.length) {
             root.updateCurSong(res.songs[0]);

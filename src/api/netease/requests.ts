@@ -39,7 +39,8 @@ import {
     ISearchSuggestRes,
 } from "../../pages/search/type";
 import { EOrderType, ESearchType, ESingerType } from "../../pages/enums";
-import { ISongUrlRes } from "./types/song-type";
+import { ISimiDetailsRes, ISimiMusicsRes, ISongUrlRes } from "./types/song-type";
+import { ILyricRes } from "./types/lyric-type";
 
 // -----------------------------------------------------
 // 首页
@@ -295,6 +296,10 @@ const getMusicDetail = (ids: number | number[]) => {
     );
 };
 
+const getMusicLyric = (id: number) => {
+    return api.get<ILyricRes>(`/lyric?id=${id}`);
+};
+
 const getMusicComment = (
     id: number,
     limit = 30,
@@ -316,6 +321,14 @@ const getMusicUrl = (ids: number | number[]) => {
 
 const downloadMusic = (url: string) => {
     return api.get(url, { responseType: "arraybuffer" });
+};
+
+const getSimiDetailsBySongId = (id: number) => {
+    return api.get<ISimiDetailsRes>(`/simi/playlist?id=${id}`);
+};
+
+const getSimiMusicsBySongId = (id: number) => {
+    return api.get<ISimiMusicsRes>(`/simi/song?id=${id}`);
 };
 
 // ----------------------------------------------------------------------
@@ -405,9 +418,12 @@ const reqFuncs = {
     detailSubscribe,
     getSimiDetails,
     getMusicDetail,
+    getMusicLyric,
     getMusicComment,
     getMusicUrl,
     downloadMusic,
+    getSimiMusicsBySongId,
+    getSimiDetailsBySongId,
     albumDetail,
     albumDetailCount,
     AlbumComments,

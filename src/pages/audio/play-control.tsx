@@ -24,7 +24,6 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     const store = useStore();
     const { volume } = props;
     const audioRef = React.useRef<HTMLAudioElement>(null);
-    const [curTime, setCurTime] = React.useState<number>(0);
     const [duration, setDuration] = React.useState<number>(0);
     const [playing, setPlaying] = React.useState<boolean>(false);
     const [isDragging, setIsDragging] = React.useState<boolean>(false);
@@ -43,16 +42,19 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     }, []);
 
     const handleAudioDurationChange = React.useCallback((e) => {
-        setDuration((e.target as HTMLAudioElement).duration || 0);
+        setDuration(Math.floor((e.target as HTMLAudioElement).duration) || 0);
     }, []);
 
     const handleAudioTimeUpdate = React.useCallback(
         (e) => {
-            if (!isDragging) {
-                setCurTime((e.target as HTMLAudioElement).currentTime);
+            const time = Math.floor((e.target as HTMLAudioElement).currentTime);
+
+            // handle throttle run, 1s per
+            if (!isDragging && store.curTime !== time) {
+                store.updateCurTime(time);
             }
         },
-        [isDragging]
+        [isDragging, store]
     );
 
     const handleAudioEnded = React.useCallback((e) => {
@@ -61,18 +63,19 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
 
     const handleTimeChange = React.useCallback((time: number) => {
         setIsDragging(true);
-        setCurTime(time);
-    }, []);
+        store.updateCurTime(time);
+    }, [store]);
 
     const handleAfterTimeChange = React.useCallback(
         (time: number) => {
             if (audioRef && audioRef.current && url) {
                 audioRef.current.currentTime = time;
+                store.updateCurTime(time);
                 audioRef.current.play();
                 setIsDragging(false);
             }
         },
-        [url]
+        [store, url]
     );
 
     // todos: set volume to 0 or 1 gradually
@@ -98,7 +101,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     React.useEffect(() => {
         const sid = store.curSongId;
         pause();
-        setCurTime(0);
+        store.updateCurTime(0);
         setUrl(null);
         if (sid) {
             reqs.netease
@@ -109,7 +112,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                         setUrl(urls[0].url);
                     } else {
                         notify("error", "暂无该歌曲音频播放资源！");
-                        setCurTime(0);
+                        store.updateCurTime(0);
                         setDuration(0);
                     }
                 })
@@ -117,17 +120,17 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                     notify("error", e.message);
                 });
         }
-    }, [pause, store.curSongId]);
+    }, [pause, store, store.curSongId]);
 
     React.useEffect(() => {
         pause();
         if (audioRef && audioRef.current && url) {
-            setCurTime(0);
+            store.updateCurTime(0);
             // reset curTime will change Slider value, fix isDragging bug
             setIsDragging(false);
             play();
         }
-    }, [pause, play, url]);
+    }, [pause, play, store, url]);
 
     React.useEffect(() => {
         if (audioRef && audioRef.current) {
@@ -176,9 +179,9 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                 onPause={handleAudioPause}
                 onTimeUpdate={handleAudioTimeUpdate}
                 onEnded={handleAudioEnded}
-                onPlayCapture={() => setPlaying(false)}
-                onPlaying={() => setPlaying(true)}
-                onWaiting={() => setPlaying(false)}
+                onPlayCapture={handleAudioPause}
+                onPlaying={handleAudioPlay}
+                onWaiting={handleAudioPause}
             />
 
             <StyledControl>
@@ -197,14 +200,14 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
 
                 <Row justify="space-between">
                     <StyledTime span={3} push={1}>
-                        <div>{timeFormat(curTime)}</div>
+                        <div>{timeFormat(store.curTime)}</div>
                     </StyledTime>
                     <Col span={16}>
                         <Slider
                             defaultValue={0}
                             disabled={duration === 0}
                             tooltipVisible={false}
-                            value={curTime}
+                            value={store.curTime}
                             max={duration}
                             onChange={handleTimeChange}
                             onAfterChange={handleAfterTimeChange}

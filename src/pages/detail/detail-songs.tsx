@@ -264,7 +264,6 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 onRow={(record) => {
                     return {
                         onDoubleClick: (event) => {
-                            store.updateCurSongId(record.id);
                             store.updateCurSong(record);
                         },
                         onContextMenu: (event) => {},
