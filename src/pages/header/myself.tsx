@@ -55,6 +55,7 @@ const TopMySelf: React.FC = observer(() => {
             .userLoginByPhone(values.phone, values.password)
             .then((res) => {
                 if (res.code === 200) {
+                    document.cookie = res.cookie;
                     logSuccess(
                         res.profile.userId,
                         res.profile.nickname,

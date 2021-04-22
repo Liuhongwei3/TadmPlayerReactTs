@@ -58,6 +58,8 @@ export interface ILoginedUser {
     code: number;
     account: Account;
     profile: Profile;
+    cookie: string;
+    token: string;
 }
 
 export interface IQRKey {

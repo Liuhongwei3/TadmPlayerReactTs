@@ -72,8 +72,12 @@ const LyricDetail: React.FC = observer(() => {
 export default LyricDetail;
 
 const StyledSongLyrics = styled.div`
-    width: 36vw;
+    width: 38%;
     text-align: center;
+
+    @media screen and (max-width: 768px) {
+        width: 95%;
+    }
 `;
 
 const StyledContent = styled.div`
@@ -104,6 +108,7 @@ const StyledWrapper = styled.div`
 
     @media screen and (max-width: 768px) {
         padding: 10px;
+        height: 86vh;
 
         ${(props: { show: boolean }) =>
             props.show ? `bottom: 14%;` : "bottom: -100vh;"}

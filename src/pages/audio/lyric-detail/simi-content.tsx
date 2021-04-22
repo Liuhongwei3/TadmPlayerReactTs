@@ -134,4 +134,9 @@ const StyledWrapper = styled.div`
     overflow-x: hidden;
     overflow-y: auto;
     max-width: 30vw;
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+        max-width: 75%;
+    }
 `;

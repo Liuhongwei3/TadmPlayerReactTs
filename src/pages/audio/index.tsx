@@ -37,7 +37,7 @@ const StyledControlPanel = styled.div`
     bottom: 0;
     left: 80px;
     width: calc(100vw - 84px);
-    padding: 6px 0;
+    padding: 10px 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
