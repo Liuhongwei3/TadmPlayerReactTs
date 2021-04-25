@@ -1,11 +1,29 @@
+export enum EPlayMode {
+    ORDER,
+    RANDOM,
+    SINGLE,
+    HEART,
+}
+
+export const IPlayModeText: Record<EPlayMode, string> = {
+    [EPlayMode.ORDER]: "顺序播放",
+    [EPlayMode.RANDOM]: "随机播放",
+    [EPlayMode.SINGLE]: "单曲循环",
+    [EPlayMode.HEART]: "心动模式",
+};
+
 export enum EDetailSongOprType {
-    ADD = 'add',
-    DELETE = 'del'
+    ADD = "add",
+    DELETE = "del",
 }
 
 export enum ETartgetType {
     SONG = 1,
     ALBUM = 10,
+    SINGER = 100,
+    DETAIL = 1000,
+    USER = 1002,
+    MV = 1004,
     JUMP = 3000,
 }
 

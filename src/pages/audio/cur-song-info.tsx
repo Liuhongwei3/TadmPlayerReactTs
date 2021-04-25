@@ -202,6 +202,7 @@ const StyledSongInfo = styled.div`
 `;
 
 const StyledTitle = styled.div`
+    width: 100%;
     margin-left: 6px;
     overflow: hidden;
 

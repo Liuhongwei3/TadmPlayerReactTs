@@ -22,6 +22,7 @@ export function createDownload(name: string, player: string, data: any) {
 
     //	PC
     let blob = new Blob([data], { type: "audio/mpeg;charset=utf-8" });
+    // let blob = new Blob([data]);
     let downloadElement = document.createElement("a");
     let href = window.URL.createObjectURL(blob);
     downloadElement.href = href;
@@ -86,59 +87,59 @@ export default function lyricParser(lrc: ILyricRes) {
     return lyrObj;
 }
 
-// export function onLoadAudio(audio) {
-//     let context = new (window.AudioContext || window.webkitAudioContext)();
-//     let analyser = context.createAnalyser();
-//     analyser.fftSize = 512;
+export function onLoadAudio(audio: HTMLAudioElement) {
+    let context = new (window.AudioContext)();
+    let analyser = context.createAnalyser();
+    analyser.fftSize = 512;
 
-//     let source = context.createMediaElementSource(
-//         document.getElementById("audio")
-//     );
+    let source = context.createMediaElementSource(
+        document.getElementById("audio") as HTMLAudioElement
+    );
 
-//     source.connect(analyser);
-//     analyser.connect(context.destination);
+    source.connect(analyser);
+    analyser.connect(context.destination);
 
-//     let bufferLength = analyser.frequencyBinCount;
-//     let dataArray = new Uint8Array(bufferLength);
+    let bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
 
-//     let canvas = document.getElementById("canvas");
-//     canvas.width = window.innerWidth;
-//     canvas.height = window.innerHeight;
+    let canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-//     let ctx = canvas.getContext("2d");
-//     let WIDTH = canvas.width;
-//     let HEIGHT = canvas.height;
+    let ctx = canvas.getContext("2d");
+    let WIDTH = canvas.width;
+    let HEIGHT = canvas.height;
 
-//     let barWidth = (WIDTH / bufferLength) * 1.5;
-//     let barHeight;
+    let barWidth = (WIDTH / bufferLength) * 1.5;
+    let barHeight;
 
-//     function renderFrame() {
-//         requestAnimationFrame(renderFrame);
+    function renderFrame() {
+        requestAnimationFrame(renderFrame);
 
-//         analyser.getByteFrequencyData(dataArray);
+        analyser.getByteFrequencyData(dataArray);
 
-//         ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        ctx!.clearRect(0, 0, WIDTH, HEIGHT);
 
-//         for (let i = 0, x = 0; i < bufferLength; i++) {
-//             barHeight = dataArray[i];
+        for (let i = 0, x = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
 
-//             let r = barHeight + 25 * (i / bufferLength);
-//             // let r = Math.round(Math.random()*255);
+            let r = barHeight + 25 * (i / bufferLength);
+            // let r = Math.round(Math.random()*255);
 
-//             let g = 250 * (i / bufferLength);
-//             // let g = Math.round(Math.random()*255);
+            let g = 250 * (i / bufferLength);
+            // let g = Math.round(Math.random()*255);
 
-//             let b = 50;
-//             // let b = Math.round(Math.random()*255);
+            let b = 50;
+            // let b = Math.round(Math.random()*255);
 
-//             ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-//             // ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-//             ctx.arc(x, HEIGHT, 50, 2 * Math.PI, false);
+            ctx!.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+            // ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+            ctx!.arc(x, HEIGHT, 50, 2 * Math.PI, 1);
 
-//             x += barWidth + 2;
-//         }
-//     }
+            x += barWidth + 2;
+        }
+    }
 
-//     renderFrame();
-//     // setInterval(renderFrame, 44);
-// }
+    renderFrame();
+    // setInterval(renderFrame, 44);
+}

@@ -4,6 +4,8 @@ import { useStore } from "./hooks/useStore";
 import Album from "./pages/album";
 import Detail from "./pages/detail";
 import Events from "./pages/events";
+import HeartDetailSongs from "./pages/heart-detail-songs";
+import HistoryPlaySongs from "./pages/history-play-songs";
 
 import Home from "./pages/home";
 import HotDetail from "./pages/hot-detail";
@@ -50,6 +52,9 @@ const Routers: React.FunctionComponent = () => {
             <Route exact path="/user/:userId">
                 <User />
             </Route>
+            <Route exact path="/heartDetail">
+                <HeartDetailSongs />
+            </Route>
             <Route exact path="/events">
                 <Events />
             </Route>
@@ -58,6 +63,9 @@ const Routers: React.FunctionComponent = () => {
             </Route>
             <Route exact path="/mv/:mvId">
                 <Mv />
+            </Route>
+            <Route exact path="/historyPlaySongs">
+                <HistoryPlaySongs />
             </Route>
         </Switch>
     );

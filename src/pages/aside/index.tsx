@@ -13,6 +13,8 @@ import {
     TeamOutlined,
     SearchOutlined,
     StarOutlined,
+    HeartOutlined,
+    HistoryOutlined,
 } from "@ant-design/icons";
 import { DEFAULT_AVATAR } from "../../web-config/defaultConfig";
 import { observer } from "mobx-react-lite";
@@ -60,14 +62,26 @@ const LeftSide: React.FunctionComponent = observer(() => {
                 <Menu.Item key="user" icon={<UserSwitchOutlined />}>
                     <Link to={`/user/${store.curUserId}`}>用户</Link>
                 </Menu.Item>
-                <Menu.Item key="myStars" icon={<StarOutlined />}>
-                    <Link to={`/myStars`}>我的收藏</Link>
-                </Menu.Item>
-                <Menu.Item key="events" icon={<TeamOutlined />}>
-                    <Link to={`/events`}>动态</Link>
-                </Menu.Item>
+                {store.userInfo.userId && (
+                    <Menu.Item key="heartDetail" icon={<HeartOutlined />}>
+                        <Link to={`/heartDetail`}>心动歌单详情</Link>
+                    </Menu.Item>
+                )}
+                {store.userInfo.userId && (
+                    <Menu.Item key="myStars" icon={<StarOutlined />}>
+                        <Link to={`/myStars`}>我的收藏</Link>
+                    </Menu.Item>
+                )}
+                {store.userInfo.userId && (
+                    <Menu.Item key="events" icon={<TeamOutlined />}>
+                        <Link to={`/events`}>动态</Link>
+                    </Menu.Item>
+                )}
                 <Menu.Item key="mv" icon={<VideoCameraOutlined />}>
                     <Link to={`/mv/${store.curMvId}`}>MV</Link>
+                </Menu.Item>
+                <Menu.Item key="historyPlaySongs" icon={<HistoryOutlined />}>
+                    <Link to={`/historyPlaySongs`}>历史听歌</Link>
                 </Menu.Item>
             </Menu>
             <Button

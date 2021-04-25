@@ -24,6 +24,14 @@ const AlbumSongs: React.FC<IProps> = (props: IProps) => {
         toTop();
     }, []);
 
+    const handleSongNameClick = React.useCallback(
+        (data: Song) => {
+            store.updateCurSongId(data.id);
+            store.updateCurOrderPlaylist(songs!.map((item) => item.id) || []);
+        },
+        [songs, store]
+    );
+
     const columns: ColumnsType<Song> = [
         {
             title: "序号",
@@ -54,9 +62,11 @@ const AlbumSongs: React.FC<IProps> = (props: IProps) => {
         },
         {
             title: "音乐标题",
-            dataIndex: "name",
             key: "name",
             width: "15%",
+            render: (data: Song) => (
+                <div onClick={() => handleSongNameClick(data)}>{data.name}</div>
+            ),
         },
         {
             title: "歌手",
@@ -122,12 +132,8 @@ const AlbumSongs: React.FC<IProps> = (props: IProps) => {
             }}
             onRow={(record) => {
                 return {
-                    onDoubleClick: (event) => {
-                        store.updateCurSongId(record.id);
-                    },
+                    onDoubleClick: (event) => handleSongNameClick(record),
                     onContextMenu: (event) => {},
-                    onMouseEnter: (event) => {}, // 鼠标移入行
-                    onMouseLeave: (event) => {},
                 };
             }}
         />

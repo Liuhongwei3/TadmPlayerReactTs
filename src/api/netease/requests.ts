@@ -39,7 +39,11 @@ import {
     ISearchSuggestRes,
 } from "../../pages/search/type";
 import { EOrderType, ESearchType, ESingerType } from "../../pages/enums";
-import { ISimiDetailsRes, ISimiMusicsRes, ISongUrlRes } from "./types/song-type";
+import {
+    ISimiDetailsRes,
+    ISimiMusicsRes,
+    ISongUrlRes,
+} from "./types/song-type";
 import { ILyricRes } from "./types/lyric-type";
 
 // -----------------------------------------------------
@@ -320,7 +324,14 @@ const getMusicUrl = (ids: number | number[]) => {
 };
 
 const downloadMusic = (url: string) => {
-    return api.get(url, { responseType: "arraybuffer" });
+    // cors --> https://blog.csdn.net/hermitsun/article/details/100797223
+    // arraybuffer - blob  -->   https://blog.csdn.net/weixin_41849462/article/details/103409341
+
+    return api.get(url, {
+        withCredentials: false,
+        responseType: "arraybuffer",
+    });
+    // return api.get(url, { responseType: "blob" });
 };
 
 const getSimiDetailsBySongId = (id: number) => {

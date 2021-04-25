@@ -401,6 +401,7 @@ export default TopMySelf;
 
 const StyledContent = styled.div`
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
 `;
 

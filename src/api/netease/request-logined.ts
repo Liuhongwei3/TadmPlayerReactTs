@@ -165,6 +165,14 @@ const addDeleteSongFromDetail = (
     );
 };
 
+const heartMode = (id: number, pid: number) => {
+    return api.get<{
+        code: number;
+        data: { songInfo: ISong }[];
+        message: string;
+    }>(`/playmode/intelligence/list?id=${id}&pid=${pid}`);
+};
+
 const reqLoginedFuncs = {
     userLoginByPhone,
     sendCodeByPhone,
@@ -193,6 +201,7 @@ const reqLoginedFuncs = {
     editDetail,
     deleteDetail,
     addDeleteSongFromDetail,
+    heartMode,
 };
 
 export default reqLoginedFuncs;

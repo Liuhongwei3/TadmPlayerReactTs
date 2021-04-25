@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { observer } from "mobx-react-lite";
 import { Image } from "antd";
 import { useStore } from "../../../hooks/useStore";
@@ -16,21 +16,23 @@ const LyricDetail: React.FC = observer(() => {
 
     React.useEffect(() => {
         document.getElementById("lyric-detail")?.scroll({ top: 0 });
-    }, [showLyrics]);
+    }, [song?.id, showLyrics]);
 
     return song ? (
         <StyledWrapper id="lyric-detail" show={showLyrics}>
             <StyledContent>
-                <Image
-                    style={{ borderRadius: "50%", border: "10px solid #222" }}
-                    alt="lyric-detail-cover"
-                    loading="lazy"
-                    preview={false}
-                    placeholder={<LoadingImg />}
-                    width={180}
-                    height={180}
-                    src={song.al.picUrl}
-                />
+                <StyledOuter>
+                    <StyledImage
+                        alt="lyric-detail-cover"
+                        loading="lazy"
+                        preview={false}
+                        placeholder={<LoadingImg />}
+                        width={180}
+                        height={180}
+                        src={song.al.picUrl}
+                    />
+                </StyledOuter>
+
                 <StyledSongLyrics>
                     <div style={{ fontSize: 24 }}>{song.name}</div>
                     <div
@@ -64,12 +66,42 @@ const LyricDetail: React.FC = observer(() => {
                 <SimiContent id={song.id} />
             </StyledContent>
 
+            {/* <canvas id="canvas"></canvas> */}
+
             <SongComments id={song.id} />
         </StyledWrapper>
     ) : null;
 });
 
 export default LyricDetail;
+
+const rotate = keyframes`
+    from { 
+        transform: rotate(0deg); 
+    }
+    to { 
+        transform: rotate(360deg); 
+    }
+`;
+
+const StyledImage = styled(Image)`
+    border-radius: 50%;
+    border: 10px solid #222;
+    animation: ${rotate} infinite linear 25s;
+    position: relative;
+`;
+
+const StyledOuter = styled.div`
+    &::before {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        filter: blur(16px);
+        background-image: radial-gradient(white, silver);
+    }
+`;
 
 const StyledSongLyrics = styled.div`
     width: 38%;

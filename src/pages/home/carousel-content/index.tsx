@@ -51,6 +51,18 @@ const CarouselContent: React.FC = () => {
                 case ETartgetType.ALBUM:
                     history.push(`/album/${item.targetId}`);
                     break;
+                case ETartgetType.SINGER:
+                    history.push(`/singer/${item.targetId}`);
+                    break;
+                case ETartgetType.DETAIL:
+                    history.push(`/detail/${item.targetId}`);
+                    break;
+                case ETartgetType.USER:
+                    history.push(`/user/${item.targetId}`);
+                    break;
+                case ETartgetType.MV:
+                    history.push(`/mv/${item.targetId}`);
+                    break;
                 case ETartgetType.JUMP:
                     window.open(item.url);
                     break;

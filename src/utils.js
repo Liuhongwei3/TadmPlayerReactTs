@@ -1,6 +1,14 @@
 import { message } from "antd";
 import { IEventTypeText } from "./pages/enums";
 
+export const isObject = (obj) => {
+    return typeof obj === "object";
+}
+
+export const isArray = (arr) => {
+    return arr instanceof Array;
+}
+
 export function toTop() {
     document.documentElement.scrollTop = document.body.scrollTop = 0;
 }

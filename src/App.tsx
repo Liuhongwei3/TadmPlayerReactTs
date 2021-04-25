@@ -59,6 +59,7 @@ const StyledRight = styled.div`
 const StyledBg = styled.div`
     width: 100%;
     height: 100%;
+    min-height: 86vh;
     z-index: 0;
     background-image: url(${DEFAULT_BG_IMG});
 `;

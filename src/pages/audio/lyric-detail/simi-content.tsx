@@ -130,6 +130,7 @@ const StyledItem = styled.div`
 const StyledWrapper = styled.div`
     margin-left: 36px;
     font-size: 14px;
+    width: 20vw;
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;

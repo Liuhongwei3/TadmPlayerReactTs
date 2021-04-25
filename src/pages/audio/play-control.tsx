@@ -8,19 +8,26 @@ import {
     BarsOutlined,
     DownloadOutlined,
     ShareAltOutlined,
+    RetweetOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Slider } from "antd";
 import { copyData, notify, timeFormat } from "../../utils";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 import reqs from "../../api/req";
-import { createDownload } from "../../features";
+import { createDownload, onLoadAudio } from "../../features";
+import { useHistory } from "react-router";
+import { EPlayMode } from "../enums";
+import SingleSvg from "../../components/svgs/single-svg";
+import HeartJumpSvg from "../../components/svgs/heart-jump-svg";
+import RandomSvg from "../../components/svgs/random-svg";
 
 interface IProps {
     volume: number;
 }
 
 const PlayControl: React.FC<IProps> = observer((props: IProps) => {
+    const history = useHistory();
     const store = useStore();
     const { volume } = props;
     const audioRef = React.useRef<HTMLAudioElement>(null);
@@ -32,6 +39,50 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     React.useEffect(() => {
         store.toggleAudioPlaying(playing);
     }, [playing, store]);
+
+    const nextSong = React.useCallback(() => {
+        if (store.curPlayMode === EPlayMode.SINGLE) {
+            return;
+        }
+        if (store.curPlaylists.length === 0) {
+            notify("warning", "当前播放列表为空~");
+        } else if (store.curPlaylists.length === 1) {
+            notify(
+                "warning",
+                "当前播放列表只有一首歌曲，播放完毕后自动停止播放~"
+            );
+        } else {
+            store.updateCurTime(0);
+            setDuration(0);
+            let index = store.curPlaylists.findIndex(
+                (id) => id === store.curSongId
+            );
+            index = index === store.curPlaylists.length - 1 ? 0 : index + 1;
+            store.updateCurSongId(store.curPlaylists[index]);
+        }
+    }, [store]);
+
+    const prevSong = React.useCallback(() => {
+        if (store.curPlayMode === EPlayMode.SINGLE) {
+            return;
+        }
+        if (store.curPlaylists.length === 0) {
+            notify("warning", "当前播放列表为空~");
+        } else if (store.curPlaylists.length === 1) {
+            notify(
+                "warning",
+                "当前播放列表只有一首歌曲，播放完毕后自动停止播放~"
+            );
+        } else {
+            store.updateCurTime(0);
+            setDuration(0);
+            let index = store.curPlaylists.findIndex(
+                (id) => id === store.curSongId
+            );
+            index = index === 0 ? store.curPlaylists.length - 1 : index - 1;
+            store.updateCurSongId(store.curPlaylists[index]);
+        }
+    }, [store]);
 
     const handleAudioPlay = React.useCallback((e) => {
         setPlaying(true);
@@ -57,14 +108,21 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
         [isDragging, store]
     );
 
-    const handleAudioEnded = React.useCallback((e) => {
-        setPlaying(false);
-    }, []);
+    const handleAudioEnded = React.useCallback(
+        (e) => {
+            setPlaying(false);
+            nextSong();
+        },
+        [nextSong]
+    );
 
-    const handleTimeChange = React.useCallback((time: number) => {
-        setIsDragging(true);
-        store.updateCurTime(time);
-    }, [store]);
+    const handleTimeChange = React.useCallback(
+        (time: number) => {
+            setIsDragging(true);
+            store.updateCurTime(time);
+        },
+        [store]
+    );
 
     const handleAfterTimeChange = React.useCallback(
         (time: number) => {
@@ -82,6 +140,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     const play = React.useCallback(() => {
         if (audioRef && audioRef.current && url) {
             audioRef.current.play();
+            // onLoadAudio(audioRef.current);
         }
     }, [url]);
 
@@ -111,16 +170,20 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                     if (urls.length) {
                         setUrl(urls[0].url);
                     } else {
-                        notify("error", "暂无该歌曲音频播放资源！");
+                        notify(
+                            "error",
+                            "暂无该歌曲音频播放资源,自动切换为下一首！"
+                        );
                         store.updateCurTime(0);
                         setDuration(0);
+                        nextSong();
                     }
                 })
                 .catch((e) => {
                     notify("error", e.message);
                 });
         }
-    }, [pause, store, store.curSongId]);
+    }, [nextSong, pause, store, store.curSongId]);
 
     React.useEffect(() => {
         pause();
@@ -153,17 +216,25 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
         reqs.netease
             .downloadMusic(url)
             .then((res) => {
-                createDownload(
-                    song.name || "song",
-                    song.ar.join(",") || "player",
-                    res.data
-                );
-                notify("success", "歌曲下载完成！");
+                if (res) {
+                    createDownload(
+                        song.name || "song",
+                        song.ar.map((art) => art.name).join(",") || "player",
+                        res
+                    );
+                    notify("success", "歌曲下载完成！");
+                } else {
+                    notify("warning", "返回空数据！");
+                }
             })
             .catch((e) => {
                 notify("error", e.message);
             });
     }, [store.curSong, url]);
+
+    const toDetail = React.useCallback(() => {
+        history.push(`/detail/${store.curDetailId}`);
+    }, [history, store.curDetailId]);
 
     return (
         <>
@@ -186,15 +257,57 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
 
             <StyledControl>
                 <StyledController>
-                    <BarsOutlined />
-                    <StepBackwardOutlined />
-                    {playing ? (
-                        <PauseCircleOutlined onClick={pause} />
-                    ) : (
-                        <PlayCircleOutlined onClick={play} />
+                    <BarsOutlined onClick={toDetail} />
+
+                    {store.curPlayMode === EPlayMode.ORDER && (
+                        <RetweetOutlined onClick={store.updateCurPlayMode} />
                     )}
-                    <StepForwardOutlined />
-                    <DownloadOutlined onClick={handleDownloadMusic} />
+                    {store.curPlayMode === EPlayMode.RANDOM && (
+                        <RandomSvg onClick={store.updateCurPlayMode} />
+                    )}
+                    {store.curPlayMode === EPlayMode.SINGLE && (
+                        <SingleSvg onClick={store.updateCurPlayMode} />
+                    )}
+                    {store.curPlayMode === EPlayMode.HEART && (
+                        <HeartJumpSvg onClick={store.updateCurPlayMode} />
+                    )}
+
+                    <StepBackwardOutlined
+                        style={{
+                            cursor:
+                                store.curPlayMode === EPlayMode.SINGLE
+                                    ? "not-allowed"
+                                    : "pointer",
+                        }}
+                        disabled={store.curPlayMode === EPlayMode.SINGLE}
+                        onClick={prevSong}
+                    />
+
+                    {playing ? (
+                        <PauseCircleOutlined disabled={!url} onClick={pause} />
+                    ) : (
+                        <PlayCircleOutlined disabled={!url} onClick={play} />
+                    )}
+
+                    <StepForwardOutlined
+                        style={{
+                            cursor:
+                                store.curPlayMode === EPlayMode.SINGLE
+                                    ? "not-allowed"
+                                    : "pointer",
+                        }}
+                        disabled={store.curPlayMode === EPlayMode.SINGLE}
+                        onClick={nextSong}
+                    />
+
+                    <DownloadOutlined
+                        style={{
+                            cursor: !url ? "not-allowed" : "auto",
+                        }}
+                        disabled={!url}
+                        onClick={handleDownloadMusic}
+                    />
+
                     <ShareAltOutlined onClick={handleShareCopy} />
                 </StyledController>
 
@@ -245,5 +358,6 @@ const StyledControl = styled.div`
     @media screen and (max-width: 768px) {
         width: 100%;
         margin-top: 10px;
+        padding: 0 6px;
     }
 `;

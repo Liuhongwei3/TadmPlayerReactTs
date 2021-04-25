@@ -160,12 +160,12 @@ const Lyrics: React.FC = observer(() => {
             ref={lyricsRef}
             // needScrollHeight={needScrollHeight}
         >
-            {lyrics.map((tlyric) => (
-                <div key={tlyric.time}>
-                    {tlyric.texts.map((lyric, index) => (
+            {lyrics.map((tlyric, index) => (
+                <div key={`${tlyric.text}${index}`}>
+                    {tlyric.texts.map((lyric, index1) => (
                         <StyledLyric
                             active={curLyricTime === tlyric.time}
-                            key={`${lyric}${index}`}
+                            key={`${lyric}${index1}`}
                         >
                             {lyric}
                         </StyledLyric>

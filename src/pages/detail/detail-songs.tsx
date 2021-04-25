@@ -115,6 +115,17 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         []
     );
 
+    const handleSongNameClick = React.useCallback(
+        (data: ISong) => {
+            store.updateCurSong(data);
+            store.updateCurOrderPlaylist(trackIds.map((item) => item.id));
+            if (store.curPlayDetailId !== detailId) {
+                store.updateCurPlayDetailid(detailId);
+            }
+        },
+        [detailId, store, trackIds]
+    );
+
     const columns: ColumnsType<ISong> = [
         {
             title: "序号",
@@ -143,9 +154,11 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         },
         {
             title: "音乐标题",
-            dataIndex: "name",
             key: "name",
             width: "15%",
+            render: (data: ISong) => (
+                <div onClick={() => handleSongNameClick(data)}>{data.name}</div>
+            ),
         },
         {
             title: "歌手",
@@ -263,9 +276,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
                 }}
                 onRow={(record) => {
                     return {
-                        onDoubleClick: (event) => {
-                            store.updateCurSong(record);
-                        },
+                        onDoubleClick: (event) => handleSongNameClick(record),
                         onContextMenu: (event) => {},
                     };
                 }}
@@ -273,4 +284,5 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
         </React.Fragment>
     );
 };
+
 export default DetailSongs;
