@@ -8,6 +8,7 @@ import { IComment, IHotComment } from "../commType";
 import StyledComment from "../../components/StyledComment";
 import { notify } from "../../utils";
 import { ESourceType } from "../../api/netease/types/like-type";
+import { EMessageType } from "../enums";
 
 const StyledCommBg = styled.div`
     margin-left: 54px;
@@ -51,7 +52,7 @@ const EventComm: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载用户动态评论数据失败"

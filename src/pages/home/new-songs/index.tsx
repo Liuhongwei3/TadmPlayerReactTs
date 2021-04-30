@@ -15,6 +15,7 @@ import {
     DEFAULT_IMG_WIDTH,
 } from "../../../web-config/defaultConfig";
 import { useStore } from "../../../hooks/useStore";
+import { EMessageType } from "../../enums";
 
 const NewSongs: React.FC = () => {
     const store = useStore();
@@ -30,7 +31,7 @@ const NewSongs: React.FC = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载最新音乐数据失败"

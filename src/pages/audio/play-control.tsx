@@ -15,9 +15,9 @@ import { copyData, notify, timeFormat } from "../../utils";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 import reqs from "../../api/req";
-import { createDownload, onLoadAudio } from "../../features";
+import { createDownload } from "../../features";
 import { useHistory } from "react-router";
-import { EPlayMode } from "../enums";
+import { EMessageType, EPlayMode } from "../enums";
 import SingleSvg from "../../components/svgs/single-svg";
 import HeartJumpSvg from "../../components/svgs/heart-jump-svg";
 import RandomSvg from "../../components/svgs/random-svg";
@@ -45,10 +45,10 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
             return;
         }
         if (store.curPlaylists.length === 0) {
-            notify("warning", "当前播放列表为空~");
+            notify(EMessageType.WARNING, "当前播放列表为空~");
         } else if (store.curPlaylists.length === 1) {
             notify(
-                "warning",
+                EMessageType.WARNING,
                 "当前播放列表只有一首歌曲，播放完毕后自动停止播放~"
             );
         } else {
@@ -67,10 +67,10 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
             return;
         }
         if (store.curPlaylists.length === 0) {
-            notify("warning", "当前播放列表为空~");
+            notify(EMessageType.WARNING, "当前播放列表为空~");
         } else if (store.curPlaylists.length === 1) {
             notify(
-                "warning",
+                EMessageType.WARNING,
                 "当前播放列表只有一首歌曲，播放完毕后自动停止播放~"
             );
         } else {
@@ -140,7 +140,6 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
     const play = React.useCallback(() => {
         if (audioRef && audioRef.current && url) {
             audioRef.current.play();
-            // onLoadAudio(audioRef.current);
         }
     }, [url]);
 
@@ -171,7 +170,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                         setUrl(urls[0].url);
                     } else {
                         notify(
-                            "error",
+                            EMessageType.ERROR,
                             "暂无该歌曲音频播放资源,自动切换为下一首！"
                         );
                         store.updateCurTime(0);
@@ -180,7 +179,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                     }
                 })
                 .catch((e) => {
-                    notify("error", e.message);
+                    notify(EMessageType.ERROR, e.message);
                 });
         }
     }, [nextSong, pause, store, store.curSongId]);
@@ -206,7 +205,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
             `http://music.163.com/song?id=${store.curSongId}`
         );
         if (copied) {
-            notify("success", "复制链接成功，请使用浏览器打开链接 ~");
+            notify(EMessageType.SUCCESS, "复制链接成功，请使用浏览器打开链接 ~");
         }
     }, [store.curSongId]);
 
@@ -222,13 +221,13 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                         song.ar.map((art) => art.name).join(",") || "player",
                         res
                     );
-                    notify("success", "歌曲下载完成！");
+                    notify(EMessageType.SUCCESS, "歌曲下载完成！");
                 } else {
-                    notify("warning", "返回空数据！");
+                    notify(EMessageType.WARNING, "返回空数据！");
                 }
             })
             .catch((e) => {
-                notify("error", e.message);
+                notify(EMessageType.ERROR, e.message);
             });
     }, [store.curSong, url]);
 
@@ -286,7 +285,7 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                     {playing ? (
                         <PauseCircleOutlined disabled={!url} onClick={pause} />
                     ) : (
-                        <PlayCircleOutlined disabled={!url} onClick={play} />
+                        <PlayCircleOutlined id="svg-play" disabled={!url} onClick={play} />
                     )}
 
                     <StepForwardOutlined

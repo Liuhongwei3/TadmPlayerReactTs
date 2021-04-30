@@ -18,6 +18,7 @@ import {
     DEFAULT_MV_SMALL_HEIGHT,
     DEFAULT_MV_SMALL_WIDTH,
 } from "../../web-config/defaultConfig";
+import { EMessageType } from "../enums";
 
 const INIT_LIMIT = 18;
 const Types = [
@@ -44,7 +45,7 @@ const TopMv: React.FunctionComponent = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载 MV 排行榜数据失败"
@@ -102,7 +103,7 @@ const TopMv: React.FunctionComponent = () => {
                         {mvRes?.data.map((item: Data) => {
                             return (
                                 <StyledItem
-                                    key={item.id}
+                                    key={`top-mv-${item.id}`}
                                     onClick={() => toDetail(item.id)}
                                 >
                                     <div

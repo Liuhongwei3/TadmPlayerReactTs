@@ -8,7 +8,7 @@ import req from "../../../api/req";
 import { IBanner } from "../type";
 import { CarouselRef } from "antd/lib/carousel";
 import { notify } from "../../../utils";
-import { ETartgetType } from "../../enums";
+import { EMessageType, ETartgetType } from "../../enums";
 import LoadingImg from "../../../components/LoadingImg";
 import { useStore } from "../../../hooks/useStore";
 
@@ -27,7 +27,7 @@ const CarouselContent: React.FC = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载轮播图数据失败"
@@ -46,7 +46,7 @@ const CarouselContent: React.FC = () => {
             switch (item.targetType) {
                 case ETartgetType.SONG:
                     store.updateCurSongId(item.targetId);
-                    notify("info", "开始播放该歌曲");
+                    notify(EMessageType.INFO, "开始播放该歌曲");
                     break;
                 case ETartgetType.ALBUM:
                     history.push(`/album/${item.targetId}`);
@@ -67,7 +67,7 @@ const CarouselContent: React.FC = () => {
                     window.open(item.url);
                     break;
                 default:
-                    notify("warning", "该功能暂未开放");
+                    notify(EMessageType.WARNING, "该功能暂未开放");
                     break;
             }
         },

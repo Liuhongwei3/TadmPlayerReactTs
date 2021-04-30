@@ -70,3 +70,12 @@ export const DEFAULT_COLORS = [
     "gold",
 ];
 export const DEFAULT_RANDOM_COLORS = shuffle(DEFAULT_COLORS);
+
+export const infoMsg = `
+%c^-^    ^-^    ^-^    ^-^    ^-^    ^-^\n
+%cWelcome to Tadm-Player-React-Ts!\n
+%cThis is my personal player by Tadm with react-buckt & Antd.\n
+If you think well,thanks to star ~\n
+%cGithub: https://github.com/Liuhongwei3\n
+%c^-^    ^-^    ^-^    ^-^    ^-^    ^-^\n
+`;

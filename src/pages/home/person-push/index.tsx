@@ -15,6 +15,7 @@ import {
     DEFAULT_MV_HEIGHT,
     DEFAULT_MV_WIDTH,
 } from "../../../web-config/defaultConfig";
+import { EMessageType } from "../../enums";
 
 const PersonPush: React.FunctionComponent = () => {
     const history = useHistory();
@@ -30,7 +31,7 @@ const PersonPush: React.FunctionComponent = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载独家放送失败"

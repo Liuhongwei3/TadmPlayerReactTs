@@ -6,7 +6,7 @@ import { CustomerServiceOutlined } from "@ant-design/icons";
 
 import { countFormat, notify } from "../../utils";
 import reqs from "../../api/req";
-import { EDetailSongOprType } from "../enums";
+import { EDetailSongOprType, EMessageType } from "../enums";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 
@@ -22,7 +22,7 @@ const AddSongToDetailDialog: React.FC<IProps> = observer((props: IProps) => {
 
     React.useEffect(() => {
         if (!store.userPlaylists.length) {
-            notify("warning", "还没有歌单呢，先去创建一个吧！");
+            notify(EMessageType.WARNING, "还没有歌单呢，先去创建一个吧！");
         }
     }, [store.userPlaylists.length]);
 
@@ -35,11 +35,11 @@ const AddSongToDetailDialog: React.FC<IProps> = observer((props: IProps) => {
             reqs.neteaseLogined
                 .addDeleteSongFromDetail(op, pid, [track])
                 .then(() => {
-                    notify("success", "收藏歌曲到歌单成功");
+                    notify(EMessageType.SUCCESS, "收藏歌曲到歌单成功");
                     handleCancel();
                 })
                 .catch((e) => {
-                    notify("error", "收藏歌曲到歌单失败");
+                    notify(EMessageType.ERROR, "收藏歌曲到歌单失败");
                 });
         },
         [op, track]

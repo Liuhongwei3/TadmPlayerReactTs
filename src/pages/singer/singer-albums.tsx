@@ -15,6 +15,7 @@ import {
     DEFAULT_IMG_HEIGHT,
     DEFAULT_IMG_WIDTH,
 } from "../../web-config/defaultConfig";
+import { EMessageType } from "../enums";
 
 interface IProps {
     singerId: number;
@@ -38,7 +39,7 @@ const SingerAlbums: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载歌手专辑数据失败"

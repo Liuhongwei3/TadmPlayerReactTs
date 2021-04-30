@@ -40,6 +40,7 @@ import DetailSimilar from "./detail-similar";
 import { useStore } from "../../hooks/useStore";
 import { ESubscribeDetail } from "../../api/netease/types/like-type";
 import openEditDetailDialog from "./edit-detail-dialog";
+import { EMessageType } from "../enums";
 
 interface IRouteParams {
     detailId: string;
@@ -67,7 +68,7 @@ const Detail: React.FunctionComponent = observer(() => {
                 })
                 .catch((err) => {
                     notify(
-                        "error",
+                        EMessageType.ERROR,
                         (err.response && err.response.statusText) ||
                             err.message ||
                             "加载每日推荐歌曲数据失败"
@@ -87,7 +88,7 @@ const Detail: React.FunctionComponent = observer(() => {
             })
             .catch((err) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (err.response && err.response.statusText) ||
                         err.message ||
                         "加载歌单数据失败"
@@ -129,11 +130,11 @@ const Detail: React.FunctionComponent = observer(() => {
         req.neteaseLogined
             .deleteDetail(+detailId)
             .then(() => {
-                notify("success", "删除歌单成功");
+                notify(EMessageType.SUCCESS, "删除歌单成功");
                 history.push(`/user/${store.curUserId}`);
             })
             .catch((e) => {
-                notify("error", e.message || "删除歌单失败");
+                notify(EMessageType.ERROR, e.message || "删除歌单失败");
             });
     }, [detailId, history, store.curUserId]);
 

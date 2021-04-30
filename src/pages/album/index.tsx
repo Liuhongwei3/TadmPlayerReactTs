@@ -22,6 +22,7 @@ import AlbumSongs from "./album-songs";
 import AlbumComments from "./album-comments";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
+import { EMessageType } from "../enums";
 
 interface IRouteParams {
     albumId: string;
@@ -51,7 +52,7 @@ const Album: React.FunctionComponent = () => {
             })
             .catch((err) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (err.response && err.response.statusText) ||
                         err.message ||
                         "加载专辑数据失败"

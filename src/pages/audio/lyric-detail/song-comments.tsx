@@ -6,6 +6,7 @@ import { notify } from "../../../utils";
 import { ICommentsRes } from "../../commType";
 import { ESourceType } from "../../../api/netease/types/like-type";
 import StyledComment from "../../../components/StyledComment";
+import { EMessageType } from "../../enums";
 
 interface IProps {
     id: number;
@@ -34,7 +35,7 @@ const SongComments: React.FC<IProps> = (props: IProps) => {
                 setcomms(res);
             })
             .catch((e) => {
-                notify("error", e.message);
+                notify(EMessageType.ERROR, e.message);
             })
             .finally(() => setLoading(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -10,6 +10,7 @@ import {
     ITLyric,
 } from "../../../api/netease/types/lyric-type";
 import lyricParser from "../../../features";
+import { EMessageType } from "../../enums";
 
 const Lyrics: React.FC = observer(() => {
     const lyricsRef = React.useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ const Lyrics: React.FC = observer(() => {
     const [curLyricTime, setCurLyricTime] = React.useState<number>(0);
     const [curLyricIndex, setCurLyricIndex] = React.useState<number>(0);
     const [lineHeight, setLineHeight] = React.useState<number>(30);
-    const [needScrollHeight, setNeedScrollHeight] = React.useState<number>(0);
+    // const [needScrollHeight, setNeedScrollHeight] = React.useState<number>(0);
     const [lyricMap, setLyricMap] = React.useState<Map<number, string>>(
         new Map()
     );
@@ -116,7 +117,7 @@ const Lyrics: React.FC = observer(() => {
                 handleLyrics(res);
             })
             .catch((e) => {
-                notify("error", e.message);
+                notify(EMessageType.ERROR, e.message);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [song?.id]);

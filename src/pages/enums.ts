@@ -1,3 +1,28 @@
+export enum ECanvasType {
+    SQUARE = "square",
+    CIRCLEBAR = "circlebar",
+    CIRCLEWAVE = "circlewave",
+}
+
+export const ICanvasTypeText: Record<ECanvasType, string> = {
+    [ECanvasType.SQUARE]: "跳跃之心",
+    [ECanvasType.CIRCLEBAR]: "动感音阶",
+    [ECanvasType.CIRCLEWAVE]: "迷幻水波",
+};
+
+export enum ELanguageType {
+    CN = "简体中文",
+    EN = "英语",
+}
+
+export enum EMessageType {
+    INFO = "info",
+    SUCCESS = "success",
+    WARNING = "warning",
+    ERROR = "error",
+    LOADING = "loading",
+}
+
 export enum EPlayMode {
     ORDER,
     RANDOM,

@@ -6,7 +6,7 @@ import { ColumnsType } from "antd/es/table";
 import req from "../../api/req";
 import { notify, timeFormat, toTop } from "../../utils";
 import { ISong } from "./type";
-import { EOrderType } from "../enums";
+import { EMessageType, EOrderType } from "../enums";
 import { useStore } from "../../hooks/useStore";
 
 interface IProps {
@@ -44,7 +44,7 @@ const SingerSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载歌手全部歌曲数据失败"

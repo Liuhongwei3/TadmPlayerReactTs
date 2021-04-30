@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
+import { EMessageType } from "../enums";
 import { IHotSearchDetail } from "./type";
 
 const HotSearchComp = (keyword: string) => {
@@ -14,7 +15,7 @@ const HotSearchComp = (keyword: string) => {
                 setHotSearchs(res.data);
             })
             .catch((e) => {
-                notify("error", (e && e.message) || "获取热搜列表数据失败");
+                notify(EMessageType.ERROR, (e && e.message) || "获取热搜列表数据失败");
             });
     }, []);
 

@@ -7,6 +7,7 @@ import { Artist, IJson, Pic } from "../user/type";
 import { getEventType, notify } from "../../utils";
 import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
 import LoadingImg from "../../components/LoadingImg";
+import { EMessageType } from "../enums";
 
 interface IProps {
     type: number;
@@ -32,7 +33,7 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
             if (id && route) {
                 history.push(`/${route}/${id}`);
             } else {
-                notify("warning", "该功能暂未开放");
+                notify(EMessageType.WARNING, "该功能暂未开放");
             }
         },
         [history, type]

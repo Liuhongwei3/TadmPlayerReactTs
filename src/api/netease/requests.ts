@@ -45,6 +45,7 @@ import {
     ISongUrlRes,
 } from "./types/song-type";
 import { ILyricRes } from "./types/lyric-type";
+import { EALbumTopType, EAlbumType } from "./types/album-type";
 
 // -----------------------------------------------------
 // 首页
@@ -89,6 +90,24 @@ const topMv = (limit = 10, area?: string) => {
     const optional1 = area ? `&area=${area}` : "";
 
     return api.get<ITopMvRes>(`${base}${optional1}`);
+};
+
+const topAlbum = (
+    type = EALbumTopType.TOTAL,
+    limit = 24,
+    year?: number,
+    offset?: number,
+    albumType = EAlbumType.ALBUM
+) => {
+    const base = `/album/songsaleboard?albumType=${albumType}&type=${type}&limit=${limit}`;
+    const date = new Date();
+    const curYear = date.getFullYear();
+
+    let optional1 =
+        type === EALbumTopType.YEAR ? `&year=${year || curYear}` : "";
+    const optional2 = offset ? `&offset=${offset}` : "";
+
+    return api.get(`${base}${optional1}${optional2}`);
 };
 
 // -----------------------------------------------------------
@@ -411,6 +430,7 @@ const reqFuncs = {
     toplist,
     topSinger,
     topMv,
+    topAlbum,
     hotSearchList,
     hotSearchDetailList,
     searchSuggest,

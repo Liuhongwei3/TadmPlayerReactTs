@@ -18,7 +18,7 @@ import {
     DEFAULT_IMG_HEIGHT,
     DEFAULT_IMG_WIDTH,
 } from "../../web-config/defaultConfig";
-import { ESingerType } from "../enums";
+import { EMessageType, ESingerType } from "../enums";
 
 const INIT_LIMIT = 24;
 const Types = [
@@ -44,7 +44,7 @@ const TopSinger: React.FunctionComponent = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载歌手排行榜数据失败"
@@ -102,7 +102,7 @@ const TopSinger: React.FunctionComponent = () => {
                         {singers.artists.slice(0, limit).map((item: Artist) => {
                             return (
                                 <StyledItem
-                                    key={item.id}
+                                    key={`top-singer-${item.id}`}
                                     onClick={() => toDetail(item.id)}
                                 >
                                     <div

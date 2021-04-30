@@ -19,6 +19,7 @@ import {
     DEFAULT_IMG_WIDTH,
 } from "../../web-config/defaultConfig";
 import HotDetailCats from "./hot-detail-cats";
+import { EMessageType } from "../enums";
 
 const INIT_LIMIT = 24;
 
@@ -38,7 +39,7 @@ const HotDetail: React.FunctionComponent = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载热门歌单数据失败"

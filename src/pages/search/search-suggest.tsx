@@ -1,6 +1,7 @@
 import React from "react";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
+import { EMessageType } from "../enums";
 import { AllMatch } from "./type";
 
 const SearchSuggest = (keyword: string) => {
@@ -14,7 +15,7 @@ const SearchSuggest = (keyword: string) => {
                     setAllMatch(res.result.allMatch);
                 })
                 .catch((e) => {
-                    notify("error", e.message || "获取搜索建议列表数据失败");
+                    notify(EMessageType.ERROR, e.message || "获取搜索建议列表数据失败");
                 });
     }, []);
 

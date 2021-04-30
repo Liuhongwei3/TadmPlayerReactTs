@@ -20,6 +20,7 @@ import {
 import StyledDivider from "../../components/StyledDivider";
 import { useStore } from "../../hooks/useStore";
 import openAddDetailDialog from "./add-detail-dialog";
+import { EMessageType } from "../enums";
 
 interface IProps {
     userId: number;
@@ -48,7 +49,7 @@ const UserPlaylist: React.FunctionComponent<IProps> = observer(
                 })
                 .catch((e) =>
                     notify(
-                        "error",
+                        EMessageType.ERROR,
                         (e.response && e.response.statusText) ||
                             e.message ||
                             "加载用户歌单数据失败"

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import LoadingImg from "../../components/LoadingImg";
 import StyledDivider from "../../components/StyledDivider";
-import { EDetailSongOprType } from "../enums";
+import { EDetailSongOprType, EMessageType } from "../enums";
 import openAddSongToDetailDialog from "./add-song-to-detail-dialog";
 import { useStore } from "../../hooks/useStore";
 
@@ -38,7 +38,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
 
     const getSongsDetail = React.useCallback(() => {
         if (!trackIds || trackIds.length === 0) {
-            notify("warning", "该歌单暂无歌曲");
+            notify(EMessageType.WARNING, "该歌单暂无歌曲");
             return;
         }
 
@@ -64,7 +64,7 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "获取歌曲详情数据失败"
@@ -98,11 +98,11 @@ const DetailSongs: React.FunctionComponent<IProps> = (props: IProps) => {
             req.neteaseLogined
                 .addDeleteSongFromDetail(op, detailId, [track])
                 .then((res) => {
-                    notify("success", "删除歌曲成功");
+                    notify(EMessageType.SUCCESS, "删除歌曲成功");
                     getDetails(true);
                 })
                 .catch((e) => {
-                    notify("error", e.message || "删除歌曲失败");
+                    notify(EMessageType.ERROR, e.message || "删除歌曲失败");
                 });
         },
         [detailId, getDetails]

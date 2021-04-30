@@ -14,7 +14,7 @@ import { ISearchs } from "./type";
 import Users from "./result-display/users";
 import Mvs from "./result-display/mvs";
 import HandleMore from "./result-display/handleMore";
-import { ESearchType } from "../enums";
+import { EMessageType, ESearchType } from "../enums";
 
 const SEARCH_THROTTLE_TIME = 500;
 const LIMIT = 16;
@@ -97,7 +97,7 @@ const SearchComp: React.FunctionComponent = () => {
                     setResult(res.result);
                 })
                 .catch((e) => {
-                    notify("error", e.message || "获取搜索结果失败");
+                    notify(EMessageType.ERROR, e.message || "获取搜索结果失败");
                 })
                 .finally(() => setLoading(false));
         },
@@ -111,7 +111,7 @@ const SearchComp: React.FunctionComponent = () => {
             return;
         }
         if (!keyword) {
-            notify("warning", "请输入关键词后搜索");
+            notify(EMessageType.WARNING, "请输入关键词后搜索");
             return;
         }
         onSearch(keyword);
@@ -138,7 +138,7 @@ const SearchComp: React.FunctionComponent = () => {
                     </Select.Option>
                 </Select>
                 <AutoComplete
-                   className="input"
+                    className="input"
                     options={[
                         ...SearchSuggest(keywordSugg),
                         ...HotSearchComp(keywordSugg),
@@ -160,10 +160,10 @@ const SearchComp: React.FunctionComponent = () => {
 
             <div>{`找到 ${resCount} 条结果`}</div>
 
-            <Tabs activeKey={String(activeKey)} onChange={updateActiveKey}>
+            <Tabs activeKey={`search-${activeKey}`} onChange={updateActiveKey}>
                 {SEARCH_RES_TABS.map((tab) => {
                     return (
-                        <Tabs.TabPane key={tab.key} tab={tab.title}>
+                        <Tabs.TabPane key={`search-${tab.key}`} tab={tab.title}>
                             <Spin spinning={loading}>
                                 {tab.component}
                                 <HandleMore

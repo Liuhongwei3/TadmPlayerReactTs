@@ -2,6 +2,7 @@ import { Anchor, Empty, Spin, Typography } from "antd";
 import React from "react";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
+import { EMessageType } from "../enums";
 import { Introduction, ISingerDesc } from "./type";
 
 interface IProps {
@@ -22,7 +23,7 @@ const SingerDesc: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载歌手描述数据失败"

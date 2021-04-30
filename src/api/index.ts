@@ -6,6 +6,7 @@ import {
 import { notify } from "../utils";
 import { parseResponseData } from "./tools";
 import { cacheAdapterEnhancer } from "axios-extensions";
+import { EMessageType } from "../pages/enums";
 
 const baseURL =
     process.env.NODE_ENV === "development"
@@ -48,15 +49,15 @@ axiosInst.interceptors.response.use(
         const res = parseResponseData(response);
 
         if (res.data && typeof res.data === "string") {
-            notify("error", res.data);
+            notify(EMessageType.ERROR, res.data);
             return Promise.reject(res.data);
         }
 
         if (res.data.reason) {
-            notify("warning", res.data.reason || "需要登录~");
+            notify(EMessageType.WARNING, res.data.reason || "需要登录~");
         }
         if (res.data.code === 400 && res.data.msg) {
-            notify("warning", res.data.msg || "请求参数错误~");
+            notify(EMessageType.WARNING, res.data.msg || "请求参数错误~");
         }
         return res.data;
     },
@@ -71,7 +72,7 @@ axiosInst.interceptors.response.use(
                 case 401:
                     // window.location.href = getSsoRedirectUrl();
                     notify(
-                        "warning",
+                        EMessageType.WARNING,
                         error.response.data.msg ||
                             error.response.statusText ||
                             "需要登录~"
@@ -79,7 +80,7 @@ axiosInst.interceptors.response.use(
                     break;
                 case 400:
                     notify(
-                        "warning",
+                        EMessageType.WARNING,
                         error.response.data.msg ||
                             error.response.statusText ||
                             "请求参数错误~"
@@ -87,7 +88,7 @@ axiosInst.interceptors.response.use(
                     break;
                 case 500:
                     notify(
-                        "error",
+                        EMessageType.ERROR,
                         error.response.data.msg ||
                             error.response.statusText ||
                             "服务器异常！"
@@ -95,7 +96,7 @@ axiosInst.interceptors.response.use(
                     break;
                 default:
                     notify(
-                        "error",
+                        EMessageType.ERROR,
                         (error.response && error.response.statusText) ||
                             error.response.data.msg ||
                             error.response.statusText ||

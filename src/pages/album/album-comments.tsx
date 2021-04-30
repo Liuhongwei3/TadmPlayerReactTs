@@ -5,6 +5,7 @@ import { notify, toTop } from "../../utils";
 import StyledComment from "../../components/StyledComment";
 import { IComment, ICommentsRes, IHotComment } from "../commType";
 import { ESourceType } from "../../api/netease/types/like-type";
+import { EMessageType } from "../enums";
 
 interface IProps {
     albumId: number;
@@ -35,7 +36,7 @@ const AlbumComments: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载专辑评论数据失败"

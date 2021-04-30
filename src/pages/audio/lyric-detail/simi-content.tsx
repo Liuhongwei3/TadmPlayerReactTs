@@ -9,6 +9,7 @@ import {
 import reqs from "../../../api/req";
 import { useStore } from "../../../hooks/useStore";
 import { notify } from "../../../utils";
+import { EMessageType } from "../../enums";
 
 interface IProps {
     id: number;
@@ -55,7 +56,7 @@ const SimiContent: React.FC<IProps> = (props: IProps) => {
                 setSimiMusics(res[1]);
             })
             .catch((e) => {
-                notify("error", e.message);
+                notify(EMessageType.ERROR, e.message);
             })
             .finally(() => {
                 setLoading(false);
@@ -65,7 +66,7 @@ const SimiContent: React.FC<IProps> = (props: IProps) => {
     return (
         <Spin spinning={loading}>
             <StyledWrapper>
-                {includeDetails?.playlists && (
+                {!!includeDetails?.playlists.length && (
                     <StyledTitle>包含这首歌的歌单</StyledTitle>
                 )}
                 {includeDetails?.playlists.map((detail) => (
@@ -82,7 +83,7 @@ const SimiContent: React.FC<IProps> = (props: IProps) => {
                     </StyledItem>
                 ))}
 
-                {simiMusics?.songs && <StyledTitle>相似歌曲</StyledTitle>}
+                {!!simiMusics?.songs.length && <StyledTitle>相似歌曲</StyledTitle>}
                 {simiMusics?.songs.map((song) => (
                     <StyledItem
                         key={`lyric-detail-${song.id}`}
@@ -134,10 +135,9 @@ const StyledWrapper = styled.div`
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    max-width: 30vw;
     margin: 0 auto;
 
     @media screen and (max-width: 768px) {
-        max-width: 75%;
+        width: 70vw;
     }
 `;

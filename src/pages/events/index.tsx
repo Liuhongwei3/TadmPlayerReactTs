@@ -20,6 +20,7 @@ import EventActions from "./event-actions";
 import EventComm from "./event-comm";
 import { IEventsRes, Event } from "./type";
 import LoadingImg from "../../components/LoadingImg";
+import { EMessageType } from "../enums";
 
 const INIT_LIMIT = 20;
 
@@ -42,7 +43,7 @@ const Events: React.FunctionComponent = () => {
                 setEventsRes(res);
             })
             .catch((e) => {
-                notify("error", e.message);
+                notify(EMessageType.ERROR, e.message);
             })
             .finally(() => {
                 setLoading(false);
@@ -50,7 +51,7 @@ const Events: React.FunctionComponent = () => {
     }, [limit]);
 
     const publishEvent = React.useCallback(() => {
-        notify("warning", "该功能暂未开放");
+        notify(EMessageType.WARNING, "该功能暂未开放");
     }, []);
 
     const avatar = React.useCallback((event: Event) => {

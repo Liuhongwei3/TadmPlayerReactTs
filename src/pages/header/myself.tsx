@@ -17,6 +17,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { useStore } from "../../hooks/useStore";
 import reqs from "../../api/req";
 import { notify, setOutDateCookie } from "../../utils";
+import { EMessageType } from "../enums";
 
 interface IForm {
     phone: string;
@@ -67,7 +68,7 @@ const TopMySelf: React.FC = observer(() => {
             })
             .catch((e) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     e.message || "登录失败，请仔细核对账号和密码后重试！"
                 );
             })
@@ -81,13 +82,13 @@ const TopMySelf: React.FC = observer(() => {
             .checkCodeByPhone(values.phone, values.code)
             .then((res) => {
                 if (res.code === 200) {
-                    notify("success", "登录成功！");
+                    notify(EMessageType.SUCCESS, "登录成功！");
                 } else {
                     throw res;
                 }
             })
             .catch((e) => {
-                notify("error", e || e.message || "验证码错误！");
+                notify(EMessageType.ERROR, e || e.message || "验证码错误！");
             })
             .finally(() => {
                 setCodeModal(false);
@@ -103,7 +104,7 @@ const TopMySelf: React.FC = observer(() => {
         if (phone) {
             reqs.neteaseLogined.sendCodeByPhone(phone);
         } else {
-            notify("warning", "请先输入正确的手机号");
+            notify(EMessageType.WARNING, "请先输入正确的手机号");
         }
     }, [form1]);
 
@@ -117,7 +118,7 @@ const TopMySelf: React.FC = observer(() => {
             setQrImg(imgRes.data.qrimg);
             return key;
         } catch (e) {
-            notify("error", e.message || "获取二维码 Key失败");
+            notify(EMessageType.ERROR, e.message || "获取二维码 Key失败");
         }
     }, []);
 
@@ -134,7 +135,7 @@ const TopMySelf: React.FC = observer(() => {
             window.sessionStorage.setItem("userId", String(userId));
             window.sessionStorage.setItem("nickname", nickname);
             window.sessionStorage.setItem("avatarUrl", avatarUrl);
-            notify("success", "登录成功！");
+            notify(EMessageType.SUCCESS, "登录成功！");
             toUser();
         },
         [store, toUser]
@@ -153,7 +154,7 @@ const TopMySelf: React.FC = observer(() => {
                         // code -- 801 -- 等待扫码
                         if (code === 800) {
                             clearInterval(timer);
-                            notify("warning", "二维码已过期,请重新获取");
+                            notify(EMessageType.WARNING, "二维码已过期,请重新获取");
                         }
                         if (code === 803) {
                             clearInterval(timer);
@@ -188,7 +189,7 @@ const TopMySelf: React.FC = observer(() => {
                 history.push("/");
             })
             .catch((e) => {
-                notify("error", e.message);
+                notify(EMessageType.ERROR, e.message);
             });
     }, [history, store]);
 
@@ -235,7 +236,7 @@ const TopMySelf: React.FC = observer(() => {
                         })
                         .catch((info) => {
                             console.warn("Validate Failed:", info);
-                            notify("warning", "请输入正确格式的内容");
+                            notify(EMessageType.WARNING, "请输入正确格式的内容");
                         });
                 }}
             >
@@ -354,7 +355,7 @@ const TopMySelf: React.FC = observer(() => {
                         })
                         .catch((info) => {
                             console.warn("Validate Failed:", info);
-                            notify("warning", "请输入正确格式的内容");
+                            notify(EMessageType.WARNING, "请输入正确格式的内容");
                         });
                 }}
             >

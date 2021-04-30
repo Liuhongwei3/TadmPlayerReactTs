@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Form, Input, Modal, Radio } from "antd";
 import { notify } from "../../utils";
 import reqs from "../../api/req";
+import { EMessageType } from "../enums";
 
 const AddDetailDialog: React.FC = () => {
     const [form] = Form.useForm();
@@ -18,7 +19,7 @@ const AddDetailDialog: React.FC = () => {
                 reqs.neteaseLogined
                     .createDetail(values.name, values.privacy)
                     .then(() => {
-                        notify("success", "新建歌单成功");
+                        notify(EMessageType.SUCCESS, "新建歌单成功");
                         form.resetFields();
                         handleCancel();
                         setTimeout(() => {
@@ -26,11 +27,11 @@ const AddDetailDialog: React.FC = () => {
                         }, 0);
                     })
                     .catch((e) => {
-                        notify("error", "新建歌单失败");
+                        notify(EMessageType.ERROR, "新建歌单失败");
                     });
             })
             .catch(() => {
-                notify("warning", "请输入正确的内容");
+                notify(EMessageType.WARNING, "请输入正确的内容");
             });
     }, [form]);
 

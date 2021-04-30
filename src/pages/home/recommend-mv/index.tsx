@@ -17,6 +17,7 @@ import {
     DEFAULT_MV_WIDTH,
     DEFAULT_MV_HEIGHT,
 } from "../../../web-config/defaultConfig";
+import { EMessageType } from "../../enums";
 
 const RecommendMv: React.FunctionComponent = () => {
     const history = useHistory();
@@ -34,7 +35,7 @@ const RecommendMv: React.FunctionComponent = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载推荐 MV 数据失败"

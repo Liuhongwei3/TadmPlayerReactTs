@@ -105,7 +105,7 @@ const Songs: React.FC<IProps> = (props: IProps) => {
     return result && result.songs && result.songs.length ? (
         <>
             <Table<Song>
-                rowKey="id"
+                rowKey={`id`}
                 bordered={false}
                 pagination={false}
                 scroll={{ x: true }}

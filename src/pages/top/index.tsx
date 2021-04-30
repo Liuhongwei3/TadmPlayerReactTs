@@ -1,6 +1,7 @@
 import { Tabs } from "antd";
 import React from "react";
 import { toTop } from "../../utils";
+import TopAlbum from "./top-album";
 import TopDetail from "./top-detail";
 import TopMv from "./top-mv";
 import TopSinger from "./top-singer";
@@ -17,7 +18,6 @@ const Top: React.FunctionComponent = () => {
         <Tabs
             size="large"
             centered={true}
-            defaultActiveKey="1"
             activeKey={activeKey}
             onChange={(activeKey) => onTabChange(activeKey)}
         >
@@ -29,6 +29,9 @@ const Top: React.FunctionComponent = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab={`MV 排行榜`} key="top-mv">
                 <TopMv />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`数字专辑排行榜`} key="top-album">
+                <TopAlbum />
             </Tabs.TabPane>
         </Tabs>
     );

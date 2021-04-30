@@ -17,6 +17,7 @@ import {
     DEFAULT_IMG_HEIGHT,
     DEFAULT_IMG_WIDTH,
 } from "../../web-config/defaultConfig";
+import { EMessageType } from "../enums";
 
 const TopDetail: React.FunctionComponent = () => {
     const history = useHistory();
@@ -32,7 +33,7 @@ const TopDetail: React.FunctionComponent = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载歌单排行榜数据失败"
@@ -63,7 +64,7 @@ const TopDetail: React.FunctionComponent = () => {
                     {topLists.map((item: ITopList) => {
                         return (
                             <StyledItem
-                                key={item.id}
+                                key={`top-detail-${item.id}`}
                                 onClick={() => toDetail(item.id)}
                             >
                                 <div

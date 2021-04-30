@@ -20,6 +20,7 @@ import {
     RECOMMEND_DAY_ID,
 } from "../../../web-config/defaultConfig";
 import { useStore } from "../../../hooks/useStore";
+import { EMessageType } from "../../enums";
 
 const RecommendDetail: React.FunctionComponent = observer(() => {
     const store = useStore();
@@ -38,7 +39,7 @@ const RecommendDetail: React.FunctionComponent = observer(() => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载推荐歌单数据失败"

@@ -14,6 +14,7 @@ import req from "../../api/req";
 import { IHotDetailCats } from "./type";
 import { notify } from "../../utils";
 import StyledTag from "../../components/StyledTag";
+import { EMessageType } from "../enums";
 
 const INIT_LIMIT = 24;
 const DEFAULT_CATS = {
@@ -61,7 +62,7 @@ const HotDetailCats: React.FunctionComponent<IProps> = (props: IProps) => {
                 setHotDetailCats(res);
             })
             .catch((e) => {
-                notify("error", (e && e.message) || "获取热门歌单类目数据失败");
+                notify(EMessageType.ERROR, (e && e.message) || "获取热门歌单类目数据失败");
             })
             .finally(() => {
                 setLoading(false);

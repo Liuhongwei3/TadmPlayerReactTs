@@ -16,6 +16,7 @@ import {
     DEFAULT_MV_SMALL_HEIGHT,
     DEFAULT_MV_SMALL_WIDTH,
 } from "../../web-config/defaultConfig";
+import { EMessageType } from "../enums";
 
 interface IProps {
     singerId: number;
@@ -39,7 +40,7 @@ const SingerMvs: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载歌手 MV 数据失败"

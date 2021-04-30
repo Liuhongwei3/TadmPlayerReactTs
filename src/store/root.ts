@@ -14,7 +14,12 @@ import { IUserPlaylist } from "../pages/user/type";
 import req from "../api/req";
 import { ISong } from "../pages/detail/type";
 import { isObject, isArray, notify, shuffle } from "../utils";
-import { EPlayMode, IPlayModeText } from "../pages/enums";
+import {
+    ECanvasType,
+    EMessageType,
+    EPlayMode,
+    IPlayModeText,
+} from "../pages/enums";
 
 const LIMIT = 999;
 
@@ -32,6 +37,10 @@ class Root {
     curPlayMode = EPlayMode.ORDER;
     curSong: ISong | undefined;
     curTime: number = 0;
+    curCanvasType: ECanvasType = ECanvasType.SQUARE;
+    // curCanvasType: ECanvasType = ECanvasType.CIRCLEBAR;
+    // curCanvasType: ECanvasType = ECanvasType.CIRCLEWAVE;
+    curCircleCanvasColorIndex: number = 0;
     curLyric: string = "暂无歌词";
     curPlayDetailId: number | undefined;
     curPlaylists: number[] = [DEFAULT_SONG_ID];
@@ -40,6 +49,7 @@ class Root {
     curHeartPlaylists: ISong[] = [];
     historyPlaySongs: ISong[] = [];
 
+    showUserBackImg: boolean = true;
     showLyrics: boolean = false;
     audioPlaying: boolean = false;
     videoPlaying: boolean = false;
@@ -84,12 +94,26 @@ class Root {
         this.curTime = time;
     }
 
+    updateCurCanvasType(type: ECanvasType) {
+        if (type !== this.curCanvasType) {
+            this.curCanvasType = type;
+        }
+    }
+
+    updateCurCircleCanvasColorIndex(index: number) {
+        this.curCircleCanvasColorIndex = index;
+    }
+
     updateCurLyric(lyric: string) {
         this.curLyric = lyric;
     }
 
-    changeLocale() {
-        this.locale = this.locale.locale === "zh-cn" ? enUS : zhCN;
+    changeLocale(flag: boolean) {
+        this.locale = flag ? zhCN : enUS;
+    }
+
+    updateShowUserBackImg(show: boolean) {
+        this.showUserBackImg = show;
     }
 
     toggleShowLyrics(show?: boolean) {
@@ -162,7 +186,7 @@ class Root {
         } else {
             this.curPlayMode++;
         }
-        notify("info", IPlayModeText[this.curPlayMode]);
+        notify(EMessageType.INFO, IPlayModeText[this.curPlayMode]);
     }
 
     updateHistoryPlaySongs(songs: ISong | ISong[]) {
@@ -172,7 +196,7 @@ class Root {
             const index = this.historyPlaySongs
                 .map((song) => song.id)
                 .findIndex((id) => id === (songs as ISong).id);
-                
+
             if (index !== -1) {
                 this.historyPlaySongs.splice(index, 1);
             }

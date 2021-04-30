@@ -11,6 +11,7 @@ import EventActions from "../../events/event-actions";
 import { handleJson } from "../content-util";
 import EventComm from "../../events/event-comm";
 import StyledDivider from "../../../components/StyledDivider";
+import { EMessageType } from "../../enums";
 
 interface IProps {
     userId: number;
@@ -42,7 +43,7 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载用户动态数据失败"

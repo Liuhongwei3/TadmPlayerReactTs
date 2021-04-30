@@ -12,6 +12,7 @@ import { observer } from "mobx-react-lite";
 import { Link, useHistory } from "react-router-dom";
 import reqs from "../../api/req";
 import { notify } from "../../utils";
+import { EMessageType } from "../enums";
 
 const CurSongInfo: React.FC = observer(() => {
     const store = useStore();
@@ -38,7 +39,7 @@ const CurSongInfo: React.FC = observer(() => {
                     }
                 })
                 .catch((e) => {
-                    notify("error", e.message);
+                    notify(EMessageType.ERROR, e.message);
                 });
         },
         [store]

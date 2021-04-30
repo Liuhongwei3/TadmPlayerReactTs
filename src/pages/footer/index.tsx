@@ -12,7 +12,7 @@ const Footer: React.FunctionComponent = () => {
                 <span>&copy;&nbsp;2021</span>
                 <StyledHeart twoToneColor="#eb2f96" />
                 <Typography.Link
-                    href="https://github.com/Liuhongwei3"
+                    href="https://github.com/Liuhongwei3/TadmPlayerReactTs"
                     target="_blank"
                 >
                     <GithubOutlined />

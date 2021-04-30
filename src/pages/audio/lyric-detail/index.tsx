@@ -8,6 +8,8 @@ import LoadingImg from "../../../components/LoadingImg";
 import SimiContent from "../lyric-detail/simi-content";
 import SongComments from "./song-comments";
 import Lyrics from "./lyrics";
+import SquareCanvas from "./all-canvas/square-canvas";
+import CircleCanvas from "./all-canvas/circle-canvas";
 
 const LyricDetail: React.FC = observer(() => {
     const store = useStore();
@@ -22,16 +24,22 @@ const LyricDetail: React.FC = observer(() => {
         <StyledWrapper id="lyric-detail" show={showLyrics}>
             <StyledContent>
                 <StyledOuter>
-                    <StyledImage
-                        alt="lyric-detail-cover"
-                        loading="lazy"
-                        preview={false}
-                        placeholder={<LoadingImg />}
-                        width={180}
-                        height={180}
-                        src={song.al.picUrl}
-                    />
+                    <StyledInner>
+                        <StyledImage
+                            alt="lyric-detail-cover"
+                            loading="lazy"
+                            preview={{
+                                maskClassName: "lyric-detail-image-mask",
+                            }}
+                            width={180}
+                            height={180}
+                            placeholder={<LoadingImg />}
+                            src={song.al.picUrl}
+                        />
+                    </StyledInner>
                 </StyledOuter>
+
+                <CircleCanvas />
 
                 <StyledSongLyrics>
                     <div style={{ fontSize: 24 }}>{song.name}</div>
@@ -66,9 +74,9 @@ const LyricDetail: React.FC = observer(() => {
                 <SimiContent id={song.id} />
             </StyledContent>
 
-            {/* <canvas id="canvas"></canvas> */}
-
             <SongComments id={song.id} />
+
+            <SquareCanvas />
         </StyledWrapper>
     ) : null;
 });
@@ -91,7 +99,13 @@ const StyledImage = styled(Image)`
     position: relative;
 `;
 
-const StyledOuter = styled.div`
+const StyledInner = styled.div`
+    position: relative;
+
+    .lyric-detail-image-mask {
+        border-radius: 50%;
+    }
+
     &::before {
         content: "";
         position: absolute;
@@ -101,6 +115,10 @@ const StyledOuter = styled.div`
         filter: blur(16px);
         background-image: radial-gradient(white, silver);
     }
+`;
+
+const StyledOuter = styled.div`
+    position: relative;
 `;
 
 const StyledSongLyrics = styled.div`

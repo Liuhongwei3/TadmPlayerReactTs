@@ -25,6 +25,7 @@ import MvSimilar from "./mv-similar";
 import styled from "styled-components";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
+import { EMessageType } from "../enums";
 
 interface IRouteParams {
     mvId: string;
@@ -53,7 +54,7 @@ const Mv: React.FunctionComponent = () => {
             })
             .catch((err) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (err.response && err.response.statusText) ||
                         err.message ||
                         "加载 MV 数据失败"

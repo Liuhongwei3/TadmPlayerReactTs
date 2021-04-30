@@ -1,13 +1,17 @@
 import { message } from "antd";
 import { IEventTypeText } from "./pages/enums";
 
+export const randomNumberMinToMax = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+};
+
 export const isObject = (obj) => {
     return typeof obj === "object";
-}
+};
 
 export const isArray = (arr) => {
     return arr instanceof Array;
-}
+};
 
 export function toTop() {
     document.documentElement.scrollTop = document.body.scrollTop = 0;

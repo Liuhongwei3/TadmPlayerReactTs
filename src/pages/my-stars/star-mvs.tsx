@@ -17,6 +17,7 @@ import {
     DEFAULT_MV_SMALL_WIDTH,
 } from "../../web-config/defaultConfig";
 import { IMvsRes } from "./type";
+import { EMessageType } from "../enums";
 
 const INIT_LIMIT = 24;
 
@@ -35,7 +36,7 @@ const StarMvs: React.FC = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载收藏的 MV 数据失败"

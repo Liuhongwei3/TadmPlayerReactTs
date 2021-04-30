@@ -38,12 +38,15 @@ import UserEvent from "./user-event";
 import { createTime, userType } from "./content-util";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
+import styled from "styled-components";
+import { observer } from "mobx-react-lite";
+import { EMessageType } from "../enums";
 
 interface IRouteParams {
     userId: string;
 }
 
-const User: React.FunctionComponent = () => {
+const User: React.FC = observer(() => {
     const store = useStore();
     const history = useHistory();
     let { userId } = useParams<IRouteParams>();
@@ -52,6 +55,7 @@ const User: React.FunctionComponent = () => {
     const [userInfo, setUserInfo] = React.useState<IUserDetail>();
     const [followed, setFollowed] = React.useState<boolean>(false);
     userId = userId || String(store.curUserId);
+    const showUserBackImg = store.showUserBackImg;
 
     const getUserInfo = React.useCallback(() => {
         setLoading(true);
@@ -63,7 +67,7 @@ const User: React.FunctionComponent = () => {
             })
             .catch((err) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (err.response && err.response.statusText) ||
                         err.message ||
                         "加载用户详情数据失败"
@@ -133,19 +137,22 @@ const User: React.FunctionComponent = () => {
     }, [userInfo]);
 
     const AuthTypes = React.useCallback(() => {
-        return userInfo && userInfo.profile.allAuthTypes?.length ? (
+        if (!userInfo || !userInfo.profile.allAuthTypes) return null;
+        const filteredTags = userInfo.profile.allAuthTypes.filter(
+            (tag) => !!tag.desc
+        );
+
+        return filteredTags.length ? (
             <div style={{ width: "100%" }}>
                 <span>认证标签：</span>
-                {userInfo.profile.allAuthTypes
-                    ?.filter((type) => type.desc.length)
-                    .map((type, index) => (
-                        <StyledTag
-                            key={type.desc}
-                            color={DEFAULT_RANDOM_COLORS[index]}
-                        >
-                            {type.desc}
-                        </StyledTag>
-                    ))}
+                {filteredTags.map((type, index) => (
+                    <StyledTag
+                        key={type.desc}
+                        color={DEFAULT_RANDOM_COLORS[index]}
+                    >
+                        {type.desc}
+                    </StyledTag>
+                ))}
             </div>
         ) : null;
     }, [userInfo]);
@@ -179,178 +186,207 @@ const User: React.FunctionComponent = () => {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            {userInfo?.profile.nickname ? (
-                <StyledWrapper>
-                    <div>
-                        <Avatar
-                            src={
-                                <LazyLoad
-                                    height={32}
-                                    placeholder={<LoadingImg />}
-                                >
-                                    <Image src={userInfo.profile.avatarUrl} />
-                                </LazyLoad>
-                            }
-                        />
-                        <Tooltip title="用户名">
-                            <StyledTag color="magenta">
-                                {userInfo?.profile.nickname}
-                            </StyledTag>
-                        </Tooltip>
-                        <Tooltip title="性别">
-                            <StyledTag color="cyan">
-                                <UserSex gender={userInfo.profile.gender} />
-                            </StyledTag>
-                        </Tooltip>
-                        <Tooltip title="等级">
-                            <StyledTag color="red">
-                                <LineChartOutlined />
-                                {`Lv.${userInfo.level}`}
-                            </StyledTag>
-                        </Tooltip>
-                        <Tooltip title="用户类型">
-                            <StyledTag color="gold">
-                                {userType(
-                                    userInfo.profile.userType,
-                                    userInfo?.profile.mainAuthType?.desc
-                                )}
-                            </StyledTag>
-                        </Tooltip>
-                        {userInfo.profile.vipType === 11 && (
-                            <StyledTag color="purple">
-                                <CrownOutlined />
-                                黑胶 VIP
-                            </StyledTag>
-                        )}
-                        <Tooltip title={`累计听歌(${userInfo.listenSongs})`}>
-                            <StyledTag color="orange">
-                                <CustomerServiceOutlined />
-                                {countFormat(userInfo.listenSongs)}
-                            </StyledTag>
-                        </Tooltip>
-                        <Tooltip title="出生日期">
-                            <StyledTag color="blue">
-                                {dateFormat(userInfo.profile.birthday)}
-                            </StyledTag>
-                        </Tooltip>
-                        <Tooltip title="村龄">
-                            <StyledTag color="green">
-                                <FieldTimeOutlined />
-                                {createTime(userInfo.createDays)}
-                            </StyledTag>
-                        </Tooltip>
-
-                        {followed ? (
-                            <Tooltip title="取消关注">
-                                <StarFilled
-                                    className="ant-svg-scale"
-                                    style={{ color: "#ff5a5a" }}
-                                    onClick={() => followUser(ELikeOpr.DISLIKE)}
-                                />
-                            </Tooltip>
-                        ) : (
-                            <Tooltip title="关注该用户">
-                                <StarOutlined
-                                    className="ant-svg-scale"
-                                    onClick={() => followUser(ELikeOpr.LIKE)}
-                                />
-                            </Tooltip>
-                        )}
-                    </div>
-
-                    <Binds />
-
-                    <StyledDivider />
-
-                    <AuthTypes />
-
-                    {userInfo.profile.artistId &&
-                        singerInfo(
-                            userInfo.profile.artistId,
-                            userInfo.profile.artistName!,
-                            userInfo.profile.mainAuthType!
-                        )}
-
-                    {!!userInfo?.profile.signature && (
-                        <>
-                            <Collapse
-                                style={{
-                                    backgroundColor: "#a2a0a0d1",
-                                    width: "50vw",
-                                }}
-                            >
-                                <Collapse.Panel
-                                    header="个人介绍"
-                                    key="description"
-                                >
-                                    <Typography.Paragraph
-                                        ellipsis={{
-                                            rows: 2,
-                                            expandable: true,
-                                        }}
+            <StyledDiv
+                backImg={
+                    showUserBackImg
+                        ? userInfo?.profile.backgroundUrl
+                        : undefined
+                }
+            >
+                {userInfo?.profile.nickname ? (
+                    <StyledWrapper>
+                        <div>
+                            <Avatar
+                                src={
+                                    <LazyLoad
+                                        height={32}
+                                        placeholder={<LoadingImg />}
                                     >
-                                        {userInfo?.profile.signature}
-                                    </Typography.Paragraph>
-                                </Collapse.Panel>
-                            </Collapse>
-                            <StyledDivider />
-                        </>
-                    )}
+                                        <Image
+                                            src={userInfo.profile.avatarUrl}
+                                        />
+                                    </LazyLoad>
+                                }
+                            />
+                            <Tooltip title="用户名">
+                                <StyledTag color="magenta">
+                                    {userInfo?.profile.nickname}
+                                </StyledTag>
+                            </Tooltip>
+                            <Tooltip title="性别">
+                                <StyledTag color="cyan">
+                                    <UserSex gender={userInfo.profile.gender} />
+                                </StyledTag>
+                            </Tooltip>
+                            <Tooltip title="等级">
+                                <StyledTag color="red">
+                                    <LineChartOutlined />
+                                    {`Lv.${userInfo.level}`}
+                                </StyledTag>
+                            </Tooltip>
+                            <Tooltip title="用户类型">
+                                <StyledTag color="gold">
+                                    {userType(
+                                        userInfo.profile.userType,
+                                        userInfo?.profile.mainAuthType?.desc
+                                    )}
+                                </StyledTag>
+                            </Tooltip>
+                            {userInfo.profile.vipType === 11 && (
+                                <StyledTag color="purple">
+                                    <CrownOutlined />
+                                    黑胶 VIP
+                                </StyledTag>
+                            )}
+                            <Tooltip
+                                title={`累计听歌(${userInfo.listenSongs})`}
+                            >
+                                <StyledTag color="orange">
+                                    <CustomerServiceOutlined />
+                                    {countFormat(userInfo.listenSongs)}
+                                </StyledTag>
+                            </Tooltip>
+                            <Tooltip title="出生日期">
+                                <StyledTag color="blue">
+                                    {dateFormat(userInfo.profile.birthday)}
+                                </StyledTag>
+                            </Tooltip>
+                            <Tooltip title="村龄">
+                                <StyledTag color="green">
+                                    <FieldTimeOutlined />
+                                    {createTime(userInfo.createDays)}
+                                </StyledTag>
+                            </Tooltip>
 
-                    <Tabs
-                        style={{ width: "100%" }}
-                        activeKey={activeKey}
-                        defaultActiveKey="1"
-                        onChange={(activeKey) => onTabChange(activeKey)}
-                    >
-                        <Tabs.TabPane
-                            tab={`动态(${countFormat(
-                                userInfo.profile.eventCount
-                            )})`}
-                            key="2"
+                            {followed ? (
+                                <Tooltip title="取消关注">
+                                    <StarFilled
+                                        className="ant-svg-scale"
+                                        style={{ color: "#ff5a5a" }}
+                                        onClick={() =>
+                                            followUser(ELikeOpr.DISLIKE)
+                                        }
+                                    />
+                                </Tooltip>
+                            ) : (
+                                <Tooltip title="关注该用户">
+                                    <StarOutlined
+                                        className="ant-svg-scale"
+                                        onClick={() =>
+                                            followUser(ELikeOpr.LIKE)
+                                        }
+                                    />
+                                </Tooltip>
+                            )}
+                        </div>
+
+                        <Binds />
+
+                        <StyledDivider />
+
+                        <AuthTypes />
+
+                        {userInfo.profile.artistId &&
+                            singerInfo(
+                                userInfo.profile.artistId,
+                                userInfo.profile.artistName!,
+                                userInfo.profile.mainAuthType!
+                            )}
+
+                        {!!userInfo?.profile.signature && (
+                            <>
+                                <Collapse
+                                    style={{
+                                        backgroundColor: "#a2a0a0d1",
+                                        width: "50vw",
+                                    }}
+                                >
+                                    <Collapse.Panel
+                                        header="个人介绍"
+                                        key="description"
+                                    >
+                                        <Typography.Paragraph
+                                            ellipsis={{
+                                                rows: 2,
+                                                expandable: true,
+                                            }}
+                                        >
+                                            {userInfo?.profile.signature}
+                                        </Typography.Paragraph>
+                                    </Collapse.Panel>
+                                </Collapse>
+                                <StyledDivider />
+                            </>
+                        )}
+
+                        <Tabs
+                            style={{ width: "100%" }}
+                            activeKey={activeKey}
+                            defaultActiveKey="1"
+                            onChange={(activeKey) => onTabChange(activeKey)}
                         >
-                            <UserEvent
-                                userId={+userId}
-                                eventCount={userInfo.profile.eventCount}
-                            />
-                        </Tabs.TabPane>
-                        <Tabs.TabPane
-                            tab={`歌单(${countFormat(
-                                userInfo.profile.playlistCount
-                            )})`}
-                            key="1"
-                        >
-                            <UserPlaylist userId={+userId} />
-                        </Tabs.TabPane>
-                        <Tabs.TabPane
-                            tab={`关注(${countFormat(
-                                userInfo.profile.follows
-                            )})`}
-                            key="3"
-                        >
-                            <UserFollow
-                                userId={+userId}
-                                followCount={userInfo.profile.follows}
-                            />
-                        </Tabs.TabPane>
-                        <Tabs.TabPane
-                            tab={`粉丝(${countFormat(
-                                userInfo.profile.followeds
-                            )})`}
-                            key="4"
-                        >
-                            <UserFollowed
-                                userId={+userId}
-                                followedCount={userInfo.profile.followeds}
-                            />
-                        </Tabs.TabPane>
-                    </Tabs>
-                </StyledWrapper>
-            ) : (
-                <Empty />
-            )}
+                            <Tabs.TabPane
+                                tab={`动态(${countFormat(
+                                    userInfo.profile.eventCount
+                                )})`}
+                                key="2"
+                            >
+                                <UserEvent
+                                    userId={+userId}
+                                    eventCount={userInfo.profile.eventCount}
+                                />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane
+                                tab={`歌单(${countFormat(
+                                    userInfo.profile.playlistCount
+                                )})`}
+                                key="1"
+                            >
+                                <UserPlaylist userId={+userId} />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane
+                                tab={`关注(${countFormat(
+                                    userInfo.profile.follows
+                                )})`}
+                                key="3"
+                            >
+                                <UserFollow
+                                    userId={+userId}
+                                    followCount={userInfo.profile.follows}
+                                />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane
+                                tab={`粉丝(${countFormat(
+                                    userInfo.profile.followeds
+                                )})`}
+                                key="4"
+                            >
+                                <UserFollowed
+                                    userId={+userId}
+                                    followedCount={userInfo.profile.followeds}
+                                />
+                            </Tabs.TabPane>
+                        </Tabs>
+                    </StyledWrapper>
+                ) : (
+                    <Empty />
+                )}
+            </StyledDiv>
         </Spin>
     );
-};
+});
 
 export default User;
+
+const StyledDiv = styled.div`
+    width: 100%;
+    height: 100%;
+
+    ${(props: { backImg: string | undefined }) =>
+        props.backImg
+            ? {
+                  backgroundImage: `url(${props.backImg})`,
+                  backgroundClip: "border-box",
+              }
+            : {}}}
+`;

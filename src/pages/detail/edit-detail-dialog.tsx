@@ -5,6 +5,7 @@ import { notify } from "../../utils";
 import reqs from "../../api/req";
 import TextArea from "antd/lib/input/TextArea";
 import { IPlaylist } from "./type";
+import { EMessageType } from "../enums";
 
 interface IProps {
     detail: IPlaylist;
@@ -118,7 +119,7 @@ const EditDetailDialog: React.FC<IProps> = (props: IProps) => {
                         values.tags
                     )
                     .then(() => {
-                        notify("success", "更新歌单成功");
+                        notify(EMessageType.SUCCESS, "更新歌单成功");
                         form.resetFields();
                         handleCancel();
                         setTimeout(() => {
@@ -126,11 +127,11 @@ const EditDetailDialog: React.FC<IProps> = (props: IProps) => {
                         }, 100);
                     })
                     .catch((e) => {
-                        notify("error", "更新歌单失败");
+                        notify(EMessageType.ERROR, "更新歌单失败");
                     });
             })
             .catch(() => {
-                notify("warning", "请输入正确的内容");
+                notify(EMessageType.WARNING, "请输入正确的内容");
             });
     }, [detail, form]);
 

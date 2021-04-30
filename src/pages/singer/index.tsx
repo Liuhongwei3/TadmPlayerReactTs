@@ -14,6 +14,7 @@ import {
 } from "antd";
 import {
     CustomerServiceOutlined,
+    AppstoreOutlined,
     StarFilled,
     StarOutlined,
     FieldTimeOutlined,
@@ -36,6 +37,7 @@ import SingerMvs from "./singer-mvs";
 import SingerDesc from "./singer-desc";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
+import { EMessageType } from "../enums";
 
 interface IRouteParams {
     singerId: string;
@@ -61,7 +63,7 @@ const Singer: React.FunctionComponent = () => {
             })
             .catch((err) => {
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (err.response && err.response.statusText) ||
                         err.message ||
                         "加载歌手数据失败"
@@ -135,7 +137,7 @@ const Singer: React.FunctionComponent = () => {
                         </Tooltip>
                         <Tooltip title="专辑数">
                             <StyledTag color="purple">
-                                <CustomerServiceOutlined />
+                                <AppstoreOutlined />
                                 {countFormat(singerInfo.artist.albumSize)}
                             </StyledTag>
                         </Tooltip>

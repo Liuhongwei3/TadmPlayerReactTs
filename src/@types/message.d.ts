@@ -1,1 +1,3 @@
-declare type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
+import { EMessageType } from "../pages/enums";
+
+declare type NoticeType = EMessageType;

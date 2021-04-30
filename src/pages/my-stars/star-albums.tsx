@@ -17,6 +17,7 @@ import {
     DEFAULT_IMG_WIDTH,
 } from "../../web-config/defaultConfig";
 import { IAlbumsRes } from "./type";
+import { EMessageType } from "../enums";
 
 const INIT_LIMIT = 24;
 
@@ -35,7 +36,7 @@ const StarAlbums: React.FC = () => {
             })
             .catch((e) =>
                 notify(
-                    "error",
+                    EMessageType.ERROR,
                     (e.response && e.response.statusText) ||
                         e.message ||
                         "加载收藏的专辑数据失败"

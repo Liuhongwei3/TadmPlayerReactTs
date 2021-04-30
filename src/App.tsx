@@ -10,13 +10,17 @@ import LeftSide from "./pages/aside";
 import ContentHeader from "./pages/header";
 import Footer from "./pages/footer";
 import Routers from "./routers";
-import { DEFAULT_BG_IMG } from "./web-config/defaultConfig";
+import { DEFAULT_BG_IMG, infoMsg } from "./web-config/defaultConfig";
 import { useStore } from "./hooks/useStore";
 import { observer } from "mobx-react-lite";
 import AudioControl from "./pages/audio";
 
 const App: React.FunctionComponent = observer(() => {
     const store = useStore();
+
+    React.useEffect(() => {
+        console.info(infoMsg, "color:red", "color:blue", "", "color:orange", "color:red");
+    }, []);
 
     return (
         <Router>
