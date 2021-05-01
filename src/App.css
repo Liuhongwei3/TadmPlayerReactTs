@@ -155,6 +155,8 @@ td {
 }
 
 @media screen and (max-width: 768px) {
-    img {
+    .ant-back-top {
+        right: 12px;
+        bottom: 160px;
     }
 }

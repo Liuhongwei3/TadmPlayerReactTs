@@ -1,5 +1,7 @@
 import React from "react";
-import { Avatar, Table, Image } from "antd";
+import { Avatar, Table, Image, Button, Popconfirm } from "antd";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { PlayCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ISong } from "../detail/type";
 import { dateFormat, timeFormat, toTop } from "../../utils";
 import { ColumnsType } from "antd/es/table";
@@ -28,6 +30,14 @@ const HistoryPlaySongs: React.FC = observer(() => {
         },
         [store]
     );
+
+    // const playHistorySongs = React.useCallback(() => {
+    //     store.updateCurPlaylist(store.curHeartPlaylists.map((song) => song.id));
+    // }, [store]);
+
+    const clearAll = React.useCallback(() => {
+        store.updateHistoryPlaySongs([]);
+    }, [store]);
 
     const columns: ColumnsType<ISong> = [
         {
@@ -119,6 +129,29 @@ const HistoryPlaySongs: React.FC = observer(() => {
         <StyledWrapper>
             <div style={{ width: "100%" }}>
                 <StyledTag color="magenta">历史听歌</StyledTag>
+                {/* <Button
+                    style={{ marginRight: 6 }}
+                    type="primary"
+                    icon={<PlayCircleOutlined />}
+                    onClick={playHistorySongs}
+                >
+                    播放全部
+                </Button> */}
+                <Popconfirm
+                    title="确定要清空所有的播放历史记录吗？"
+                    okText="是的"
+                    cancelText="否"
+                    placement="bottom"
+                    onConfirm={clearAll}
+                >
+                    <Button
+                        type="primary"
+                        danger={true}
+                        icon={<DeleteOutlined />}
+                    >
+                        清空记录
+                    </Button>
+                </Popconfirm>
 
                 <Table<ISong>
                     rowKey="id"

@@ -1,3 +1,6 @@
+export const AUDIO_VOLUME = "audio-volume";
+export const CUR_HISTORY_SONGS = "cur-history-songs";
+
 export enum ECanvasType {
     SQUARE = "square",
     CIRCLEBAR = "circlebar",

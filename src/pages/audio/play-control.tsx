@@ -358,5 +358,10 @@ const StyledControl = styled.div`
         width: 100%;
         margin-top: 10px;
         padding: 0 6px;
+
+        svg {
+            font-size: 22px;
+            margin: 0 5px;
+        }
     }
 `;

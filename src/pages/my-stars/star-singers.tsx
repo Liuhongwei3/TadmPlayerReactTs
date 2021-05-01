@@ -89,7 +89,7 @@ const StarSingers: React.FC = () => {
                                                 preview={false}
                                                 width={DEFAULT_IMG_WIDTH}
                                                 height={DEFAULT_IMG_HEIGHT}
-                                                src={item.picUrl}
+                                                src={item.img1v1Url}
                                                 placeholder={<LoadingImg />}
                                             />
                                         </LazyLoad>

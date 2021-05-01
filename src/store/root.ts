@@ -15,6 +15,7 @@ import req from "../api/req";
 import { ISong } from "../pages/detail/type";
 import { isObject, isArray, notify, shuffle } from "../utils";
 import {
+    CUR_HISTORY_SONGS,
     ECanvasType,
     EMessageType,
     EPlayMode,
@@ -47,7 +48,9 @@ class Root {
     curOrderPlaylists: number[] = [DEFAULT_SONG_ID];
     curRandomPlaylists: number[] = [DEFAULT_SONG_ID];
     curHeartPlaylists: ISong[] = [];
-    historyPlaySongs: ISong[] = [];
+    historyPlaySongs: ISong[] =
+        JSON.parse(window.localStorage.getItem(CUR_HISTORY_SONGS) || "[]") ||
+        [];
 
     showUserBackImg: boolean = true;
     showLyrics: boolean = false;
@@ -280,5 +283,14 @@ autorun(() => {
         default:
             root.updateCurPlaylist(root.curOrderPlaylists);
             break;
+    }
+});
+
+autorun(() => {
+    if (window.localStorage) {
+        window.localStorage.setItem(
+            CUR_HISTORY_SONGS,
+            JSON.stringify(root.historyPlaySongs)
+        );
     }
 });

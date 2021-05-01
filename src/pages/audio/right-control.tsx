@@ -4,14 +4,22 @@ import { SoundOutlined } from "@ant-design/icons";
 import { Col, Row, Slider, Tooltip } from "antd";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
+import { AUDIO_VOLUME } from "../enums";
 
 interface IProps {
+    volume: number;
     handleVolumeChange: (volume: number) => void;
 }
 
 const RightControl: React.FC<IProps> = observer((props: IProps) => {
     const store = useStore();
-    const { handleVolumeChange } = props;
+    const { volume, handleVolumeChange } = props;
+
+    const toLocalAudioVolume = React.useCallback((v: number) => {
+        if (window.localStorage) {
+            window.localStorage.setItem(AUDIO_VOLUME, String(v));
+        }
+    }, []);
 
     return (
         <StyledRight>
@@ -21,10 +29,15 @@ const RightControl: React.FC<IProps> = observer((props: IProps) => {
                 </Col>
                 <Col span={16} push={2}>
                     <Slider
-                        defaultValue={0.8}
-                        step={0.1}
-                        max={1}
-                        onChange={(e: number) => handleVolumeChange(e)}
+                        step={1}
+                        max={100}
+                        value={volume * 100}
+                        onChange={(e: number) =>
+                            handleVolumeChange(+(e / 100).toFixed(2))
+                        }
+                        onAfterChange={(v: number) =>
+                            toLocalAudioVolume(+(v / 100).toFixed(2))
+                        }
                     />
                 </Col>
             </Row>

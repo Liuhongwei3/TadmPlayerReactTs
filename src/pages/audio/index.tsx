@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { AUDIO_VOLUME } from "../enums";
 import CurSongInfo from "./cur-song-info";
 import LyricDetail from "./lyric-detail";
 import PlayControl from "./play-control";
@@ -12,6 +13,13 @@ const AudioControl: React.FC = () => {
         setVolume(num);
     }, []);
 
+    React.useEffect(() => {
+        if (window.localStorage) {
+            const volume = window.localStorage.getItem(AUDIO_VOLUME);
+            handleVolumeChange(Number(volume) || 0.8);
+        }
+    }, [handleVolumeChange]);
+
     return (
         <>
             <StyledControlPanel>
@@ -19,7 +27,10 @@ const AudioControl: React.FC = () => {
 
                 <PlayControl volume={volume} />
 
-                <RightControl handleVolumeChange={handleVolumeChange} />
+                <RightControl
+                    volume={volume}
+                    handleVolumeChange={handleVolumeChange}
+                />
             </StyledControlPanel>
 
             <LyricDetail />
