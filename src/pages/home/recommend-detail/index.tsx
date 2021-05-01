@@ -82,8 +82,8 @@ const RecommendDetail: React.FunctionComponent = observer(() => {
                                     style={{
                                         position: "absolute",
                                         fontSize: 24,
-                                        top: 34,
-                                        left: 62,
+                                        top: "22%",
+                                        left: "40%",
                                     }}
                                 >
                                     {getCurDay()}

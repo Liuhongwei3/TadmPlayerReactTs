@@ -146,7 +146,7 @@ const StyledCarouselItem = styled.div`
 
 const StyledImage = styled(Image)`
     width: 100%;
-    height: 300px;
+    height: 320px;
     border-radius: 10px;
     margin: 0 auto;
 

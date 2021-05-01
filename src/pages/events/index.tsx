@@ -67,76 +67,87 @@ const Events: React.FunctionComponent = () => {
         );
     }, []);
 
-    return eventsRes && eventsRes.event.length ? (
+    return (
         <Spin tip="Loading..." spinning={loading}>
-            <div style={{ padding: 10 }}>
-                <Space
-                    style={{ width: "100%", justifyContent: "space-between" }}
-                >
-                    <Typography.Title level={3} style={{ color: "#d0c051" }}>
-                        朋友动态
-                    </Typography.Title>
-                    <Button type="primary" onClick={publishEvent}>
-                        <EditOutlined />
-                        发布动态
-                    </Button>
-                </Space>
+            {eventsRes && eventsRes.event.length ? (
+                <div style={{ padding: 10 }}>
+                    <Space
+                        style={{
+                            width: "100%",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Typography.Title
+                            level={3}
+                            style={{ color: "#d0c051" }}
+                        >
+                            朋友动态
+                        </Typography.Title>
+                        <Button type="primary" onClick={publishEvent}>
+                            <EditOutlined />
+                            发布动态
+                        </Button>
+                    </Space>
 
-                <React.Fragment>
-                    {eventsRes.event.map((event) => (
-                        <div key={`events${event.id}${event.eventTime}`}>
-                            <Comment
-                                actions={[
-                                    <EventActions
-                                        event={event}
-                                        comm={{
-                                            showComm,
-                                            setShowComm,
-                                            curEventId,
-                                            setCurEventId,
-                                        }}
-                                    />,
-                                ]}
-                                author={
-                                    <Link to={`/user/${event.user.userId}`}>
-                                        {event.user.nickname}
-                                    </Link>
-                                }
-                                avatar={avatar(event)}
-                                content={
-                                    <ShareDetail
-                                        type={event.type}
-                                        json={JSON.parse(event.json)}
-                                        pics={event.pics}
-                                    />
-                                }
-                                datetime={dateFormat(event.eventTime, "more")}
-                            />
-                            {event.info.threadId === curEventId && (
-                                <EventComm
-                                    key={`event-comm-${event.id}`}
-                                    showComm={showComm}
-                                    event={event}
+                    <React.Fragment>
+                        {eventsRes.event.map((event) => (
+                            <div key={`events${event.id}${event.eventTime}`}>
+                                <Comment
+                                    actions={[
+                                        <EventActions
+                                            event={event}
+                                            comm={{
+                                                showComm,
+                                                setShowComm,
+                                                curEventId,
+                                                setCurEventId,
+                                            }}
+                                        />,
+                                    ]}
+                                    author={
+                                        <Link to={`/user/${event.user.userId}`}>
+                                            {event.user.nickname}
+                                        </Link>
+                                    }
+                                    avatar={avatar(event)}
+                                    content={
+                                        <ShareDetail
+                                            type={event.type}
+                                            json={JSON.parse(event.json)}
+                                            pics={event.pics}
+                                        />
+                                    }
+                                    datetime={dateFormat(
+                                        event.eventTime,
+                                        "more"
+                                    )}
                                 />
-                            )}
-                        </div>
-                    ))}
-                </React.Fragment>
+                                {event.info.threadId === curEventId && (
+                                    <EventComm
+                                        key={`event-comm-${event.id}`}
+                                        showComm={showComm}
+                                        event={event}
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </React.Fragment>
 
-                <StyledDivider />
-                <Button
-                    style={{ margin: "0 auto", display: "flex" }}
-                    type="primary"
-                    disabled={!eventsRes.more}
-                    loading={loading}
-                    onClick={() => setLimit(limit + 12)}
-                >
-                    Loading More
-                </Button>
-            </div>
+                    <StyledDivider />
+                    <Button
+                        style={{ margin: "0 auto", display: "flex" }}
+                        type="primary"
+                        disabled={!eventsRes.more}
+                        loading={loading}
+                        onClick={() => setLimit(limit + 12)}
+                    >
+                        Loading More
+                    </Button>
+                </div>
+            ) : (
+                <Empty />
+            )}
         </Spin>
-    ) : (
-        <Empty />
     );
 };
 
