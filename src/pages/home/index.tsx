@@ -7,8 +7,9 @@ import RecommendDetail from "./recommend-detail";
 import RecommendMv from "./recommend-mv";
 import StyledDivider from "../../components/StyledDivider";
 import { toTop } from "../../utils";
+import NewMv from "./new-mvs";
 
-const Home: React.FunctionComponent = () => {
+const Home: React.FC = () => {
     React.useEffect(() => {
         toTop();
     }, []);
@@ -24,6 +25,7 @@ const Home: React.FunctionComponent = () => {
             <NewSongs />
             <StyledDivider />
             <RecommendMv />
+            <NewMv />
         </>
     );
 };

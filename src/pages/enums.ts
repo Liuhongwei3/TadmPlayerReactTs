@@ -1,6 +1,30 @@
 export const AUDIO_VOLUME = "audio-volume";
 export const CUR_HISTORY_SONGS = "cur-history-songs";
 
+export enum EShareResourceType {
+    SONG = "song",
+    PLAYLIST = "playlist",
+    ALBUM = "album",
+    MV = "mv",
+    DJRADIO = "djradio",
+    DJPROGRAM = "djprogram",
+}
+
+export enum ESourceType {
+    SONG = 0,
+    MV = 1,
+    DETAIL = 2,
+    ALBUM = 3,
+    DJ_RADIO = 4,
+    VIEDEO = 5,
+    EVENT = 6
+}
+
+export enum EPlayRecordType {
+    ALL,
+    WEEK,
+}
+
 export enum ECanvasType {
     SQUARE = "square",
     CIRCLEBAR = "circlebar",

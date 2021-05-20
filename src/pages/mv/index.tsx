@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { Link, useParams } from "react-router-dom";
-import { Avatar, Tabs, Image, Tooltip, Spin, Empty } from "antd";
+import { Avatar, Tabs, Image, Tooltip, Spin, Empty, Tag } from "antd";
 import {
     FieldTimeOutlined,
     CustomerServiceOutlined,
@@ -9,6 +9,7 @@ import {
     StarFilled,
     ShareAltOutlined,
     CommentOutlined,
+    EditOutlined,
 } from "@ant-design/icons";
 import DPlayer from "react-dplayer";
 
@@ -25,7 +26,9 @@ import MvSimilar from "./mv-similar";
 import styled from "styled-components";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
-import { EMessageType } from "../enums";
+import { EMessageType, EShareResourceType, ESourceType } from "../enums";
+import ShareResource from "../share-resource";
+import openPublishCommModal from "../../components/comment/publish-comm-modal";
 
 interface IRouteParams {
     mvId: string;
@@ -99,6 +102,10 @@ const Mv: React.FunctionComponent = () => {
     const handleDPlayerEnded = React.useCallback(() => {
         store.toggleVideoPlaying(false);
     }, [store]);
+
+    const publishComment = React.useCallback(() => {
+        openPublishCommModal(ESourceType.MV, +mvId);
+    }, [mvId]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -176,6 +183,14 @@ const Mv: React.FunctionComponent = () => {
                                     />
                                 </Tooltip>
                             )}
+
+                            <Tooltip title="分享该专辑">
+                                <ShareResource
+                                    scale={true}
+                                    type={EShareResourceType.MV}
+                                    id={+mvId}
+                                />
+                            </Tooltip>
                         </div>
 
                         <div style={{ width: "100%" }}>
@@ -224,8 +239,7 @@ const Mv: React.FunctionComponent = () => {
                                         contextmenu: [
                                             {
                                                 text: "Tadm",
-                                                link:
-                                                    "https://github.com/Liuhongwei3/TadmPlayerReactTs",
+                                                link: "https://github.com/Liuhongwei3/TadmPlayerReactTs",
                                             },
                                         ],
                                     }}
@@ -257,6 +271,10 @@ const Mv: React.FunctionComponent = () => {
                                 )})`}
                                 key="2"
                             >
+                                <Tag color="orange" onClick={publishComment}>
+                                    <EditOutlined />
+                                    发布评论
+                                </Tag>
                                 <MvComments
                                     mvId={+mvId}
                                     commCount={mvInfo?.data.commentCount || 0}

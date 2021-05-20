@@ -20,7 +20,7 @@ interface IProps {
 
 const INIT_LIMIT = 10;
 
-const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
+const UserEvent: React.FC<IProps> = (props: IProps) => {
     const { userId, eventCount } = props;
     const [loading, setLoading] = React.useState<boolean>(false);
     const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
@@ -92,9 +92,8 @@ const UserEvent: React.FunctionComponent<IProps> = (props: IProps) => {
                                 avatar={avatar(event)}
                                 content={
                                     <ShareDetail
-                                        type={event.type}
+                                        event={event}
                                         json={event.json}
-                                        pics={event.pics}
                                     />
                                 }
                                 datetime={dateFormat(event.eventTime, "more")}

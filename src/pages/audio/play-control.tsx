@@ -7,20 +7,20 @@ import {
     PauseCircleOutlined,
     BarsOutlined,
     DownloadOutlined,
-    ShareAltOutlined,
     RetweetOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Slider } from "antd";
-import { copyData, notify, timeFormat } from "../../utils";
+import { notify, timeFormat } from "../../utils";
 import { useStore } from "../../hooks/useStore";
 import { observer } from "mobx-react-lite";
 import reqs from "../../api/req";
 import { createDownload } from "../../features";
 import { useHistory } from "react-router";
-import { EMessageType, EPlayMode } from "../enums";
+import { EMessageType, EPlayMode, EShareResourceType } from "../enums";
 import SingleSvg from "../../components/svgs/single-svg";
 import HeartJumpSvg from "../../components/svgs/heart-jump-svg";
 import RandomSvg from "../../components/svgs/random-svg";
+import ShareResource from "../share-resource";
 
 interface IProps {
     volume: number;
@@ -200,15 +200,6 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
         }
     }, [volume]);
 
-    const handleShareCopy = React.useCallback(() => {
-        const copied = copyData(
-            `http://music.163.com/song?id=${store.curSongId}`
-        );
-        if (copied) {
-            notify(EMessageType.SUCCESS, "复制链接成功，请使用浏览器打开链接 ~");
-        }
-    }, [store.curSongId]);
-
     const handleDownloadMusic = React.useCallback(() => {
         const song = store.curSong;
         if (!song || !url) return;
@@ -285,7 +276,11 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                     {playing ? (
                         <PauseCircleOutlined disabled={!url} onClick={pause} />
                     ) : (
-                        <PlayCircleOutlined id="svg-play" disabled={!url} onClick={play} />
+                        <PlayCircleOutlined
+                            id="svg-play"
+                            disabled={!url}
+                            onClick={play}
+                        />
                     )}
 
                     <StepForwardOutlined
@@ -307,7 +302,11 @@ const PlayControl: React.FC<IProps> = observer((props: IProps) => {
                         onClick={handleDownloadMusic}
                     />
 
-                    <ShareAltOutlined onClick={handleShareCopy} />
+                    <ShareResource
+                        scale={false}
+                        type={EShareResourceType.SONG}
+                        id={store.curSongId}
+                    />
                 </StyledController>
 
                 <Row justify="space-between">

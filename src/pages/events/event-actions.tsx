@@ -9,8 +9,11 @@ import {
 
 import { Event } from "../user/type";
 import { countFormat } from "../../utils";
-import { ELikeOpr, ESourceType } from "../../api/netease/types/like-type";
+import { ELikeOpr } from "../../api/netease/types/like-type";
 import reqs from "../../api/req";
+import openForwardEventModal from "./forward-event-modal";
+import { ESourceType } from "../enums";
+import openPublishCommModal from "../../components/comment/publish-comm-modal";
 
 interface IProps {
     event: Event;
@@ -54,6 +57,14 @@ const EventActions: React.FunctionComponent<IProps> = (props: IProps) => {
         [event.info.threadId]
     );
 
+    const shareEvent = React.useCallback(() => {
+        openForwardEventModal(event.id);
+    }, [event]);
+
+    const publishComment = React.useCallback(() => {
+        openPublishCommModal(ESourceType.EVENT, event.info.threadId);
+    }, [event.info.threadId]);
+
     return (
         <>
             <Tooltip title={liked ? "dislike" : "Like"}>
@@ -72,8 +83,8 @@ const EventActions: React.FunctionComponent<IProps> = (props: IProps) => {
                     </span>
                 </span>
             </Tooltip>
-            <Tooltip title="Share">
-                <span>
+            <Tooltip title="点击转发动态">
+                <span onClick={shareEvent}>
                     <ShareAltOutlined />
                     <span className="comment-action">
                         {event.info.shareCount}
@@ -88,7 +99,7 @@ const EventActions: React.FunctionComponent<IProps> = (props: IProps) => {
                     </span>
                 </span>
             </Tooltip>
-            <span>Reply to</span>,
+            <span onClick={publishComment}>Reply to</span>,
         </>
     );
 };

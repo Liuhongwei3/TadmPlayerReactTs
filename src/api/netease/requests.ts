@@ -3,6 +3,7 @@ import { ITopListRes, ITopMvRes, ITopSingerRes } from "../../pages/top/type";
 import { IHotDetailCats, IHotdetailRes } from "../../pages/hot-detail/type";
 import {
     IBannerRes,
+    INewMvRes,
     INewSongsRes,
     IPersonPushRes,
     IRecomDetailRes,
@@ -58,20 +59,26 @@ const getBanner = (type = 0) => {
     return api.get<IBannerRes>(`/banner?type=${type}`);
 };
 
-const getRecomDetails = (limit = 16) => {
+const getRecomDetails = (limit = 17) => {
     return api.get<IRecomDetailRes>(`/personalized?limit=${limit}`);
 };
 
-const getPerPush = () => {
-    return api.get<IPersonPushRes>(`/personalized/privatecontent`);
+const getPerPush = (limit = 5) => {
+    return api.get<IPersonPushRes>(
+        `/personalized/privatecontent/list?limit=${limit}`
+    );
 };
 
-const getNewSongs = (limit = 16) => {
+const getNewSongs = (limit = 18) => {
     return api.get<INewSongsRes>(`/personalized/newsong?limit=${limit}`);
 };
 
-const getNewMvs = () => {
-    return api.get<IRecommendMvRes>(`/personalized/mv`);
+const getRecommMvs = (limit = 5) => {
+    return api.get<IRecommendMvRes>(`/personalized/mv?limit=${limit}`);
+};
+
+const getNewMvs = (limit = 12) => {
+    return api.get<INewMvRes>(`/mv/first?limit=${limit}`);
 };
 
 // ----------------------------------------------------------
@@ -195,7 +202,7 @@ const userEvent = (uid: number, limit?: number, lasttime?: number) => {
     const optional2 = lasttime ? `&lasttime=${lasttime}` : "";
 
     return api.get<IUserEventsRes>(
-        `/user/event?uid=${uid}${optional1}${optional2}`
+        `/user/event?uid=${uid}${optional1}${optional2}&timestamp=${Date.now()}`
     );
 };
 const userEventComm = (
@@ -208,7 +215,7 @@ const userEventComm = (
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = offset && before ? `&before=${before}` : "";
 
-    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}&timestamp=${Date.now()}`);
 };
 
 // ----------------------------------------------------------------------
@@ -231,7 +238,9 @@ const detailComment = (
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = offset && before ? `&before=${before}` : "";
 
-    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+    return api.get<ICommentsRes>(
+        `${base}${optional1}${optional2}&timestamp=${Date.now()}`
+    );
 };
 
 // 注意：该接口不会返回所有的收藏者，所以总数应以这里返回的 total 为准 (目前 max --> 2000)
@@ -266,7 +275,7 @@ const AlbumComments = (
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = offset && before ? `&before=${before}` : "";
 
-    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}&timestamp=${Date.now()}`);
 };
 
 // ----------------------------------------------------------------------
@@ -333,7 +342,7 @@ const getMusicComment = (
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = offset && before ? `&before=${before}` : "";
 
-    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}&timestamp=${Date.now()}`);
 };
 
 const getMusicUrl = (ids: number | number[]) => {
@@ -385,7 +394,7 @@ const newComment = (
     const optional2 = sortType ? `&sortType=${sortType}` : "";
     const optional3 = cursor ? `&cursor=${cursor}` : "";
 
-    return api.get(`${base}${optional1}${optional2}${optional3}`);
+    return api.get(`${base}${optional1}${optional2}${optional3}&timestamp=${Date.now()}`);
 };
 
 // ----------------------------------------------------------------------
@@ -411,7 +420,7 @@ const mvComment = (
     const optional1 = offset ? `&offset=${offset}` : "";
     const optional2 = offset && before ? `&before=${before}` : "";
 
-    return api.get<ICommentsRes>(`${base}${optional1}${optional2}`);
+    return api.get<ICommentsRes>(`${base}${optional1}${optional2}&timestamp=${Date.now()}`);
 };
 
 const simiMv = (id: number) => {
@@ -426,6 +435,7 @@ const reqFuncs = {
     getRecomDetails,
     getPerPush,
     getNewSongs,
+    getRecommMvs,
     getNewMvs,
     toplist,
     topSinger,

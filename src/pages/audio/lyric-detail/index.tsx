@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { observer } from "mobx-react-lite";
-import { Image } from "antd";
+import { Image, Tag } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import { useStore } from "../../../hooks/useStore";
 import LoadingImg from "../../../components/LoadingImg";
 import SimiContent from "../lyric-detail/simi-content";
@@ -10,6 +11,8 @@ import SongComments from "./song-comments";
 import Lyrics from "./lyrics";
 import SquareCanvas from "./all-canvas/square-canvas";
 import CircleCanvas from "./all-canvas/circle-canvas";
+import openPublishCommModal from "../../../components/comment/publish-comm-modal";
+import { ESourceType } from "../../enums";
 
 const LyricDetail: React.FC = observer(() => {
     const store = useStore();
@@ -18,7 +21,13 @@ const LyricDetail: React.FC = observer(() => {
 
     React.useEffect(() => {
         document.getElementById("lyric-detail")?.scroll({ top: 0 });
-    }, [song?.id, showLyrics]);
+    }, [song?.id]);
+
+    const publishComment = React.useCallback(() => {
+        if (song) {
+            openPublishCommModal(ESourceType.SONG, song.id);
+        }
+    }, [song]);
 
     return song ? (
         <StyledWrapper id="lyric-detail" show={showLyrics}>
@@ -74,6 +83,15 @@ const LyricDetail: React.FC = observer(() => {
                 <SimiContent id={song.id} />
             </StyledContent>
 
+            {showLyrics && (
+                <StyledPublishComm>
+                    <Tag color="orange" onClick={publishComment}>
+                        <EditOutlined />
+                        发布评论
+                    </Tag>
+                </StyledPublishComm>
+            )}
+
             <SongComments id={song.id} />
 
             <SquareCanvas />
@@ -82,6 +100,17 @@ const LyricDetail: React.FC = observer(() => {
 });
 
 export default LyricDetail;
+
+const StyledPublishComm = styled.div`
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+
+    @media screen and (max-width: 768px) {
+        bottom: 22%;
+        right: 3%;
+    }
+`;
 
 const rotate = keyframes`
     from { 

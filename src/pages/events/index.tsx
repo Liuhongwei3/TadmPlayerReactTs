@@ -10,6 +10,7 @@ import {
     Avatar,
     Image,
     Space,
+    Switch,
 } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import reqs from "../../api/req";
@@ -21,15 +22,19 @@ import EventComm from "./event-comm";
 import { IEventsRes, Event } from "./type";
 import LoadingImg from "../../components/LoadingImg";
 import { EMessageType } from "../enums";
+import { useStore } from "../../hooks/useStore";
 
 const INIT_LIMIT = 20;
 
 const Events: React.FunctionComponent = () => {
+    const store = useStore();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [eventsRes, setEventsRes] = React.useState<IEventsRes>();
     const [limit, setLimit] = React.useState<number>(INIT_LIMIT);
     const [showComm, setShowComm] = React.useState<boolean>(false);
     const [curEventId, setCurEventId] = React.useState<string>("");
+    const [showOwn, setShowOwn] = React.useState(true);
+    const [showEvents, setShowEvents] = React.useState<Event[]>([]);
 
     React.useEffect(() => {
         toTop();
@@ -49,6 +54,18 @@ const Events: React.FunctionComponent = () => {
                 setLoading(false);
             });
     }, [limit]);
+
+    React.useEffect(() => {
+        if (eventsRes) {
+            setShowEvents(
+                showOwn
+                    ? eventsRes.event
+                    : eventsRes.event.filter(
+                          (ev) => ev.user.userId !== store.userInfo.userId
+                      )
+            );
+        }
+    }, [eventsRes, showOwn, store.userInfo.userId]);
 
     const publishEvent = React.useCallback(() => {
         notify(EMessageType.WARNING, "该功能暂未开放");
@@ -83,14 +100,22 @@ const Events: React.FunctionComponent = () => {
                         >
                             朋友动态
                         </Typography.Title>
+
                         <Button type="primary" onClick={publishEvent}>
                             <EditOutlined />
                             发布动态
                         </Button>
                     </Space>
 
+                    <div>
+                        <span style={{ fontSize: 14 }}>显示自己的动态：</span>
+                        <Switch defaultChecked onChange={setShowOwn} />
+                    </div>
+
+                    <StyledDivider />
+
                     <React.Fragment>
-                        {eventsRes.event.map((event) => (
+                        {showEvents.map((event) => (
                             <div key={`events${event.id}${event.eventTime}`}>
                                 <Comment
                                     actions={[
@@ -112,9 +137,8 @@ const Events: React.FunctionComponent = () => {
                                     avatar={avatar(event)}
                                     content={
                                         <ShareDetail
-                                            type={event.type}
+                                            event={event}
                                             json={JSON.parse(event.json)}
-                                            pics={event.pics}
                                         />
                                     }
                                     datetime={dateFormat(

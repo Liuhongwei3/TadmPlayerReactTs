@@ -5,10 +5,9 @@ import { Empty, Pagination, Spin, Tabs } from "antd";
 import { Event } from "../user/type";
 import req from "../../api/req";
 import { IComment, IHotComment } from "../commType";
-import StyledComment from "../../components/StyledComment";
+import StyledComment from "../../components/comment/StyledComment";
 import { notify } from "../../utils";
-import { ESourceType } from "../../api/netease/types/like-type";
-import { EMessageType } from "../enums";
+import { EMessageType, ESourceType } from "../enums";
 
 const StyledCommBg = styled.div`
     margin-left: 54px;

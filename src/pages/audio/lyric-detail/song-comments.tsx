@@ -4,9 +4,8 @@ import { Empty, Pagination, Spin } from "antd";
 import reqs from "../../../api/req";
 import { notify } from "../../../utils";
 import { ICommentsRes } from "../../commType";
-import { ESourceType } from "../../../api/netease/types/like-type";
-import StyledComment from "../../../components/StyledComment";
-import { EMessageType } from "../../enums";
+import StyledComment from "../../../components/comment/StyledComment";
+import { EMessageType, ESourceType } from "../../enums";
 
 interface IProps {
     id: number;

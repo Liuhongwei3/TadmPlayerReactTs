@@ -2,6 +2,7 @@ import React from "react";
 import { Layout, Typography } from "antd";
 import { GithubOutlined, HeartTwoTone } from "@ant-design/icons";
 import styled, { keyframes } from "styled-components";
+import NeteaseSvg from "../../components/svgs/netease-svg";
 
 const Footer: React.FunctionComponent = () => {
     return (
@@ -17,6 +18,17 @@ const Footer: React.FunctionComponent = () => {
                 >
                     <GithubOutlined />
                     Tadm(jingke)
+                </Typography.Link>
+                <Typography.Link href="https://music.163.com/" target="_blank">
+                    &nbsp;&nbsp;
+                    <span
+                        style={{
+                            verticalAlign: "middle",
+                        }}
+                    >
+                        <NeteaseSvg />
+                    </span>
+                    网易云
                 </Typography.Link>
             </div>
         </Layout.Footer>

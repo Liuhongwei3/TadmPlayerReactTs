@@ -2,9 +2,16 @@ import api from "../index";
 import { ISong } from "../../pages/detail/type";
 import { IEventsRes } from "../../pages/events/type";
 import { IAlbumsRes, IMvsRes, ISingersRes } from "../../pages/my-stars/type";
-import { ELikeOpr, ESourceType, ESubscribeDetail } from "./types/like-type";
+import { ELikeOpr, ESubscribeDetail } from "./types/like-type";
 import { ILoginedUser, IQRImg, IQRKey, IQRStatus } from "./types/login-type";
-import { EDetailSongOprType } from "../../pages/enums";
+import {
+    EDetailSongOprType,
+    EPlayRecordType,
+    EShareResourceType,
+    ESourceType,
+} from "../../pages/enums";
+import { IPlayRecRes } from "../../pages/user/type";
+import { EReplyOpr } from "./types/reply-type";
 
 const userLoginByPhone = (phone: string, password: string) => {
     // ?phone=${phone}&password=${password}
@@ -82,6 +89,24 @@ const getEvents = (limit: number) => {
     );
 };
 
+const forwardEvent = (id: number, userId: number, forward = "") => {
+    return api.get<{ code: number; message: string }>(
+        `/event/forward?evId=${id}&uid=${userId}&forwards=${forward}&timestamp=${Date.now()}`
+    );
+};
+
+const forwardResourceToEvent = (
+    type: EShareResourceType,
+    id: number,
+    msg: string
+) => {
+    return api.get(`/share/resource?type=${type}&id=${id}&msg=${msg}`);
+};
+
+const delEvent = (id: number) => {
+    return api.get<{ code: number }>(`event/del?evId=${id}`);
+};
+
 // 点赞资源
 const likeSong = (id: number, like = true) => {
     return api.get(`/like?id=${id}&like=${like}`);
@@ -111,10 +136,53 @@ const likeComment = (
     return api.get(`/comment/like?t=${opr}&type=${type}&id=${id}&cid=${cid}`);
 };
 
+// 发送、回复评论
+const replyComment = (
+    opr: EReplyOpr,
+    type: ESourceType,
+    id: string | number,
+    content: string,
+    commentId?: string | number
+) => {
+    const reply = opr === EReplyOpr.REPLY ? `&commentId=${commentId}` : "";
+    // 评论动态
+    if (typeof id === "string") {
+        return api.get(
+            `/comment?t=${opr}&type=${type}&threadId=${id}&content=${content}${reply}`
+        );
+    }
+    return api.get(
+        `/comment?t=${opr}&type=${type}&id=${id}&content=${content}${reply}`
+    );
+};
+
+// 删除评论
+const delComment = (
+    type: ESourceType,
+    id: string | number,
+    commentId: string | number,
+    content?: string,
+) => {
+    const opr = 0;
+    // 删除动态评论
+    if (typeof id === "string") {
+        return api.get(
+            `/comment?t=${opr}&type=${type}&threadId=${id}&commentId=${commentId}`
+        );
+    }
+    return api.get(
+        `/comment?t=${opr}&type=${type}&id=${id}&commentId=${commentId}`
+    );
+};
+
 const userComments = (uid: number, limit = 10, time = 0) => {
     return api.get(
         `/user/comment/history?uid=${uid}&limit=${limit}&time=${time}`
     );
+};
+
+const userPlayRecords = (uid: number, type = EPlayRecordType.WEEK) => {
+    return api.get<IPlayRecRes>(`/user/record?uid=${uid}&type=${type}`);
 };
 
 // 用户的收藏
@@ -190,10 +258,16 @@ const reqLoginedFuncs = {
     subscribeMv,
     getRecommendSongs,
     getEvents,
+    forwardResourceToEvent,
+    forwardEvent,
+    delEvent,
     likeSong,
     likeSth,
     likeComment,
+    replyComment,
+    delComment,
     userComments,
+    userPlayRecords,
     starSingers,
     starMvs,
     starAlbums,

@@ -546,4 +546,73 @@ export interface IJson {
     video: Video;
     djRadio?: DjRadio;
     forward?: Event;
+    event?: Event;
+}
+
+export interface Ar {
+    id: number;
+    name: string;
+    tns: any[];
+    alias: any[];
+}
+
+export interface Al {
+    id: number;
+    name: string;
+    picUrl: string;
+    tns: any[];
+    pic_str: string;
+    pic: number;
+}
+
+export interface RecSong {
+    name: string;
+    id: number;
+    pst: number;
+    t: number;
+    ar: Ar[];
+    alia?: string[];
+    pop: number;
+    st: number;
+    rt?: any;
+    fee: number;
+    v: number;
+    crbt?: any;
+    cf: string;
+    al: Al;
+    dt: number;
+    a?: any;
+    cd: string;
+    no: number;
+    rtUrl?: any;
+    ftype: number;
+    rtUrls: any[];
+    djId: number;
+    copyright: number;
+    s_id: number;
+    mark: number;
+    originCoverType: number;
+    originSongSimpleData?: any;
+    single: number;
+    noCopyrightRcmd?: any;
+    rtype: number;
+    rurl?: any;
+    mst: number;
+    cp: number;
+    mv: number;
+    publishTime: number;
+    tns: string[];
+}
+
+export interface RecSongData {
+    playCount: number;
+    score: number;
+    song: RecSong;
+}
+
+export interface IPlayRecRes {
+    data: RecSongData[];
+    weekData: RecSongData[];
+    allData: RecSongData[];
+    code: number;
 }

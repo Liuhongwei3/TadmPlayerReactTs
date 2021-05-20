@@ -73,6 +73,10 @@ a:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
+.ant-tag:hover {
+    cursor: pointer;
+}
+
 .ant-table {
     background-color: #fff0;
 }

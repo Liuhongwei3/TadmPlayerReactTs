@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useParams } from "react-router-dom";
-import { Avatar, Spin, Image, Tabs, Tooltip, Typography } from "antd";
+import { Avatar, Spin, Image, Tabs, Tooltip, Typography, Tag } from "antd";
 import {
     ShareAltOutlined,
     TrademarkCircleOutlined,
@@ -9,6 +9,7 @@ import {
     StarOutlined,
     StarFilled,
     AudioOutlined,
+    EditOutlined,
 } from "@ant-design/icons";
 
 import reqs from "../../api/req";
@@ -22,7 +23,9 @@ import AlbumSongs from "./album-songs";
 import AlbumComments from "./album-comments";
 import { useStore } from "../../hooks/useStore";
 import { ELikeOpr } from "../../api/netease/types/like-type";
-import { EMessageType } from "../enums";
+import { EMessageType, EShareResourceType, ESourceType } from "../enums";
+import ShareResource from "../share-resource";
+import openPublishCommModal from "../../components/comment/publish-comm-modal";
 
 interface IRouteParams {
     albumId: string;
@@ -85,6 +88,10 @@ const Album: React.FunctionComponent = () => {
     const onTabChange = React.useCallback((activeKey: string) => {
         setActiveKey(activeKey);
     }, []);
+
+    const publishComment = React.useCallback(() => {
+        openPublishCommModal(ESourceType.ALBUM, +albumId);
+    }, [albumId]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -160,6 +167,13 @@ const Album: React.FunctionComponent = () => {
                             />
                         </Tooltip>
                     )}
+                    <Tooltip title="分享该专辑">
+                        <ShareResource
+                            scale={true}
+                            type={EShareResourceType.ALBUM}
+                            id={+albumId}
+                        />
+                    </Tooltip>
                 </div>
                 <StyledDivider />
 
@@ -179,6 +193,10 @@ const Album: React.FunctionComponent = () => {
                         tab={`评论(${countFormat(albumCount?.commentCount)})`}
                         key="2"
                     >
+                        <Tag color="orange" onClick={publishComment}>
+                            <EditOutlined />
+                            发布评论
+                        </Tag>
                         <AlbumComments
                             albumId={+albumId}
                             commCount={albumCount?.commentCount}

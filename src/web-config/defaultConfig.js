@@ -15,7 +15,7 @@ export const DEFAULT_LOADING_IMG =
 
 export const RECOMMEND_DAY_ID = 999;
 
-export const DEFAULT_SONG_ID = 1364247901;
+export const DEFAULT_SONG_ID = 1330348068;
 export const DEFAULT_ALBUM_ID = 21506;
 export const DEFAULT_DETAIL_ID = 3778678;
 export const DEFAULT_SINGER_ID = 160947; // 华晨宇: 861777
@@ -37,8 +37,8 @@ export const DEFAULT_IMG_HEIGHT = isPc
     ? DEFAULT_IMG_PC_HEIGHT
     : DEFAULT_IMG_PH_HEIGHT;
 
-export const DEFAULT_MV_PC_WIDTH = 320;
-export const DEFAULT_MV_PC_HEIGHT = 200;
+export const DEFAULT_MV_PC_WIDTH = 290;
+export const DEFAULT_MV_PC_HEIGHT = 180;
 
 export const DEFAULT_MV_WIDTH = isPc
     ? DEFAULT_MV_PC_WIDTH
@@ -47,8 +47,8 @@ export const DEFAULT_MV_HEIGHT = isPc
     ? DEFAULT_MV_PC_HEIGHT
     : DEFAULT_MV_PC_HEIGHT * 0.8;
 
-export const DEFAULT_MV_PC_SMALL_WIDTH = 210;
-export const DEFAULT_MV_PC_SMALL_HEIGHT = 150;
+export const DEFAULT_MV_PC_SMALL_WIDTH = 230;
+export const DEFAULT_MV_PC_SMALL_HEIGHT = 160;
 
 export const DEFAULT_MV_SMALL_WIDTH = isPc
     ? DEFAULT_MV_PC_SMALL_WIDTH

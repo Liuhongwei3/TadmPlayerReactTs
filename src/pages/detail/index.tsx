@@ -11,6 +11,7 @@ import {
     Tabs,
     Tooltip,
     Popconfirm,
+    Tag,
 } from "antd";
 import {
     ShareAltOutlined,
@@ -40,7 +41,9 @@ import DetailSimilar from "./detail-similar";
 import { useStore } from "../../hooks/useStore";
 import { ESubscribeDetail } from "../../api/netease/types/like-type";
 import openEditDetailDialog from "./edit-detail-dialog";
-import { EMessageType } from "../enums";
+import { EMessageType, EShareResourceType, ESourceType } from "../enums";
+import ShareResource from "../share-resource";
+import openPublishCommModal from "../../components/comment/publish-comm-modal";
 
 interface IRouteParams {
     detailId: string;
@@ -58,44 +61,47 @@ const Detail: React.FunctionComponent = observer(() => {
     const [dailySongs, setDailySongs] = React.useState<ISong[]>([]);
     detailId = detailId || String(store.curDetailId);
 
-    const getDetails = React.useCallback((force = false) => {
-        setLoading(true);
-        if (+detailId === RECOMMEND_DAY_ID) {
-            req.neteaseLogined
-                .getRecommendSongs()
+    const getDetails = React.useCallback(
+        (force = false) => {
+            setLoading(true);
+            if (+detailId === RECOMMEND_DAY_ID) {
+                req.neteaseLogined
+                    .getRecommendSongs()
+                    .then((res) => {
+                        setDailySongs(res.data.dailySongs);
+                    })
+                    .catch((err) => {
+                        notify(
+                            EMessageType.ERROR,
+                            (err.response && err.response.statusText) ||
+                                err.message ||
+                                "加载每日推荐歌曲数据失败"
+                        );
+                    })
+                    .finally(() => setLoading(false));
+                return;
+            }
+            req.netease
+                .playlistdetail(+detailId, force)
                 .then((res) => {
-                    setDailySongs(res.data.dailySongs);
+                    setDetailInfo(res);
+                    setIsOwnDetail(
+                        res.playlist.creator.userId === store.userInfo.userId
+                    );
+                    setSubscribed(res.playlist.subscribed);
                 })
                 .catch((err) => {
                     notify(
                         EMessageType.ERROR,
                         (err.response && err.response.statusText) ||
                             err.message ||
-                            "加载每日推荐歌曲数据失败"
+                            "加载歌单数据失败"
                     );
                 })
                 .finally(() => setLoading(false));
-            return;
-        }
-        req.netease
-            .playlistdetail(+detailId, force)
-            .then((res) => {
-                setDetailInfo(res);
-                setIsOwnDetail(
-                    res.playlist.creator.userId === store.userInfo.userId
-                );
-                setSubscribed(res.playlist.subscribed);
-            })
-            .catch((err) => {
-                notify(
-                    EMessageType.ERROR,
-                    (err.response && err.response.statusText) ||
-                        err.message ||
-                        "加载歌单数据失败"
-                );
-            })
-            .finally(() => setLoading(false));
-    }, [detailId, store.userInfo.userId]);
+        },
+        [detailId, store.userInfo.userId]
+    );
 
     React.useEffect(() => {
         toTop();
@@ -137,6 +143,10 @@ const Detail: React.FunctionComponent = observer(() => {
                 notify(EMessageType.ERROR, e.message || "删除歌单失败");
             });
     }, [detailId, history, store.curUserId]);
+
+    const publishComment = React.useCallback(() => {
+        openPublishCommModal(ESourceType.DETAIL, +detailId);
+    }, [detailId]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -258,6 +268,7 @@ const Detail: React.FunctionComponent = observer(() => {
                                         }
                                     />
                                 </Tooltip>
+
                                 <Tooltip title="删除该歌单">
                                     <Popconfirm
                                         title="确定要删除该歌单吗?"
@@ -271,6 +282,13 @@ const Detail: React.FunctionComponent = observer(() => {
                                 </Tooltip>
                             </>
                         )}
+                        <Tooltip title="分享该歌单">
+                            <ShareResource
+                                scale={true}
+                                type={EShareResourceType.PLAYLIST}
+                                id={+detailId}
+                            />
+                        </Tooltip>
                     </div>
 
                     {detailInfo.playlist.tags.length ? (
@@ -334,6 +352,11 @@ const Detail: React.FunctionComponent = observer(() => {
                             )})`}
                             key="detail-comment"
                         >
+                            <Tag color="orange" onClick={publishComment}>
+                                <EditOutlined />
+                                发布评论
+                            </Tag>
+
                             <DetailComments
                                 detailId={+detailId}
                                 commCount={detailInfo.playlist.commentCount}

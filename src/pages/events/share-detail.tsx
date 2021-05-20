@@ -1,30 +1,60 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Image, Tag } from "antd";
+import { Image, Popconfirm, Tag } from "antd";
 import styled from "styled-components";
+import { DeleteTwoTone } from "@ant-design/icons";
 
-import { Artist, IJson, Pic } from "../user/type";
+import { Artist, Event, IJson } from "../user/type";
 import { getEventType, notify } from "../../utils";
 import { DEFAULT_RANDOM_COLORS } from "../../web-config/defaultConfig";
 import LoadingImg from "../../components/LoadingImg";
-import { EMessageType } from "../enums";
+import { EEventType, EMessageType } from "../enums";
+import reqs from "../../api/req";
+import { useStore } from "../../hooks/useStore";
 
 interface IProps {
-    type: number;
+    event: Event;
     json: IJson | string;
-    pics: Pic[];
+    canDelete?: boolean;
+    user?: { userId: number; nickname: string };
 }
 
 const types = [
-    { type: 19, route: "album" },
-    { type: 13, route: "detail" },
-    { type: 21, route: "mv" },
+    { type: EEventType.SHARE_ALBUM, route: "album" },
+    { type: EEventType.SHARE_DETAIL, route: "detail" },
+    { type: EEventType.SHARE_MV, route: "mv" },
 ];
 
 const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
     const history = useHistory();
-    const { type, json, pics } = props;
+    const store = useStore();
+    const {
+        event,
+        event: {
+            id: eventId,
+            type,
+            pics,
+            user: { userId },
+        },
+        json,
+        canDelete,
+        user,
+    } = props;
     const randomIndex = Math.floor(Math.random() * 10);
+
+    const delEvent = React.useCallback(() => {
+        reqs.neteaseLogined
+            .delEvent(eventId)
+            .then((res) => {
+                if (res.code === 200) {
+                    notify(EMessageType.SUCCESS, "删除动态成功 ~");
+                    window.location.reload();
+                }
+            })
+            .catch((e) => {
+                notify(EMessageType.ERROR, e.message || "删除动态失败！");
+            });
+    }, [eventId]);
 
     const toDetail = React.useCallback(
         (id: number | string) => {
@@ -32,11 +62,21 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
 
             if (id && route) {
                 history.push(`/${route}/${id}`);
+            } else if (id && type === EEventType.SHARE_SONG) {
+                store.updateCurSongId(+id);
             } else {
                 notify(EMessageType.WARNING, "该功能暂未开放");
             }
         },
-        [history, type]
+        [history, store, type]
+    );
+
+    const toUser = React.useCallback(
+        (userid: number | undefined) => {
+            if (!userid) return;
+            history.push(`/user/${userid}`);
+        },
+        [history]
     );
 
     if (typeof json === "object") {
@@ -79,6 +119,21 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
                     <Tag key={type} color={DEFAULT_RANDOM_COLORS[randomIndex]}>
                         {getEventType(type)}
                     </Tag>
+                    {userId === store.userInfo.userId &&
+                        canDelete === undefined && (
+                            <Popconfirm
+                                title="确定要删除当前动态吗？"
+                                okText="是的"
+                                cancelText="否"
+                                placement="right"
+                                onConfirm={delEvent}
+                            >
+                                <DeleteTwoTone
+                                    style={{ fontSize: 16 }}
+                                    twoToneColor="#ff5d5d"
+                                />
+                            </Popconfirm>
+                        )}
                 </div>
                 <div>{json.msg}</div>
                 {name && (
@@ -94,7 +149,7 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
 
                         <StyledNameArtDiv>
                             <div>{name}</div>
-                            <div style={{ color: "#B1B1B1" }}>
+                            <StyledArts>
                                 By{" "}
                                 {typeof artists === "string" ? (
                                     <span>{artists}</span>
@@ -103,9 +158,24 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
                                         <span key={art.id}>{art.name} / </span>
                                     ))
                                 )}
-                            </div>
+                            </StyledArts>
                         </StyledNameArtDiv>
                     </StyledDetailDiv>
+                )}
+
+                {json.forward && (
+                    <ShareDetail
+                        user={json.forward.user}
+                        event={json.forward}
+                        json={json.forward.json}
+                    />
+                )}
+                {!json.forward && json.event && (
+                    <ShareDetail
+                        user={json.event.user}
+                        event={json.event}
+                        json={json.event.json}
+                    />
                 )}
 
                 <Image.PreviewGroup>
@@ -129,7 +199,26 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
             </>
         );
     } else {
-        return <StyledJson>{json}</StyledJson>;
+        const newJson = JSON.parse(json);
+
+        return typeof newJson === "object" ? (
+            <StyledForward
+                onClick={(e) => {
+                    e.stopPropagation();
+                }}
+            >
+                <hr />
+                <div
+                    style={{ color: "orange" }}
+                    onClick={() => toUser(user?.userId)}
+                >
+                    转发自：@{user?.nickname}
+                </div>
+                <ShareDetail canDelete={false} event={event} json={newJson} />
+            </StyledForward>
+        ) : (
+            <StyledJson>{json}</StyledJson>
+        );
     }
 };
 
@@ -150,12 +239,23 @@ const StyledDetailDiv = styled.div`
 `;
 
 const StyledNameArtDiv = styled.div`
-    margin-left: 10px;
+    margin: 10px 0 0 10px;
     font-size: 16px;
     justify-content: center;
     align-items: center;
 `;
 
+const StyledArts = styled.div`
+    color: #b1b1b1;
+    margin-top: 6px;
+`;
+
 const StyledJson = styled.div`
     width: 85vw;
+`;
+
+const StyledForward = styled.div`
+    &:hover {
+        cursor: pointer;
+    }
 `;

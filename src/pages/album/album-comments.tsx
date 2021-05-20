@@ -2,10 +2,9 @@ import React from "react";
 import { Empty, Spin, Tabs, Pagination } from "antd";
 import req from "../../api/req";
 import { notify, toTop } from "../../utils";
-import StyledComment from "../../components/StyledComment";
+import StyledComment from "../../components/comment/StyledComment";
 import { IComment, ICommentsRes, IHotComment } from "../commType";
-import { ESourceType } from "../../api/netease/types/like-type";
-import { EMessageType } from "../enums";
+import { EMessageType, ESourceType } from "../enums";
 
 interface IProps {
     albumId: number;
