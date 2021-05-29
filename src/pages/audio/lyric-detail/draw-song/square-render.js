@@ -28,6 +28,8 @@ export function onLoadAudio(audio, canvas, flag) {
         function renderFrame() {
             requestAnimationFrame(renderFrame);
 
+            // console.log(dataArray);
+
             analyser.getByteFrequencyData(dataArray);
 
             ctx.clearRect(0, 0, WIDTH, HEIGHT);

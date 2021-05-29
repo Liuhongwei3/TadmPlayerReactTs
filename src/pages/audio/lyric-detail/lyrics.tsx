@@ -12,14 +12,16 @@ import {
 import lyricParser from "../../../features";
 import { EMessageType } from "../../enums";
 
+const DEFAULT_LINE_HEIGHT = 25;
+
 const Lyrics: React.FC = observer(() => {
     const lyricsRef = React.useRef<HTMLDivElement>(null);
     const store = useStore();
     const { curSong: song, curTime } = store;
-    const [halfIndex, setHalfIndex] = React.useState<number>(3);
+    // const [halfIndex, setHalfIndex] = React.useState<number>(3);
     const [curLyricTime, setCurLyricTime] = React.useState<number>(0);
     const [curLyricIndex, setCurLyricIndex] = React.useState<number>(0);
-    const [lineHeight, setLineHeight] = React.useState<number>(30);
+    // const [lineHeight, setLineHeight] = React.useState<number>(DEFAULT_LINE_HEIGHT);
     // const [needScrollHeight, setNeedScrollHeight] = React.useState<number>(0);
     const [lyricMap, setLyricMap] = React.useState<Map<number, string>>(
         new Map()
@@ -32,6 +34,7 @@ const Lyrics: React.FC = observer(() => {
     ]);
 
     const setDefault = React.useCallback(() => {
+        document.getElementById("lyrics")?.scroll({ top: 0 });
         setLyrics([{ time: 0, text: "暂无歌词", texts: ["暂无歌词"] }]);
         setLyricMap(new Map());
         setLrcTimeMap(new Map());
@@ -73,8 +76,13 @@ const Lyrics: React.FC = observer(() => {
                 const { time, text } = l;
                 const lyricItem = { time, text, texts: [text] };
                 const sameTimeTLyric = tlrcMap.get(time);
-                // 解决翻译歌词但只有一种语言的
-                lyricItem.texts.push(sameTimeTLyric || text);
+
+                // // 解决翻译歌词但只有一种语言的
+                // lyricItem.texts.push(sameTimeTLyric || text);
+
+                if (sameTimeTLyric) {
+                    lyricItem.texts.push(sameTimeTLyric);
+                }
                 ret.push(lyricItem);
             });
         } else {
@@ -108,9 +116,6 @@ const Lyrics: React.FC = observer(() => {
     );
 
     const getDetailLyrics = React.useCallback(() => {
-        if (lyricsRef && lyricsRef.current && curLyricIndex >= halfIndex) {
-            lyricsRef.current.scrollTop = 0;
-        }
         reqs.netease
             .getMusicLyric(song!.id)
             .then((res) => {
@@ -129,31 +134,47 @@ const Lyrics: React.FC = observer(() => {
         getDetailLyrics();
     }, [song, getDetailLyrics, setDefault]);
 
-    React.useLayoutEffect(() => {
-        setTimeout(() => {
-            if (lyricsRef && lyricsRef.current) {
-                const outHeight =
-                    lyricsRef.current.getBoundingClientRect().height - 48;
-                const lyricLineHeight =
-                    lyricsRef.current.firstElementChild?.getBoundingClientRect()
-                        .height || 24;
-                setLineHeight(lyricLineHeight + 5);
-                setHalfIndex(
-                    Math.floor(
-                        Math.round(outHeight / (lyricLineHeight + 5)) / 2
-                    )
-                );
-            }
-        }, 500);
-    }, [lyricsRef, song?.id]);
+    // React.useLayoutEffect(() => {
+    //     setTimeout(() => {
+    //         if (lyricsRef && lyricsRef.current) {
+    //             const outHeight =
+    //                 lyricsRef.current.getBoundingClientRect().height - 48;
+    //             const lyricLineHeight =
+    //                 lyricsRef.current.firstElementChild?.getBoundingClientRect()
+    //                     .height || 24;
+    //             setLineHeight(lyricLineHeight + 5);
+    //             setHalfIndex(
+    //                 Math.floor(
+    //                     Math.round(outHeight / (lyricLineHeight + 5)) / 2
+    //                 )
+    //             );
+    //         }
+    //     }, 500);
+    // }, [lyricsRef, song?.id]);
 
     React.useEffect(() => {
-        if (lyricsRef && lyricsRef.current && curLyricIndex >= halfIndex) {
-            lyricsRef.current.scrollTop =
-                lineHeight * (curLyricIndex - halfIndex);
-            // setNeedScrollHeight(lineHeight * (curLyricIndex - halfIndex));
+        if (lyricsRef && lyricsRef.current) {
+            const outHeight =
+                lyricsRef.current.getBoundingClientRect().height - 48;
+            const curLine: HTMLDivElement | null =
+                document.querySelector("#lyrics .active");
+            // https://blog.csdn.net/jinxi1112/article/details/90692484
+            const offset =
+                (curLine?.offsetTop || 0) -
+                Math.floor(Math.round(outHeight / 2)) +
+                DEFAULT_LINE_HEIGHT;
+
+            if (curLine) {
+                lyricsRef.current.scrollTop = offset;
+            }
         }
-    }, [curLyricIndex, halfIndex, lineHeight]);
+
+        // if (lyricsRef && lyricsRef.current && curLyricIndex >= halfIndex) {
+        //     lyricsRef.current.scrollTop =
+        //         lineHeight * (curLyricIndex - halfIndex);
+        //     // setNeedScrollHeight(lineHeight * (curLyricIndex - halfIndex));
+        // }
+    }, [curLyricIndex]);
 
     return song ? (
         <StyledLyrics
@@ -162,7 +183,10 @@ const Lyrics: React.FC = observer(() => {
             // needScrollHeight={needScrollHeight}
         >
             {lyrics.map((tlyric, index) => (
-                <div key={`${tlyric.text}${index}`}>
+                <div
+                    key={`${tlyric.text}${index}`}
+                    className={curLyricTime === tlyric.time ? "active" : ""}
+                >
                     {tlyric.texts.map((lyric, index1) => (
                         <StyledLyric
                             active={curLyricTime === tlyric.time}
@@ -195,6 +219,7 @@ const StyledLyric = styled.div`
 `;
 
 const StyledLyrics = styled.div`
+    position: relative;
     height: 50vh;
     overflow-y: scroll;
     margin: 24px 0;

@@ -19,10 +19,6 @@ const LyricDetail: React.FC = observer(() => {
     const song = store.curSong;
     const showLyrics = store.showLyrics;
 
-    React.useEffect(() => {
-        document.getElementById("lyric-detail")?.scroll({ top: 0 });
-    }, [song?.id]);
-
     const publishComment = React.useCallback(() => {
         if (song) {
             openPublishCommModal(ESourceType.SONG, song.id);
