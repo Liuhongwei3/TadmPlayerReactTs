@@ -38,7 +38,7 @@ const Albums: React.FC<IProps> = (props: IProps) => {
                 {result.albums.map((item) => {
                     return (
                         <StyledItem
-                            key={item.id}
+                            key={`search-album-${item.id}`}
                             onClick={() => toDetail(item.id)}
                         >
                             <div

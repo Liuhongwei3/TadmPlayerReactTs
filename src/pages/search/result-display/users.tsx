@@ -37,7 +37,7 @@ const Users: React.FC<IProps> = (props: IProps) => {
                 {result.userprofiles.map((item) => {
                     return (
                         <StyledItem
-                            key={item.userId}
+                            key={`search-user-${item.userId}`}
                             onClick={() => toDetail(item.userId)}
                         >
                             <div

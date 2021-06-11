@@ -38,7 +38,7 @@ const Mvs: React.FC<IProps> = (props: IProps) => {
                 {result.mvs.map((item) => {
                     return (
                         <StyledItem
-                            key={item.id}
+                            key={`search-mv-${item.id}`}
                             onClick={() => toDetail(item.id)}
                         >
                             <div

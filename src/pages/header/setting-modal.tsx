@@ -124,6 +124,9 @@ const SettingModal: React.FC<IProps> = observer((props: IProps) => {
                         setSettings({ ...settings, canvasType: v })
                     }
                 >
+                    <Select.Option value={ECanvasType.NONE}>
+                        {ICanvasTypeText[ECanvasType.NONE]}
+                    </Select.Option>
                     <Select.Option value={ECanvasType.SQUARE}>
                         {ICanvasTypeText[ECanvasType.SQUARE]}
                     </Select.Option>

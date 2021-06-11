@@ -38,7 +38,7 @@ const Details: React.FC<IProps> = (props: IProps) => {
                 {result.playlists.map((item) => {
                     return (
                         <StyledItem
-                            key={item.id}
+                            key={`search-detail-${item.id}`}
                             onClick={() => toDetail(item.id)}
                         >
                             <div

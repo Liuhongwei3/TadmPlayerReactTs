@@ -113,7 +113,7 @@ const TopSinger: React.FunctionComponent = () => {
                                         }}
                                     >
                                         <LazyLoad
-                                            height={100}
+                                            height={DEFAULT_IMG_HEIGHT}
                                             placeholder={<LoadingImg />}
                                         >
                                             <Image

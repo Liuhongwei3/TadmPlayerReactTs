@@ -19,6 +19,13 @@ const LyricDetail: React.FC = observer(() => {
     const song = store.curSong;
     const showLyrics = store.showLyrics;
 
+    React.useEffect(() => {
+        const lyricDetailDom = document.getElementById("lyric-detail");
+        if (lyricDetailDom) {
+            lyricDetailDom.scrollTop = 0;
+        }
+    }, [song]);
+
     const publishComment = React.useCallback(() => {
         if (song) {
             openPublishCommModal(ESourceType.SONG, song.id);
@@ -101,6 +108,7 @@ const StyledPublishComm = styled.div`
     position: fixed;
     bottom: 100px;
     right: 30px;
+    z-index: 9999;
 
     @media screen and (max-width: 768px) {
         bottom: 22%;

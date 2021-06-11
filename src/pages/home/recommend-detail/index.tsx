@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import { observer } from "mobx-react-lite";
-import { Empty, Spin, Image } from "antd";
+import { Spin, Image } from "antd";
 import { CustomerServiceOutlined, CalendarOutlined } from "@ant-design/icons";
 
 import req from "../../../api/req";
@@ -22,7 +22,7 @@ import {
 import { useStore } from "../../../hooks/useStore";
 import { EMessageType } from "../../enums";
 
-const RecommendDetail: React.FunctionComponent = observer(() => {
+const RecommendDetail: React.FC = observer(() => {
     const store = useStore();
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -144,9 +144,7 @@ const RecommendDetail: React.FunctionComponent = observer(() => {
                         );
                     })}
                 </StyledWrapper>
-            ) : (
-                <Empty />
-            )}
+            ) : null}
         </Spin>
     );
 });

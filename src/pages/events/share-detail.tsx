@@ -187,7 +187,8 @@ const ShareDetail: React.FunctionComponent<IProps> = (props: IProps) => {
                                 padding: 10,
                                 height: 250,
                                 width:
-                                    +(pic.width / pic.height).toFixed(2) * 250,
+                                    +(pic.width / pic.height).toFixed(2) *
+                                        250 || 250,
                                 maxWidth: "100%",
                             }}
                             placeholder={<LoadingImg />}

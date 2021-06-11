@@ -1,9 +1,9 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { Empty, Spin, Image } from "antd";
+import { Spin, Image } from "antd";
 
 import req from "../../../api/req";
-import { IArtist, INewSongs } from "../type";
+import { INewSongs } from "../type";
 import StyledItem from "../../../components/detail/StyledItem";
 import StyledWrapper from "../../../components/detail/StyledWrapper";
 import StyledDesc from "../../../components/detail/StyledDesc";
@@ -54,6 +54,7 @@ const NewSongs: React.FC = () => {
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《最新音乐》</h2>
+
             {newSongs.length ? (
                 <StyledWrapper>
                     {newSongs.map((item: INewSongs) => {
@@ -70,7 +71,7 @@ const NewSongs: React.FC = () => {
                                     }}
                                 >
                                     <LazyLoad
-                                        height={160}
+                                        height={DEFAULT_IMG_HEIGHT}
                                         placeholder={<LoadingImg />}
                                     >
                                         <Image
@@ -86,20 +87,18 @@ const NewSongs: React.FC = () => {
                                     </LazyLoad>
                                     <StyledDesc width={DEFAULT_IMG_WIDTH}>
                                         <span>By </span>
-                                        {item.song.artists.map(
-                                            (artist: IArtist) => {
-                                                return item.song.artists
-                                                    .length === 1 ? (
-                                                    <span key={artist.id}>
-                                                        {artist.name}
-                                                    </span>
-                                                ) : (
-                                                    <span key={artist.id}>
-                                                        {`${artist.name} / `}
-                                                    </span>
-                                                );
-                                            }
-                                        )}
+                                        {item.song.artists.map((artist) => {
+                                            return item.song.artists.length ===
+                                                1 ? (
+                                                <span key={artist.id}>
+                                                    {artist.name}
+                                                </span>
+                                            ) : (
+                                                <span key={artist.id}>
+                                                    {`${artist.name} / `}
+                                                </span>
+                                            );
+                                        })}
                                     </StyledDesc>
                                 </div>
 
@@ -110,9 +109,7 @@ const NewSongs: React.FC = () => {
                         );
                     })}
                 </StyledWrapper>
-            ) : (
-                <Empty />
-            )}
+            ) : null}
         </Spin>
     );
 };

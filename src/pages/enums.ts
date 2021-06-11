@@ -26,12 +26,14 @@ export enum EPlayRecordType {
 }
 
 export enum ECanvasType {
+    NONE = "none",
     SQUARE = "square",
     CIRCLEBAR = "circlebar",
     CIRCLEWAVE = "circlewave",
 }
 
 export const ICanvasTypeText: Record<ECanvasType, string> = {
+    [ECanvasType.NONE]: "关闭",
     [ECanvasType.SQUARE]: "跳跃之心",
     [ECanvasType.CIRCLEBAR]: "动感音阶",
     [ECanvasType.CIRCLEWAVE]: "迷幻水波",

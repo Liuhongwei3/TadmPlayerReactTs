@@ -38,7 +38,7 @@ const Singers: React.FC<IProps> = (props: IProps) => {
                 {result.artists.map((item) => {
                     return (
                         <StyledItem
-                            key={item.id}
+                            key={`search-singer-${item.id}`}
                             onClick={() => toDetail(item.id)}
                         >
                             <div

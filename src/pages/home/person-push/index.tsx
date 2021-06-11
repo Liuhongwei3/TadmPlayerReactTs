@@ -1,7 +1,7 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
 import { useHistory } from "react-router-dom";
-import { Empty, Spin, Image } from "antd";
+import { Spin, Image } from "antd";
 
 import req from "../../../api/req";
 import { IPersonPush } from "../type";
@@ -17,7 +17,7 @@ import {
 } from "../../../web-config/defaultConfig";
 import { EMessageType } from "../../enums";
 
-const PersonPush: React.FunctionComponent = () => {
+const PersonPush: React.FC = () => {
     const history = useHistory();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [personPush, setPersonPush] = React.useState<Array<IPersonPush>>([]);
@@ -54,6 +54,7 @@ const PersonPush: React.FunctionComponent = () => {
     return (
         <Spin tip="Loading..." spinning={loading}>
             <h2>《独家放送》</h2>
+
             {personPush.length ? (
                 <StyledWrapper>
                     {personPush.map((item: IPersonPush) => {
@@ -96,9 +97,7 @@ const PersonPush: React.FunctionComponent = () => {
                         );
                     })}
                 </StyledWrapper>
-            ) : (
-                <Empty />
-            )}
+            ) : null}
         </Spin>
     );
 };

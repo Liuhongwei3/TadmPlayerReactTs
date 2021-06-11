@@ -119,7 +119,7 @@ const SearchComp: React.FunctionComponent = () => {
 
     const updateActiveKey = React.useCallback((activeKey: string) => {
         setLimit(LIMIT);
-        setActiveKey(+activeKey);
+        setActiveKey(+activeKey.replace("search-", ""));
     }, []);
 
     return (

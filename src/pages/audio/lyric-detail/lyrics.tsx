@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
+import { Tag } from "antd";
 import { useStore } from "../../../hooks/useStore";
 import reqs from "../../../api/req";
 import { notify } from "../../../utils";
@@ -13,6 +14,7 @@ import lyricParser from "../../../features";
 import { EMessageType } from "../../enums";
 
 const DEFAULT_LINE_HEIGHT = 25;
+const DEFAULT_LYRICS = [{ time: 0, text: "暂无歌词", texts: ["暂无歌词"] }];
 
 const Lyrics: React.FC = observer(() => {
     const lyricsRef = React.useRef<HTMLDivElement>(null);
@@ -29,13 +31,14 @@ const Lyrics: React.FC = observer(() => {
     const [lrcTimeMap, setLrcTimeMap] = React.useState<Map<number, number>>(
         new Map()
     );
-    const [lyrics, setLyrics] = React.useState<ITLyric[]>([
-        { time: 0, text: "暂无歌词", texts: ["暂无歌词"] },
-    ]);
+    const [lyrics, setLyrics] = React.useState<ITLyric[]>(DEFAULT_LYRICS);
+    const [showTrans, setShowTrans] = React.useState<Boolean>(true);
+    const [controlShowTrans, setControlShowTrans] =
+        React.useState<Boolean>(true);
 
     const setDefault = React.useCallback(() => {
         document.getElementById("lyrics")?.scroll({ top: 0 });
-        setLyrics([{ time: 0, text: "暂无歌词", texts: ["暂无歌词"] }]);
+        setLyrics(DEFAULT_LYRICS);
         setLyricMap(new Map());
         setLrcTimeMap(new Map());
     }, []);
@@ -69,7 +72,7 @@ const Lyrics: React.FC = observer(() => {
         setLrcTimeMap(lrcTime);
 
         // 空内容的去除
-        const lyricFiltered = lyric.filter(({ text }) => Boolean(text));
+        const lyricFiltered = lyric.filter(({ text }) => !!text);
         // content统一转换数组形式
         if (lyricFiltered.length && tlrcMap.size) {
             lyricFiltered.forEach((l) => {
@@ -120,6 +123,7 @@ const Lyrics: React.FC = observer(() => {
             .getMusicLyric(song!.id)
             .then((res) => {
                 handleLyrics(res);
+                setControlShowTrans(!!res?.tlyric?.lyric);
             })
             .catch((e) => {
                 notify(EMessageType.ERROR, e.message);
@@ -187,21 +191,45 @@ const Lyrics: React.FC = observer(() => {
                     key={`${tlyric.text}${index}`}
                     className={curLyricTime === tlyric.time ? "active" : ""}
                 >
-                    {tlyric.texts.map((lyric, index1) => (
+                    {showTrans ? (
+                        tlyric.texts.map((lyric, index1) => (
+                            <StyledLyric
+                                active={curLyricTime === tlyric.time}
+                                key={`trans-${lyric}${index1}`}
+                            >
+                                {lyric}
+                            </StyledLyric>
+                        ))
+                    ) : (
                         <StyledLyric
                             active={curLyricTime === tlyric.time}
-                            key={`${lyric}${index1}`}
+                            key={`noTrans-${tlyric.texts[0]}`}
                         >
-                            {lyric}
+                            {tlyric.texts[0]}
                         </StyledLyric>
-                    ))}
+                    )}
                 </div>
             ))}
+
+            {controlShowTrans && (
+                <StyledControlTransTag
+                    color={showTrans ? "orange" : "lime"}
+                    onClick={() => setShowTrans(!showTrans)}
+                >
+                    译
+                </StyledControlTransTag>
+            )}
         </StyledLyrics>
     ) : null;
 });
 
 export default Lyrics;
+
+const StyledControlTransTag = styled(Tag)`
+    position: sticky;
+    bottom: 6%;
+    left: 90%;
+`;
 
 const StyledLyric = styled.div`
     margin: 5px 0;
@@ -220,6 +248,7 @@ const StyledLyric = styled.div`
 
 const StyledLyrics = styled.div`
     position: relative;
+    width: 100%;
     height: 50vh;
     overflow-y: scroll;
     margin: 24px 0;

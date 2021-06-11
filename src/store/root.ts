@@ -38,9 +38,7 @@ class Root {
     curPlayMode = EPlayMode.ORDER;
     curSong: ISong | undefined;
     curTime: number = 0;
-    curCanvasType: ECanvasType = ECanvasType.SQUARE;
-    // curCanvasType: ECanvasType = ECanvasType.CIRCLEBAR;
-    // curCanvasType: ECanvasType = ECanvasType.CIRCLEWAVE;
+    curCanvasType: ECanvasType = ECanvasType.NONE;
     curCircleCanvasColorIndex: number = 0;
     curLyric: string = "暂无歌词";
     curPlayDetailId: number | undefined;
